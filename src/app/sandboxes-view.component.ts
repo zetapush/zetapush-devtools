@@ -5,11 +5,11 @@ import { Sandbox } from './sandboxes-resolver.service';
 @Component({
   selector: 'zp-sandboxes-view',
   template: `
-    <ul>
-      <li *ngFor="let sandbox of sandboxes">
+    <md-list>
+      <md-list-item *ngFor="let sandbox of sandboxes">
         <a [routerLink]="['/trace', sandbox.businessId]">{{sandbox.businessId}}</a>
-      </li>
-    </ul>
+      </md-list-item>
+    </md-list>
   `,
   styles: [],
 })
