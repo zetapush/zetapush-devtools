@@ -12,25 +12,32 @@ import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Authentication, Client, services } from 'zetapush-js';
 import { Credentials } from './credentials.interface';
+import { Trace, TraceCompletion } from './trace.interface';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 
-export interface Trace {
-  n: number;
-  data: any;
-  line: number;
-  location: string;
-  owner: string;
-  level: string;
-}
+const LOCATION_PATTERN = /^(.*)\|(.*)\:(.*)$/;
 
 @Component({
   selector: 'zp-trace-view',
   template: `
     <h1>Trace for {{sandboxId}}</h1>
-    <md-table #table [dataSource]="source">
+    <nav>
+      <button md-raised-button (click)="onClearClick()">Clear</button>
+    </nav>
+    <md-table #table [dataSource]="source" class="Table">
+      <!-- Ctx Column -->
+      <ng-container mdColumnDef="ctx">
+        <md-header-cell *mdHeaderCellDef> Ctx </md-header-cell>
+        <md-cell *mdCellDef="let row"> {{row.ctx}} </md-cell>
+      </ng-container>
+      <!-- Type Column -->
+      <ng-container mdColumnDef="type">
+        <md-header-cell *mdHeaderCellDef> Type </md-header-cell>
+        <md-cell *mdCellDef="let row"> {{row.type}} </md-cell>
+      </ng-container>
       <!-- N Column -->
       <ng-container mdColumnDef="n">
         <md-header-cell *mdHeaderCellDef> N </md-header-cell>
@@ -62,19 +69,37 @@ export interface Trace {
         <md-cell *mdCellDef="let row"> {{row.level}} </md-cell>
       </ng-container>
       <md-header-row *mdHeaderRowDef="columns"></md-header-row>
-      <md-row *mdRowDef="let row; columns: columns;"></md-row>
+      <md-row *mdRowDef="let row; columns: columns;" (click)="onRowClick(row)" class="Table__Row"></md-row>
     </md-table>
+    <ul *ngIf="selection">
+      <li *ngFor="let trace of selection">{{trace | json}}</li>
+    <ul>
   `,
-  styles: [],
+  styles: [
+    `
+    .Table {
+      height: 50vh;
+      border: 1px dashed rgba(0,0,0,.12);
+      overflow-y: scroll;
+    }
+    .Table__Body {
+    }
+    .Table__Row {
+      cursor: pointer;
+    }
+  `,
+  ],
 })
 export class TraceViewComponent implements OnDestroy, OnInit {
   sandboxId: string;
   traces: any[] = [];
+  map = new Map<number, Trace[]>();
   client: Client;
   connected = false;
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
-  columns = ['n', 'data', 'line', 'location', 'owner', 'level'];
+  columns = ['ctx', 'type', 'n', 'data', 'line', 'location', 'owner', 'level'];
+  selection: Trace[];
 
   constructor(private route: ActivatedRoute) {
     route.params.subscribe(({ sandboxId }) => {
@@ -102,15 +127,24 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     const api = this.client.createService({
       Type: services.Macro,
       listener: {
-        trace: message => {
+        trace: (message: TraceCompletion) => {
           const trace = message.data;
           try {
             const { level, ...infos } = trace;
-            console[level.toLowerCase()](infos);
+            // console[level.toLowerCase()](infos);
+            const queue = this.map.has(trace.ctx)
+              ? this.map.get(trace.ctx)
+              : [];
+            queue[trace.n] = trace;
+            this.map.set(trace.ctx, queue);
           } catch (e) {
-            console.log(trace);
+            // console.log(trace);
           }
-          this.traces = [trace, ...this.traces];
+          this.traces = Array.from(this.map.entries()).map(([ctx, traces]) => {
+            return traces[1];
+          });
+          // console.log('TraceViewComponent::traces', this.traces);
+          // console.log('TraceViewComponent::map', this.map);
           this.subject.next(this.traces);
         },
       },
@@ -123,6 +157,18 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   }
   ngOnDestroy() {
     this.client.disconnect();
+  }
+  onClearClick() {
+    this.map = new Map<number, Trace[]>();
+    this.traces = [];
+    this.subject.next(this.traces);
+    this.selection = null;
+  }
+  onRowClick(trace: Trace) {
+    console.log('TraceViewComponent::onRowClick', trace);
+    const traces = this.map.get(trace.ctx).filter(truthy => truthy);
+    console.log('TraceViewComponent::onRowClick', traces);
+    this.selection = traces;
   }
 }
 
