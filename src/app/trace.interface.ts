@@ -1,8 +1,8 @@
 export enum TraceType {
-  MS = 'MS',
-  CMT = 'CMT',
-  USR = 'USR',
-  ME = 'ME',
+  MACRO_START = 'MS',
+  COMMENT = 'CMT',
+  USER = 'USR',
+  MACRO_END = 'ME',
 }
 
 export enum TraceLevel {
