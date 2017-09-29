@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ENVIRONMENT_ID } from './env.module';
+import { Platform } from './environment.interface';
 import { Credentials } from './credentials.interface';
 
 @Component({
@@ -24,23 +26,11 @@ import { Credentials } from './credentials.interface';
   styles: [],
 })
 export class LoginViewComponent {
-  apiUrl;
-  platforms = [
-    {
-      url: 'http://vm-zbo:8080',
-      name: 'Preprod',
-    },
-    {
-      url: 'https://demo-2.zpush.io',
-      name: 'Demo',
-    },
-    {
-      url: 'http://zbo.zpush.io',
-      name: 'Prod',
-    },
-  ];
+  platforms: Platform[];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, injector: Injector) {
+    this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
+  }
 
   async onSubmit({ value, valid }: { value: Credentials; valid: boolean }) {
     console.log('LoginComponent::onSubmit', value, valid);

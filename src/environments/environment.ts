@@ -4,5 +4,19 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  plateforms: [
+    {
+      url: 'http://zbo.zpush.io',
+      name: 'Production',
+    },
+    {
+      url: 'https://demo-2.zpush.io',
+      name: 'Demonstration',
+    },
+    {
+      url: 'http://vm-zbo:8080',
+      name: 'Pre-Production',
+    },
+  ],
 };

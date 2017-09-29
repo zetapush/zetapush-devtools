@@ -1,13 +1,6 @@
 import { InjectionToken, NgModule } from '@angular/core';
+import { Environement, Platform } from './environment.interface';
 import { environment } from '../environments/environment';
-
-export interface Environement {
-  production: boolean;
-  zetapush: {
-    apiUrl: string;
-    sandboxId: string;
-  };
-}
 
 export const ENVIRONMENT_ID = new InjectionToken<Environement>('Environment');
 
