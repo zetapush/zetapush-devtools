@@ -30,20 +30,20 @@
   dependencies:
     tslib "^1.7.1"
 
-"@angular/cdk@^2.0.0-beta.10":
-  version "2.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-2.0.0-beta.10.tgz#7ffcc430d6f67dfde1df25e1fa693c188e4da08a"
+"@angular/cdk@2.0.0-beta.11":
+  version "2.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-2.0.0-beta.11.tgz#b9e799574786272c63b6334c837c5ee2445bc933"
   dependencies:
     tslib "^1.7.1"
 
-"@angular/cli@1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-1.4.2.tgz#220a54c7e12303157cc289f4306fa46d080705ac"
+"@angular/cli@1.5.0-beta.1":
+  version "1.5.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-1.5.0-beta.1.tgz#5f88022b6a49a74f87a034da9550086bf7ba983d"
   dependencies:
     "@angular-devkit/build-optimizer" "~0.0.18"
     "@angular-devkit/schematics" "~0.0.21"
     "@ngtools/json-schema" "1.1.0"
-    "@ngtools/webpack" "1.7.1"
+    "@ngtools/webpack" "1.8.0-beta.1"
     "@schematics/angular" "~0.0.30"
     autoprefixer "^6.5.3"
     chalk "^2.0.1"
@@ -89,6 +89,7 @@
     stylus "^0.54.5"
     stylus-loader "^3.0.1"
     typescript ">=2.0.0 <2.6.0"
+    uglifyjs-webpack-plugin "1.0.0-beta.1"
     url-loader "^0.5.7"
     webpack "~3.5.5"
     webpack-concat-plugin "1.4.0"
@@ -143,9 +144,9 @@
   version "5.0.0-beta.7"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-5.0.0-beta.7.tgz#18a53d2edea533626516c2348b97bf64d507803d"
 
-"@angular/material@^2.0.0-beta.10":
-  version "2.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-beta.10.tgz#23f5887d5e34da89dd6da1fe4da0b3f779da4807"
+"@angular/material@2.0.0-beta.11":
+  version "2.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-beta.11.tgz#9124a1f50f3eb7dc28640317ee1e875f71da753a"
   dependencies:
     tslib "^1.7.1"
 
@@ -177,9 +178,9 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@ngtools/json-schema/-/json-schema-1.1.0.tgz#c3a0c544d62392acc2813a42c8a0dc6f58f86922"
 
-"@ngtools/webpack@1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-1.7.1.tgz#383ddd689845cf42fc755975f6440f75535f5016"
+"@ngtools/webpack@1.8.0-beta.1":
+  version "1.8.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-1.8.0-beta.1.tgz#e1cd18c0fbf06abde68189f13a53be1c081158b8"
   dependencies:
     enhanced-resolve "^3.1.0"
     loader-utils "^1.0.2"
@@ -5377,6 +5378,13 @@ typescript@~2.3.3:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.3.4.tgz#3d38321828231e434f287514959c37a82b629f42"
 
+uglify-es@^3.0.21:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.1.2.tgz#b22cfca950f0632092aff42bb46979d83b5ec6f5"
+  dependencies:
+    commander "~2.11.0"
+    source-map "~0.5.1"
+
 uglify-js@3.1.x:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.1.1.tgz#e7144307281a1bc38a9a20715090b546c9f44791"
@@ -5404,6 +5412,14 @@ uglify-js@~2.3:
 uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
+
+uglifyjs-webpack-plugin@1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.0.0-beta.1.tgz#595c14d8b85bedd708ab7a6e811894fbe0e69890"
+  dependencies:
+    source-map "^0.5.6"
+    uglify-es "^3.0.21"
+    webpack-sources "^1.0.1"
 
 uglifyjs-webpack-plugin@^0.4.6:
   version "0.4.6"
@@ -5920,9 +5936,9 @@ zetapush-cometd@next:
     node-fetch "^1.7.0"
     websocket "^1.0.24"
 
-zetapush-js@^3.2.0-alpha.3:
-  version "3.2.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/zetapush-js/-/zetapush-js-3.2.0-alpha.3.tgz#f0147dfab15c182373db92b2ebe072520d25aac9"
+zetapush-js@3.2.0-alpha.5:
+  version "3.2.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/zetapush-js/-/zetapush-js-3.2.0-alpha.5.tgz#b2cc2376762519c08811bbc28ce44b862a1a966c"
   dependencies:
     zetapush-cometd next
 
