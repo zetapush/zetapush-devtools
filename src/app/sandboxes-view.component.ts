@@ -7,7 +7,7 @@ import { Sandbox } from './sandboxes-resolver.service';
   template: `
     <md-list>
       <md-list-item *ngFor="let sandbox of sandboxes">
-        <a [routerLink]="['/trace', sandbox.businessId]">{{sandbox.businessId}}</a>
+        <a [routerLink]="['/trace', sandbox.businessId]">({{sandbox.businessId}}) -- {{sandbox.name}}</a>
       </md-list-item>
     </md-list>
   `,

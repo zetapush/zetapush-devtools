@@ -7,6 +7,8 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 
+import { Credentials } from './credentials.interface';
+
 export interface Sandbox {
   businessId: string;
   name?: string;
@@ -18,13 +20,16 @@ export class SandboxesResolver implements Resolve<Sandbox[]> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<Sandbox[]> {
-    const response = await fetch('https://demo-2.zpush.io/zbo/auth/whoami', {
+    console.log('SandboxesResolver::resolve', route);
+    const credentials = JSON.parse(
+      sessionStorage.getItem('zp:devtools:credentials'),
+    ) as Credentials;
+    const url = `${credentials.apiUrl}/zbo/orga/business/list/mine`;
+    const response = await fetch(url, {
+      method: 'GET',
       credentials: 'include',
     });
-    const whoami = await response.json();
-    return whoami.businesses.map(businessId => ({
-      businessId,
-      name: businessId,
-    }));
+    const { content } = await response.json();
+    return content.map(({ businessId, name }) => ({ businessId, name }));
   }
 }

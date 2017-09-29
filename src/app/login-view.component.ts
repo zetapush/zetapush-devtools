@@ -48,7 +48,17 @@ export class LoginViewComponent {
     if (valid) {
       sessionStorage.setItem('zp:devtools:credentials', JSON.stringify(value));
       try {
-        const response = await fetch(`${value.apiUrl}/zbo/auth/login`, {
+        const urls = {
+          login: `${value.apiUrl}/zbo/auth/login`,
+          logout: `${value.apiUrl}/zbo/auth/logout`,
+        };
+        console.log('LoginComponent::onSubmit', urls);
+        await fetch(urls.logout, {
+          method: 'GET',
+          body: {},
+          credentials: 'include',
+        });
+        const response = await fetch(urls.login, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
