@@ -7,6 +7,8 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
+import { Credentials } from './credentials.interface';
+
 @Injectable()
 export class IsAuthenticated implements CanActivate {
   constructor(private router: Router) {}
@@ -15,13 +17,13 @@ export class IsAuthenticated implements CanActivate {
     state: RouterStateSnapshot,
   ): Promise<boolean> {
     try {
-      const response = await fetch('https://demo-2.zpush.io/zbo/auth/whoami', {
+      const credentials = JSON.parse(
+        sessionStorage.getItem('zp:devtools:credentials'),
+      ) as Credentials;
+      const response = await fetch(`${credentials.apiUrl}/zbo/auth/whoami`, {
         credentials: 'include',
       });
       const whoami = await response.json();
-      const credentials = JSON.parse(
-        sessionStorage.getItem('zp:devtools:credentials'),
-      );
       return true;
     } catch (e) {
       this.router.navigate(['/login']);
