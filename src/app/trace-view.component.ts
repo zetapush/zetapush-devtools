@@ -12,13 +12,16 @@ import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Authentication, Client, services } from 'zetapush-js';
 import { Credentials } from './credentials.interface';
-import { Trace, TraceCompletion } from './trace.interface';
+import {
+  Trace,
+  TraceCompletion,
+  TraceLocation,
+  parseTraceLocation,
+} from './trace.interface';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-
-const LOCATION_PATTERN = /^(.*)\|(.*)\:(.*)$/;
 
 @Component({
   selector: 'zp-trace-view',
@@ -55,8 +58,8 @@ const LOCATION_PATTERN = /^(.*)\|(.*)\:(.*)$/;
       </ng-container>
       <!-- Location Column -->
       <ng-container mdColumnDef="location">
-        <md-header-cell *mdHeaderCellDef> Location </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.location}} </md-cell>
+        <md-header-cell *mdHeaderCellDef> Recipe </md-header-cell>
+        <md-cell *mdCellDef="let row"> {{row.location.recipe}}@{{row.location.version}} </md-cell>
       </ng-container>
       <!-- Owner Column -->
       <ng-container mdColumnDef="owner">
@@ -98,7 +101,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   connected = false;
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
-  columns = ['ctx', 'type', 'n', 'data', 'line', 'location', 'owner', 'level'];
+  columns = ['ctx', 'type', 'n', 'data', 'line', 'location', 'owner'];
   selection: Trace[];
 
   constructor(private route: ActivatedRoute) {
@@ -128,7 +131,10 @@ export class TraceViewComponent implements OnDestroy, OnInit {
       Type: services.Macro,
       listener: {
         trace: (message: TraceCompletion) => {
-          const trace = message.data;
+          const trace = {
+            ...message.data,
+            location: parseTraceLocation(message.data.location),
+          };
           try {
             const { level, ...infos } = trace;
             // console[level.toLowerCase()](infos);

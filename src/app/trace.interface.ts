@@ -33,3 +33,10 @@ export interface Trace {
 export interface TraceCompletion {
   data: Trace;
 }
+
+const LOCATION_PATTERN = /^(.*)\|(.*)\:(.*)$/;
+
+export const parseTraceLocation = (location): TraceLocation => {
+  const [, recipe, version, path] = LOCATION_PATTERN.exec(location);
+  return { recipe, version, path };
+};
