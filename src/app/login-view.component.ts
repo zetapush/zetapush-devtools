@@ -18,11 +18,13 @@ import { Credentials } from './credentials.interface';
         <mat-form-field>
           <input matInput placeholder="Password" name="password" type="password" required ngModel>
         </mat-form-field>
-        <mat-select placeholder="Api Url" name="apiUrl" required ngModel>
-          <mat-option *ngFor="let platform of platforms" [value]="platform.url">
-            {{ platform.name }}
-          </mat-option>
-        </mat-select>
+        <mat-form-field>
+          <mat-select placeholder="Api Url" name="apiUrl" required ngModel>
+            <mat-option *ngFor="let platform of platforms" [value]="platform.url">
+              {{ platform.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-card-content>
       <mat-card-actions align="end">
         <button mat-raised-button>Connect</button>
@@ -36,7 +38,8 @@ import { Credentials } from './credentials.interface';
     </mat-card>
   </form>
   `,
-  styles: [`
+  styles: [
+    `
     mat-card {
       max-width: 50vw;
       margin: auto;
@@ -51,7 +54,8 @@ import { Credentials } from './credentials.interface';
     mat-card-content > * {
       width: 100%;
     }
-  `],
+  `,
+  ],
 })
 export class LoginViewComponent {
   platforms: Platform[];
