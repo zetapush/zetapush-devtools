@@ -5,6 +5,7 @@
   },
   "apps": [
     {
+      "name": "default",
       "root": "src",
       "outDir": "dist",
       "assets": ["assets", "favicon.ico"],
@@ -22,6 +23,7 @@
       }
     },
     {
+      "name": "hmr",
       "root": "src",
       "outDir": "dist",
       "assets": ["assets", "favicon.ico"],
