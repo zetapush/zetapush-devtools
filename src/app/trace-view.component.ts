@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { MdSort } from '@angular/material';
+import { MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -28,57 +28,57 @@ import 'rxjs/add/operator/map';
   template: `
     <h1>Trace for {{sandboxId}}</h1>
     <nav>
-      <button md-raised-button (click)="onClearClick()">Clear</button>
+      <button mat-raised-button (click)="onClearClick()">Clear</button>
     </nav>
-    <md-table #table [dataSource]="source" class="Table">
+    <mat-table #table [dataSource]="source" class="Table">
       <!-- Ctx Column -->
-      <ng-container mdColumnDef="ctx">
-        <md-header-cell *mdHeaderCellDef> Ctx </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.ctx}} </md-cell>
+      <ng-container matColumnDef="ctx">
+        <mat-header-cell *matHeaderCellDef> Ctx </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.ctx}} </mat-cell>
       </ng-container>
       <!-- Ts Column -->
-      <ng-container mdColumnDef="ts">
-        <md-header-cell *mdHeaderCellDef> Ts </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.ts | date:'mediumTime'}} </md-cell>
+      <ng-container matColumnDef="ts">
+        <mat-header-cell *matHeaderCellDef> Ts </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.ts | date:'mediumTime'}} </mat-cell>
       </ng-container>
       <!-- Type Column -->
-      <ng-container mdColumnDef="type">
-        <md-header-cell *mdHeaderCellDef> Type </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.type}} </md-cell>
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
       </ng-container>
       <!-- N Column -->
-      <ng-container mdColumnDef="n">
-        <md-header-cell *mdHeaderCellDef> N </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.n}} </md-cell>
+      <ng-container matColumnDef="n">
+        <mat-header-cell *matHeaderCellDef> N </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.n}} </mat-cell>
       </ng-container>
       <!-- Data Column -->
-      <ng-container mdColumnDef="data">
-        <md-header-cell *mdHeaderCellDef> Data </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.data}}</md-cell>
+      <ng-container matColumnDef="data">
+        <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.data}}</mat-cell>
       </ng-container>
       <!-- Line Column -->
-      <ng-container mdColumnDef="line">
-        <md-header-cell *mdHeaderCellDef> Line </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.line}} </md-cell>
+      <ng-container matColumnDef="line">
+        <mat-header-cell *matHeaderCellDef> Line </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.line}} </mat-cell>
       </ng-container>
       <!-- Location Column -->
-      <ng-container mdColumnDef="location">
-        <md-header-cell *mdHeaderCellDef> Recipe </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.location.recipe}}@{{row.location.version}} </md-cell>
+      <ng-container matColumnDef="location">
+        <mat-header-cell *matHeaderCellDef> Recipe </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.location.recipe}}@{{row.location.version}} </mat-cell>
       </ng-container>
       <!-- Owner Column -->
-      <ng-container mdColumnDef="owner">
-        <md-header-cell *mdHeaderCellDef> Owner </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.owner}} </md-cell>
+      <ng-container matColumnDef="owner">
+        <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
       </ng-container>
       <!-- Level Column -->
-      <ng-container mdColumnDef="level">
-        <md-header-cell *mdHeaderCellDef> Level </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.level}} </md-cell>
+      <ng-container matColumnDef="level">
+        <mat-header-cell *matHeaderCellDef> Level </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.level}} </mat-cell>
       </ng-container>
-      <md-header-row *mdHeaderRowDef="columns"></md-header-row>
-      <md-row *mdRowDef="let row; columns: columns;" (click)="onRowClick(row)" class="Table__Row"></md-row>
-    </md-table>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;" (click)="onRowClick(row)" class="Table__Row"></mat-row>
+    </mat-table>
     <zp-stack-trace *ngIf="selection" [traces]="selection"></zp-stack-trace>
   `,
   styles: [

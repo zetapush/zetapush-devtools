@@ -1,36 +1,37 @@
 import { NgModule } from '@angular/core';
 import {
-  MdButtonModule,
-  MdCheckboxModule,
-  MdFormFieldModule,
-  MdInputModule,
-  MdListModule,
-  MdOptionModule,
-  MdSelectModule,
-  MdSortModule,
-  MdTableModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatListModule,
+  MatOptionModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
+  MatSortModule,
+  MatTableModule,
 } from '@angular/material';
+
+const MODULES = [
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatListModule,
+  MatOptionModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
+  MatTableModule,
+];
 
 @NgModule({
   imports: [
-    MdButtonModule,
-    MdCheckboxModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdListModule,
-    MdOptionModule,
-    MdSelectModule,
-    MdTableModule,
+    ...MODULES
   ],
   exports: [
-    MdButtonModule,
-    MdCheckboxModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdListModule,
-    MdOptionModule,
-    MdSelectModule,
-    MdTableModule,
+    ...MODULES
   ],
 })
 export class UiModule {}
