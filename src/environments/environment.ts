@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  hmr: true,
   plateforms: [
     {
       url: 'http://zbo.zpush.io',
