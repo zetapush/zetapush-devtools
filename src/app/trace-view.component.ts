@@ -26,7 +26,10 @@ import 'rxjs/add/operator/map';
 @Component({
   selector: 'zp-trace-view',
   template: `
-    <h1>Trace for {{sandboxId}}</h1>
+    <h1>
+      <mat-icon mat-list-icon>folder</mat-icon>
+      <span>Trace for {{sandboxId}}</span>
+    </h1>
     <nav>
       <button mat-raised-button (click)="onClearClick()">Clear</button>
     </nav>
