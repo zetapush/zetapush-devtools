@@ -36,6 +36,11 @@ import 'rxjs/add/operator/map';
         <md-header-cell *mdHeaderCellDef> Ctx </md-header-cell>
         <md-cell *mdCellDef="let row"> {{row.ctx}} </md-cell>
       </ng-container>
+      <!-- Ts Column -->
+      <ng-container mdColumnDef="ts">
+        <md-header-cell *mdHeaderCellDef> Ts </md-header-cell>
+        <md-cell *mdCellDef="let row"> {{row.ts | date:'mediumTime'}} </md-cell>
+      </ng-container>
       <!-- Type Column -->
       <ng-container mdColumnDef="type">
         <md-header-cell *mdHeaderCellDef> Type </md-header-cell>
@@ -75,7 +80,7 @@ import 'rxjs/add/operator/map';
       <md-row *mdRowDef="let row; columns: columns;" (click)="onRowClick(row)" class="Table__Row"></md-row>
     </md-table>
     <ul *ngIf="selection">
-      <li *ngFor="let trace of selection">{{trace | json}}</li>
+      <li [ngClass]="['Trace', 'Trace--' + trace.type]" *ngFor="let trace of selection">{{trace | json}}</li>
     <ul>
   `,
   styles: [
@@ -90,6 +95,19 @@ import 'rxjs/add/operator/map';
     .Table__Row {
       cursor: pointer;
     }
+    .Trace {}
+    .Trace--USR {
+      color: #1B6FCB;
+      font-weight: bold;
+    }
+    .Trace--CMT {
+      color: #C1B8B6;
+    }
+    .Trace--MS,
+    .Trace--ME {
+      color: #919191;
+      font-weight: bold;
+    }
   `,
   ],
 })
@@ -101,13 +119,54 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   connected = false;
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
-  columns = ['ctx', 'type', 'n', 'data', 'line', 'location', 'owner'];
+  columns = ['ctx', 'ts', 'type', 'n', 'data', 'line', 'location', 'owner'];
   selection: Trace[];
 
   constructor(private route: ActivatedRoute) {
     route.params.subscribe(({ sandboxId }) => {
       console.log('TraceViewComponent', sandboxId);
       this.sandboxId = sandboxId;
+    });
+  }
+
+  createTraceObservable(
+    client: Client,
+    dictionnary: Map<number, Trace[]>,
+    deploymentId = services.Macro.DEFAULT_DEPLOYMENT_ID,
+  ): Observable<Trace[]> {
+    return new Observable(observer => {
+      const api = client.createService({
+        Type: services.Macro,
+        deploymentId,
+        listener: {
+          trace: (message: TraceCompletion) => {
+            const trace = {
+              ...message.data,
+              location: parseTraceLocation(message.data.location),
+              ts: Date.now(),
+            };
+            try {
+              const { level, ...infos } = trace;
+              const queue = dictionnary.has(trace.ctx)
+                ? dictionnary.get(trace.ctx)
+                : [];
+              queue[trace.n] = trace;
+              dictionnary.set(trace.ctx, queue);
+            } catch (e) {
+              // console.log(trace);
+            }
+            const traces = Array.from(
+              dictionnary.entries(),
+            ).map(([ctx, list]) => {
+              return list[1];
+            });
+            observer.next(traces);
+          },
+        },
+      });
+      return () => {
+        client.unsubscribe(api);
+      };
     });
   }
 
@@ -127,39 +186,21 @@ export class TraceViewComponent implements OnDestroy, OnInit {
           password: credentials.password,
         }),
     });
-    const api = this.client.createService({
-      Type: services.Macro,
-      listener: {
-        trace: (message: TraceCompletion) => {
-          const trace = {
-            ...message.data,
-            location: parseTraceLocation(message.data.location),
-          };
-          try {
-            const { level, ...infos } = trace;
-            // console[level.toLowerCase()](infos);
-            const queue = this.map.has(trace.ctx)
-              ? this.map.get(trace.ctx)
-              : [];
-            queue[trace.n] = trace;
-            this.map.set(trace.ctx, queue);
-          } catch (e) {
-            // console.log(trace);
-          }
-          this.traces = Array.from(this.map.entries()).map(([ctx, traces]) => {
-            return traces[1];
-          });
-          // console.log('TraceViewComponent::traces', this.traces);
-          // console.log('TraceViewComponent::map', this.map);
-          this.subject.next(this.traces);
-        },
-      },
-    });
     this.client.onSuccessfulHandshake(authentication => {
       console.log('onSuccessfulHandshake', authentication);
       this.connected = true;
     });
     this.client.connect();
+    this.createTraceObservable(
+      this.client,
+      this.map,
+      'macro_0',
+    ).subscribe(traces => this.subject.next(traces));
+    this.createTraceObservable(
+      this.client,
+      this.map,
+      'macro_1',
+    ).subscribe(traces => this.subject.next(traces));
   }
   ngOnDestroy() {
     this.client.disconnect();

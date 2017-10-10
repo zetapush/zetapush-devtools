@@ -28,6 +28,7 @@ export interface Trace {
   location: TraceLocation;
   owner: string;
   level: TraceLevel;
+  ts: number;
 }
 
 export interface TraceCompletion {
