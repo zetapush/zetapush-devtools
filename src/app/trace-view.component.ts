@@ -30,9 +30,13 @@ import 'rxjs/add/operator/map';
       <mat-icon mat-list-icon>folder</mat-icon>
       <span>Trace for {{sandboxId}}</span>
     </h1>
-    <nav>
-      <button mat-raised-button (click)="onClearClick()">Clear</button>
-    </nav>
+    <mat-toolbar>
+      <span>Actions</span>
+      <span class="Spacer"></span>
+      <button mat-icon-button>
+        <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
+      </button>
+    </mat-toolbar>
     <mat-table #table [dataSource]="source" class="Table">
       <!-- Ctx Column -->
       <ng-container matColumnDef="ctx">
@@ -86,6 +90,9 @@ import 'rxjs/add/operator/map';
   `,
   styles: [
     `
+    .Spacer {
+      flex: 1 1 auto;
+    }
     .Table {
       height: 50vh;
       border: 1px dashed rgba(0,0,0,.12);
@@ -95,19 +102,6 @@ import 'rxjs/add/operator/map';
     }
     .Table__Row {
       cursor: pointer;
-    }
-    .Trace {}
-    .Trace--USR {
-      color: #1B6FCB;
-      font-weight: bold;
-    }
-    .Trace--CMT {
-      color: #C1B8B6;
-    }
-    .Trace--MS,
-    .Trace--ME {
-      color: #919191;
-      font-weight: bold;
     }
   `,
   ],
@@ -207,6 +201,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     this.client.disconnect();
   }
   onClearClick() {
+    console.log('TraceViewComponent::onClearClick');
     this.map = new Map<number, Trace[]>();
     this.traces = [];
     this.subject.next(this.traces);

@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   Trace,
   TraceCompletion,
@@ -41,11 +36,6 @@ export class StackTraceComponent implements OnDestroy, OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-
-  }
-  ngOnDestroy() {
-
-  }
+  ngOnInit() {}
+  ngOnDestroy() {}
 }
-
