@@ -79,9 +79,7 @@ import 'rxjs/add/operator/map';
       <md-header-row *mdHeaderRowDef="columns"></md-header-row>
       <md-row *mdRowDef="let row; columns: columns;" (click)="onRowClick(row)" class="Table__Row"></md-row>
     </md-table>
-    <ul *ngIf="selection">
-      <li [ngClass]="['Trace', 'Trace--' + trace.type]" *ngFor="let trace of selection">{{trace | json}}</li>
-    <ul>
+    <zp-stack-trace *ngIf="selection" [traces]="selection"></zp-stack-trace>
   `,
   styles: [
     `

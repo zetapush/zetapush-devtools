@@ -11,14 +11,16 @@ import { EnvModule } from './env.module';
 import { AppComponent } from './app.component';
 import { LoginViewComponent } from './login-view.component';
 import { SandboxesViewComponent } from './sandboxes-view.component';
-import { TraceViewComponent } from './trace-view.component';
+import { StackTraceComponent } from './stack-trace.component';
 import { RedirectViewComponent } from './redirect-view.component';
+import { TraceViewComponent } from './trace-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginViewComponent,
     SandboxesViewComponent,
+    StackTraceComponent,
     TraceViewComponent,
     RedirectViewComponent,
   ],
