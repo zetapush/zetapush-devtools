@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  hmr: false,
   plateforms: [
     {
       url: 'http://zbo.zpush.io',
