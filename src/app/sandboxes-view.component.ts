@@ -24,11 +24,16 @@ import { Sandbox } from './sandboxes-resolver.service';
     </mat-list-item>
   </mat-list>
   `,
-  styles: [`
-    .mat-list-icon {
+  styles: [
+    `
+    [mat-list-icon] {
       color: rgba(0, 0, 0, 0.54);
     }
-  `],
+    mat-list-item {
+      cursor: pointer;
+    }
+  `,
+  ],
 })
 export class SandboxesViewComponent {
   sandboxes: Sandbox[] = [];
