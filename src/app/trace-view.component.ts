@@ -26,68 +26,73 @@ import 'rxjs/add/operator/map';
 @Component({
   selector: 'zp-trace-view',
   template: `
-    <h1>
-      <mat-icon mat-list-icon>folder</mat-icon>
-      <span>Trace for {{sandboxId}}</span>
-    </h1>
-    <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
-    <mat-toolbar>
-      <span>Actions</span>
-      <span class="Spacer"></span>
-      <button mat-icon-button>
-        <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
-      </button>
-    </mat-toolbar>
-    <mat-table #table [dataSource]="source" class="Table">
-      <!-- Ctx Column -->
-      <ng-container matColumnDef="ctx">
-        <mat-header-cell *matHeaderCellDef> Ctx </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.ctx}} </mat-cell>
-      </ng-container>
-      <!-- Ts Column -->
-      <ng-container matColumnDef="ts">
-        <mat-header-cell *matHeaderCellDef> Ts </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.ts | date:'mediumTime'}} </mat-cell>
-      </ng-container>
-      <!-- Type Column -->
-      <ng-container matColumnDef="type">
-        <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
-      </ng-container>
-      <!-- N Column -->
-      <ng-container matColumnDef="n">
-        <mat-header-cell *matHeaderCellDef> N </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.n}} </mat-cell>
-      </ng-container>
-      <!-- Data Column -->
-      <ng-container matColumnDef="data">
-        <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.data}}</mat-cell>
-      </ng-container>
-      <!-- Line Column -->
-      <ng-container matColumnDef="line">
-        <mat-header-cell *matHeaderCellDef> Line </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.line}} </mat-cell>
-      </ng-container>
-      <!-- Location Column -->
-      <ng-container matColumnDef="location">
-        <mat-header-cell *matHeaderCellDef> Recipe </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.location.recipe}}@{{row.location.version}} </mat-cell>
-      </ng-container>
-      <!-- Owner Column -->
-      <ng-container matColumnDef="owner">
-        <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
-      </ng-container>
-      <!-- Level Column -->
-      <ng-container matColumnDef="level">
-        <mat-header-cell *matHeaderCellDef> Level </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.level}} </mat-cell>
-      </ng-container>
-      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns;" (click)="onRowClick(row)" class="Table__Row"></mat-row>
-    </mat-table>
-    <zp-stack-trace *ngIf="selection" [traces]="selection"></zp-stack-trace>
+    <mat-sidenav-container class="Container--Sidenav">
+      <h1>
+        <mat-icon mat-list-icon [routerLink]="['/sandboxes']">arrow_back</mat-icon>
+        <span>Trace for {{sandboxId}}</span>
+      </h1>
+      <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
+      <mat-toolbar>
+        <span>Actions</span>
+        <span class="Spacer"></span>
+        <button mat-icon-button>
+          <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
+        </button>
+      </mat-toolbar>
+      <mat-table #table [dataSource]="source" class="Table">
+        <!-- Ctx Column -->
+        <ng-container matColumnDef="ctx">
+          <mat-header-cell *matHeaderCellDef> Ctx </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.ctx}} </mat-cell>
+        </ng-container>
+        <!-- Ts Column -->
+        <ng-container matColumnDef="ts">
+          <mat-header-cell *matHeaderCellDef> Ts </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.ts | date:'mediumTime'}} </mat-cell>
+        </ng-container>
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
+        </ng-container>
+        <!-- N Column -->
+        <ng-container matColumnDef="n">
+          <mat-header-cell *matHeaderCellDef> N </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.n}} </mat-cell>
+        </ng-container>
+        <!-- Data Column -->
+        <ng-container matColumnDef="data">
+          <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.data}}</mat-cell>
+        </ng-container>
+        <!-- Line Column -->
+        <ng-container matColumnDef="line">
+          <mat-header-cell *matHeaderCellDef> Line </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.line}} </mat-cell>
+        </ng-container>
+        <!-- Location Column -->
+        <ng-container matColumnDef="location">
+          <mat-header-cell *matHeaderCellDef> Recipe </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.location.recipe}}@{{row.location.version}} </mat-cell>
+        </ng-container>
+        <!-- Owner Column -->
+        <ng-container matColumnDef="owner">
+          <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
+        </ng-container>
+        <!-- Level Column -->
+        <ng-container matColumnDef="level">
+          <mat-header-cell *matHeaderCellDef> Level </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.level}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns;" (click)="onRowClick(row);sidenav.toggle()" class="Table__Row"></mat-row>
+      </mat-table>
+
+      <mat-sidenav #sidenav mode="over" position="end">
+        <zp-stack-trace [traces]="selection"></zp-stack-trace>
+      </mat-sidenav>
+    </mat-sidenav-container>
   `,
   styles: [
     `
@@ -95,7 +100,7 @@ import 'rxjs/add/operator/map';
       flex: 1 1 auto;
     }
     .Table {
-      height: 50vh;
+      height: 80vh;
       border: 1px dashed rgba(0,0,0,.12);
       overflow-y: scroll;
     }
@@ -103,6 +108,18 @@ import 'rxjs/add/operator/map';
     }
     .Table__Row {
       cursor: pointer;
+    }
+    .Container--Sidenav {
+      height: 100vh;
+    }
+    .Container--Sidenav mat-sidenav {
+      max-width: 75vw;
+      padding: 1rem;
+    }
+    .Container--Sidenav .mat-sidenav-content,
+    .Container--Sidenav mat-sidenav {
+      display: flex;
+      overflow-y: scroll;
     }
   `,
   ],

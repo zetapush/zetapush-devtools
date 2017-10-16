@@ -5,13 +5,42 @@ import {
   TraceLocation,
   parseTraceLocation,
 } from './trace.interface';
-
+/*
+  ctx: number;
+  type: TraceType;
+  n: number;
+  data: any;
+  line: number;
+  location: TraceLocation;
+  owner: string;
+  level: TraceLevel;
+  ts: number;
+*/
 @Component({
   selector: 'zp-stack-trace',
   template: `
-    <ul>
-      <li [ngClass]="['Trace', 'Trace--' + trace.type]" *ngFor="let trace of traces">{{trace | json}}</li>
-    <ul>
+    <table>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Owner</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let trace of traces" [ngClass]="['Trace', 'Trace--' + trace.type]">
+          <td>{{trace.n}}</td>
+          <td>{{trace.type}}</td>
+          <td>{{trace.ts | date:'mediumTime'}}</td>
+          <td>{{trace.location.recipe}}@{{trace.location.version}}</td>
+          <td>{{trace.owner}}</td>
+          <td>{{trace.data | json}}</td>
+        </tr>
+      </tbody>
+    </table>
   `,
   styles: [
     `

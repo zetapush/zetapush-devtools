@@ -10,6 +10,7 @@ import {
   MatOptionModule,
   MatProgressSpinnerModule,
   MatSelectModule,
+  MatSidenavModule,
   MatSlideToggleModule,
   MatSortModule,
   MatTableModule,
@@ -28,6 +29,7 @@ const MODULES = [
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSlideToggleModule,
+  MatSidenavModule,
   MatTableModule,
   MatToolbarModule,
 ];
