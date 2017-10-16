@@ -19,6 +19,10 @@ import {
 @Component({
   selector: 'zp-stack-trace',
   template: `
+    <form class="Form Form--Filter">
+      <span>Filter: </span>
+      <mat-checkbox *ngFor="let type of types" [(ngModel)]="type.selected" name="filter" class="Filter">{{type.label}}</mat-checkbox>
+    </form>
     <table>
       <thead>
         <tr>
@@ -31,7 +35,7 @@ import {
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let trace of traces" [ngClass]="['Trace', 'Trace--' + trace.type]">
+        <tr *ngFor="let trace of filtered" [ngClass]="['Trace', 'Trace--' + trace.type]">
           <td>{{trace.n}}</td>
           <td>{{trace.type}}</td>
           <td>{{trace.ts | date:'mediumTime'}}</td>
@@ -57,14 +61,32 @@ import {
       color: #919191;
       font-weight: bold;
     }
+    .Form--Filter {
+      font-weight: bold;
+    }
+    .Filter {
+      padding-right: 0.25rem;
+    }
   `,
   ],
 })
 export class StackTraceComponent implements OnDestroy, OnInit {
   @Input() traces: Trace[] = [];
-
+  types = [
+    { label: 'MS', selected: true },
+    { label: 'ME', selected: true },
+    { label: 'CMT', selected: true },
+    { label: 'USR', selected: true },
+  ];
   constructor() {}
-
+  get filtered() {
+    const types = this.types
+      .filter(type => type.selected)
+      .map(type => type.label);
+    return this.traces
+      ? this.traces.filter(trace => types.includes(trace.type))
+      : [];
+  }
   ngOnInit() {}
   ngOnDestroy() {}
 }
