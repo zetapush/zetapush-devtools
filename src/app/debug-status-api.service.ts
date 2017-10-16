@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { PreferencesStorage } from './preferences-storage.service';
+import { getSecureUrl } from './utils';
 
 export interface DebugStatus {
   currentNb: number;
@@ -19,7 +20,9 @@ export class DebugStatusApi {
     const servers = await this.servers(sandboxId);
 
     const getStatusByServer = (server: string): Promise<DebugStatus> => {
-      const url = `${server}/rest/deployed/${sandboxId}/${deploymentId}/debug/status`;
+      const url = getSecureUrl(
+        `${server}/rest/deployed/${sandboxId}/${deploymentId}/debug/status`,
+      );
       return fetch(url, {
         headers: {
           'X-Authorization': JSON.stringify(credentials),
@@ -54,7 +57,9 @@ export class DebugStatusApi {
     const credentials = this.preferences.getCredentials();
     const servers = await this.servers(sandboxId);
     const enableStatusByServer = (server: string): Promise<any> => {
-      const url = `${server}/rest/deployed/${sandboxId}/${deploymentId}/debug/enable`;
+      const url = getSecureUrl(
+        `${server}/rest/deployed/${sandboxId}/${deploymentId}/debug/enable`,
+      );
       return fetch(url, {
         headers: {
           'X-Authorization': JSON.stringify(credentials),
@@ -72,7 +77,9 @@ export class DebugStatusApi {
     const credentials = this.preferences.getCredentials();
     const servers = await this.servers(sandboxId);
     const enableStatusByServer = (server: string): Promise<any> => {
-      const url = `${server}/rest/deployed/${sandboxId}/${deploymentId}/debug/disable`;
+      const url = getSecureUrl(
+        `${server}/rest/deployed/${sandboxId}/${deploymentId}/debug/disable`,
+      );
       return fetch(url, {
         headers: {
           'X-Authorization': JSON.stringify(credentials),
@@ -88,7 +95,9 @@ export class DebugStatusApi {
 
   async servers(sandboxId: string): Promise<string[]> {
     const credentials = this.preferences.getCredentials();
-    const url = `${credentials.apiUrl}/zbo/pub/business/${sandboxId}`;
+    const url = getSecureUrl(
+      `${credentials.apiUrl}/zbo/pub/business/${sandboxId}`,
+    );
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',
