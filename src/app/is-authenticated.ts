@@ -7,19 +7,20 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { Credentials } from './credentials.interface';
+import { PreferencesStorage } from './preferences-storage.service';
 
 @Injectable()
 export class IsAuthenticated implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private preferences: PreferencesStorage,
+    private router: Router,
+  ) {}
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<boolean> {
     try {
-      const credentials = JSON.parse(
-        sessionStorage.getItem('zp:devtools:credentials'),
-      ) as Credentials;
+      const credentials = this.preferences.getCredentials();
       const response = await fetch(`${credentials.apiUrl}/zbo/auth/whoami`, {
         credentials: 'include',
       });

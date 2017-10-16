@@ -10,8 +10,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
-import { Authentication, Client, services } from 'zetapush-js';
-import { Credentials } from './credentials.interface';
+import { Authentication, Client, services as SERVICES } from 'zetapush-js';
+import { PreferencesStorage } from './preferences-storage.service';
 import {
   Trace,
   TraceCompletion,
@@ -30,6 +30,7 @@ import 'rxjs/add/operator/map';
       <mat-icon mat-list-icon>folder</mat-icon>
       <span>Trace for {{sandboxId}}</span>
     </h1>
+    <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
     <mat-toolbar>
       <span>Actions</span>
       <span class="Spacer"></span>
@@ -116,22 +117,30 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   source: TraceDataSource | null;
   columns = ['ctx', 'ts', 'type', 'n', 'data', 'line', 'location', 'owner'];
   selection: Trace[];
+  services: string[] = [];
 
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    private preferences: PreferencesStorage,
+    private route: ActivatedRoute,
+  ) {
     route.params.subscribe(({ sandboxId }) => {
-      console.log('TraceViewComponent', sandboxId);
+      console.log('TraceViewComponent::route.params', sandboxId);
       this.sandboxId = sandboxId;
+    });
+    route.data.subscribe(({ services }) => {
+      console.log('TraceViewComponent::route.data', services);
+      this.services = services;
     });
   }
 
   createTraceObservable(
     client: Client,
     dictionnary: Map<number, Trace[]>,
-    deploymentId = services.Macro.DEFAULT_DEPLOYMENT_ID,
+    deploymentId = SERVICES.Macro.DEFAULT_DEPLOYMENT_ID,
   ): Observable<Trace[]> {
     return new Observable(observer => {
       const api = client.createService({
-        Type: services.Macro,
+        Type: SERVICES.Macro,
         deploymentId,
         listener: {
           trace: (message: TraceCompletion) => {
@@ -167,9 +176,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.source = new TraceDataSource(this.subject /*, this.sort*/);
-    const credentials = JSON.parse(
-      sessionStorage.getItem('zp:devtools:credentials'),
-    ) as Credentials;
+    const credentials = this.preferences.getCredentials();
     this.client = new Client({
       apiUrl: `${credentials.apiUrl}/zbo/pub/business/`,
       sandboxId: this.sandboxId,
@@ -186,16 +193,14 @@ export class TraceViewComponent implements OnDestroy, OnInit {
       this.connected = true;
     });
     this.client.connect();
-    this.createTraceObservable(
-      this.client,
-      this.map,
-      'macro_0',
-    ).subscribe(traces => this.subject.next(traces));
-    this.createTraceObservable(
-      this.client,
-      this.map,
-      'macro_1',
-    ).subscribe(traces => this.subject.next(traces));
+    // Enable subscription for all deployed services
+    this.services.forEach(deploymentId =>
+      this.createTraceObservable(
+        this.client,
+        this.map,
+        deploymentId,
+      ).subscribe(traces => this.subject.next(traces)),
+    );
   }
   ngOnDestroy() {
     this.client.disconnect();

@@ -7,7 +7,7 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 
-import { Credentials } from './credentials.interface';
+import { PreferencesStorage } from './preferences-storage.service';
 
 export interface Sandbox {
   businessId: string;
@@ -16,14 +16,13 @@ export interface Sandbox {
 
 @Injectable()
 export class SandboxesResolver implements Resolve<Sandbox[]> {
+  constructor(private preferences: PreferencesStorage) {}
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<Sandbox[]> {
     console.log('SandboxesResolver::resolve', route);
-    const credentials = JSON.parse(
-      sessionStorage.getItem('zp:devtools:credentials'),
-    ) as Credentials;
+    const credentials = this.preferences.getCredentials();
     const url = `${credentials.apiUrl}/zbo/orga/business/list/mine`;
     const response = await fetch(url, {
       method: 'GET',

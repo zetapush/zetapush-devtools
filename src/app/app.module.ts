@@ -14,6 +14,9 @@ import { SandboxesViewComponent } from './sandboxes-view.component';
 import { StackTraceComponent } from './stack-trace.component';
 import { RedirectViewComponent } from './redirect-view.component';
 import { TraceViewComponent } from './trace-view.component';
+import { DebugFormComponent } from './debug-form.component';
+import { DebugStatusApi } from './debug-status-api.service';
+import { PreferencesStorage } from './preferences-storage.service';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,7 @@ import { TraceViewComponent } from './trace-view.component';
     StackTraceComponent,
     TraceViewComponent,
     RedirectViewComponent,
+    DebugFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,11 @@ import { TraceViewComponent } from './trace-view.component';
     AppRoutingModule,
     UiModule,
   ],
-  providers: [{ provide: LocationStrategy, useClass: PathLocationStrategy }],
+  providers: [
+    DebugStatusApi,
+    PreferencesStorage,
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -10,9 +10,10 @@ import {
   MatOptionModule,
   MatProgressSpinnerModule,
   MatSelectModule,
+  MatSlideToggleModule,
   MatSortModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
 } from '@angular/material';
 
 const MODULES = [
@@ -26,16 +27,13 @@ const MODULES = [
   MatOptionModule,
   MatProgressSpinnerModule,
   MatSelectModule,
+  MatSlideToggleModule,
   MatTableModule,
   MatToolbarModule,
 ];
 
 @NgModule({
-  imports: [
-    ...MODULES
-  ],
-  exports: [
-    ...MODULES
-  ],
+  imports: [...MODULES],
+  exports: [...MODULES],
 })
 export class UiModule {}
