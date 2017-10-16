@@ -41,7 +41,7 @@ import {
           <td>{{trace.ts | date:'mediumTime'}}</td>
           <td>{{trace.location.recipe}}@{{trace.location.version}}</td>
           <td>{{trace.owner}}</td>
-          <td>{{trace.data | json}}</td>
+          <td><pre>{{trace.data | json}}</pre></td>
         </tr>
       </tbody>
     </table>
