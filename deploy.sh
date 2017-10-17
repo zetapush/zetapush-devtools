@@ -2,8 +2,8 @@
 
 set -e
 
-hash=$(git rev-parse --verify HEAD)
-artifact="devtools.zpush.io--$hash.tar.gz"
+revision=$(git rev-parse --verify HEAD)
+artifact="devtools.zpush.io--$revision.tar.gz"
 file=./archives/$artifact
 
 if [ -f $file ]; then
@@ -11,8 +11,8 @@ if [ -f $file ]; then
 else
   echo "[LOG] Build application"
   yarn run build:optimized --base-href=/
-  echo "[LOG] Clean previous packaged applications"
-  rm -f $file
+  echo "[LOG] Inject revision in built ouput"
+  echo $revision > ./dist/revision.txt
   echo "[LOG] Package application"
   cd ./dist
   echo "[LOG] Generate artifact $artifact"
