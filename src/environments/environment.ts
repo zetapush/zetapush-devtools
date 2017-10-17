@@ -19,5 +19,9 @@ export const environment = {
       url: 'http://vm-zbo:8080',
       name: 'Pre-Production',
     },
+    {
+      url: '<custom>',
+      name: 'Custom',
+    },
   ],
 };

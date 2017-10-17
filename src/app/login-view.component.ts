@@ -1,9 +1,12 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ENVIRONMENT_ID } from './env.module';
 import { Platform } from './environment.interface';
 import { Credentials } from './credentials.interface';
+
+const CUSTOM_API_URL = '<custom>';
 
 @Component({
   selector: 'zp-login-view',
@@ -24,6 +27,9 @@ import { Credentials } from './credentials.interface';
               {{ platform.name }}
             </mat-option>
           </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="isCustomApiUrl()">
+          <input matInput placeholder="Custom Api Url" name="customApiUrl" type="text" required ngModel>
         </mat-form-field>
       </mat-card-content>
       <mat-card-actions align="end">
@@ -57,24 +63,41 @@ import { Credentials } from './credentials.interface';
   `,
   ],
 })
-export class LoginViewComponent {
+export class LoginViewComponent implements OnInit {
   platforms: Platform[];
   connecting = false;
 
+  @ViewChild(NgForm) form: NgForm;
+
   constructor(private router: Router, injector: Injector) {
     this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
+  }
+
+  ngOnInit() {
+    console.log('LoginViewComponent::ngOnInit', this.form);
   }
 
   async onSubmit({ value, valid }: { value: Credentials; valid: boolean }) {
     console.log('LoginComponent::onSubmit', value, valid);
 
     if (valid) {
-      sessionStorage.setItem('zp:devtools:credentials', JSON.stringify(value));
+      const { apiUrl, username, password } = value;
+      const credentials = { apiUrl, username, password };
+      if (apiUrl === CUSTOM_API_URL) {
+        credentials.apiUrl = apiUrl.replace(
+          CUSTOM_API_URL,
+          this.form.value.customApiUrl,
+        );
+      }
+      sessionStorage.setItem(
+        'zp:devtools:credentials',
+        JSON.stringify(credentials),
+      );
       this.connecting = true;
       try {
         const urls = {
-          login: `${value.apiUrl}/zbo/auth/login`,
-          logout: `${value.apiUrl}/zbo/auth/logout`,
+          login: `${credentials.apiUrl}/zbo/auth/login`,
+          logout: `${credentials.apiUrl}/zbo/auth/logout`,
         };
         console.log('LoginComponent::onSubmit', urls);
         await fetch(urls.logout, {
@@ -87,7 +110,7 @@ export class LoginViewComponent {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(value),
+          body: JSON.stringify(credentials),
           credentials: 'include',
         });
         const data = await response.json();
@@ -98,5 +121,9 @@ export class LoginViewComponent {
         console.error('error', e);
       }
     }
+  }
+
+  isCustomApiUrl(): boolean {
+    return this.form.value.apiUrl === CUSTOM_API_URL;
   }
 }

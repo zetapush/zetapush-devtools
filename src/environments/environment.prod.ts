@@ -14,5 +14,9 @@ export const environment = {
       url: 'http://hq.zpush.io:9080',
       name: 'Pre-Production',
     },
+    {
+      url: '<custom>',
+      name: 'Custom',
+    },
   ],
 };
