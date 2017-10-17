@@ -4,13 +4,13 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --app=default",
     "start:hmr": "ng serve --app=hmr --hmr",
-    "build": "ng build",
+    "build": "ng build --app=default",
+    "build:optimized": "ng build --prod --build-optimizer",
     "test": "ng test",
     "lint": "ng lint",
-    "deploy":
-      "ng build --prod --build-optimizer --base-href=https://zetapush.github.io/zetapush-devtools/ && angular-cli-ghpages"
+    "deploy": "yarn run build:ghpages && angular-cli-ghpages"
   },
   "private": true,
   "dependencies": {
