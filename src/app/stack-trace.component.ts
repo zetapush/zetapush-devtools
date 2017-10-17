@@ -28,20 +28,18 @@ import {
         <tr>
           <th>N</th>
           <th>Type</th>
-          <th>Date</th>
+          <th>Data</th>
           <th>Location</th>
           <th>Owner</th>
-          <th>Data</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let trace of filtered" [ngClass]="['Trace', 'Trace--' + trace.type]">
           <td>{{trace.n}}</td>
           <td>{{trace.type}}</td>
-          <td>{{trace.ts | date:'mediumTime'}}</td>
-          <td>{{trace.location.recipe}}@{{trace.location.version}}</td>
-          <td>{{trace.owner}}</td>
           <td><pre>{{trace.data | json}}</pre></td>
+          <td>{{trace.location.recipe}}:{{trace.location.path}}#{{trace.line}}</td>
+          <td>{{trace.owner}}</td>
         </tr>
       </tbody>
     </table>

@@ -42,49 +42,33 @@ import 'rxjs/add/operator/map';
       <mat-table #table [dataSource]="source" class="Table">
         <!-- Ctx Column -->
         <ng-container matColumnDef="ctx">
-          <mat-header-cell *matHeaderCellDef> Ctx </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.ctx}} </mat-cell>
+          <mat-header-cell class="HeaderCell HeaderCell--Ctx" *matHeaderCellDef> Id </mat-header-cell>
+          <mat-cell class="Cell Cell--Ctx" *matCellDef="let row">
+            {{row.ctx}}
+          </mat-cell>
         </ng-container>
         <!-- Ts Column -->
         <ng-container matColumnDef="ts">
-          <mat-header-cell *matHeaderCellDef> Ts </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.ts | date:'mediumTime'}} </mat-cell>
-        </ng-container>
-        <!-- Type Column -->
-        <ng-container matColumnDef="type">
-          <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
-        </ng-container>
-        <!-- N Column -->
-        <ng-container matColumnDef="n">
-          <mat-header-cell *matHeaderCellDef> N </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.n}} </mat-cell>
-        </ng-container>
-        <!-- Data Column -->
-        <ng-container matColumnDef="data">
-          <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.data}}</mat-cell>
-        </ng-container>
-        <!-- Line Column -->
-        <ng-container matColumnDef="line">
-          <mat-header-cell *matHeaderCellDef> Line </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.line}} </mat-cell>
+          <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
+          <mat-cell class="Cell Cell--Ts" *matCellDef="let row">
+            {{row.ts | date:'mediumTime'}}
+          </mat-cell>
         </ng-container>
         <!-- Location Column -->
         <ng-container matColumnDef="location">
-          <mat-header-cell *matHeaderCellDef> Recipe </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.location.recipe}}@{{row.location.version}} </mat-cell>
+          <mat-header-cell class="HeaderCell HeaderCell--Location" *matHeaderCellDef> Location </mat-header-cell>
+          <mat-cell class="Cell Cell--Location" *matCellDef="let row">
+            {{row.location.recipe}}@{{row.location.version}}:@{{row.location.path}}
+          </mat-cell>
         </ng-container>
         <!-- Owner Column -->
         <ng-container matColumnDef="owner">
-          <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
+          <mat-header-cell class="HeaderCell HeaderCell--Owner" *matHeaderCellDef> Owner </mat-header-cell>
+          <mat-cell class="Cell Cell--Owner" *matCellDef="let row">
+            {{row.owner}}
+          </mat-cell>
         </ng-container>
-        <!-- Level Column -->
-        <ng-container matColumnDef="level">
-          <mat-header-cell *matHeaderCellDef> Level </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.level}} </mat-cell>
-        </ng-container>
+
         <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: columns;" (click)="onRowClick(row);sidenav.toggle()" class="Table__Row"></mat-row>
       </mat-table>
@@ -121,6 +105,10 @@ import 'rxjs/add/operator/map';
       display: flex;
       overflow-y: scroll;
     }
+    .HeaderCell--Location,
+    .Cell--Location {
+      flex-grow: 2;
+    }
   `,
   ],
 })
@@ -132,7 +120,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   connected = false;
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
-  columns = ['ctx', 'ts', 'type', 'n', 'data', 'line', 'location', 'owner'];
+  columns = ['ctx', 'ts', 'location', 'owner'];
   selection: Trace[];
   services: string[] = [];
 
@@ -176,11 +164,11 @@ export class TraceViewComponent implements OnDestroy, OnInit {
             } catch (e) {
               // console.log(trace);
             }
-            const traces = Array.from(
-              dictionnary.entries(),
-            ).map(([ctx, list]) => {
-              return list[1];
-            });
+            const traces = Array.from(dictionnary.entries())
+              .map(([ctx, list]) => {
+                return list[1];
+              })
+              .filter(element => element);
             observer.next(traces);
           },
         },

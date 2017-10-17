@@ -18,14 +18,15 @@ export interface DebugStatusView extends DebugStatus {
     <form (ngSubmit)="onSubmit(form)" novalidate #form="ngForm">
       <div class="Container Container--All">
         <mat-slide-toggle
-        [checked]="checked"
+          [checked]="checked"
           (change)="onChangeDebugStatus($event)"
+          class="Slide Slide--All"
           labelPosition="before">
             All :
         </mat-slide-toggle>
       </div>
       <div class="Container Container--Services">
-        <mat-slide-toggle *ngFor="let model of models"
+        <mat-slide-toggle class="Slide Slide--Model" *ngFor="let model of models"
           [checked]="model.debug"
           (change)="onChangeDebugStatusByModel(model, $event)"
           labelPosition="before">
@@ -42,6 +43,9 @@ export interface DebugStatusView extends DebugStatus {
     }
     .Container--All {
       border-right: 1px solid #f5f5f5;
+    }
+    .Slide--Model {
+      padding-right: 0.5rem;
     }
   `,
   ],

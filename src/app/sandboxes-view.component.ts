@@ -1,17 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Sandbox } from './sandboxes-resolver.service';
-/**
-    <mat-list>
-      <h3 mat-subheader>Folders</h3>
-      <mat-list-item *ngFor="let sandbox of sandboxes">
-        <mat-icon mat-list-icon>folder</mat-icon>
-        <p mat-line>
-          <a [routerLink]="['/trace', sandbox.businessId]">({{sandbox.businessId}}) -- {{sandbox.name}}</a>
-        </p>
-      </mat-list-item>
-    </mat-list>
- */
+
 @Component({
   selector: 'zp-sandboxes-view',
   template: `
