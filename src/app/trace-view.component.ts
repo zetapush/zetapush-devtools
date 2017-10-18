@@ -58,7 +58,7 @@ import 'rxjs/add/operator/map';
         <ng-container matColumnDef="location">
           <mat-header-cell class="HeaderCell HeaderCell--Location" *matHeaderCellDef> Location </mat-header-cell>
           <mat-cell class="Cell Cell--Location" *matCellDef="let row">
-            {{row.location.recipe}}@{{row.location.version}}:@{{row.location.path}}
+            {{row.location.recipe}}@{{row.location.version}}:{{row.location.path}}
           </mat-cell>
         </ng-container>
         <!-- Owner Column -->
