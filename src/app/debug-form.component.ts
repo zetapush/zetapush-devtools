@@ -18,6 +18,7 @@ export interface DebugStatusView extends DebugStatus {
     <form (ngSubmit)="onSubmit(form)" novalidate #form="ngForm">
       <div class="Container Container--All">
         <mat-slide-toggle
+          [disabled]="models.length === 0"
           [checked]="checked"
           (change)="onChangeDebugStatus($event)"
           class="Slide Slide--All"
@@ -32,6 +33,7 @@ export interface DebugStatusView extends DebugStatus {
           labelPosition="before">
             {{model.deploymentId}} :
         </mat-slide-toggle>
+        <span *ngIf="models.length === 0">No macro services deployed</span>
       </div>
     </form>
   `,
@@ -81,7 +83,7 @@ export class DebugFormComponent implements OnChanges, OnInit {
     this.checked = models.reduce((enabled, next) => {
       enabled = enabled && next.debug;
       return enabled;
-    }, true);
+    }, models.length > 0);
     this.models = models;
     console.log('DebugFormComponent::fetch', models);
     return await models;
