@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import { PreferencesStorage } from './preferences-storage.service';
+import { getSecureUrl } from './utils';
 
 @Injectable()
 export class IsAuthenticated implements CanActivate {
@@ -21,7 +22,8 @@ export class IsAuthenticated implements CanActivate {
   ): Promise<boolean> {
     try {
       const credentials = this.preferences.getCredentials();
-      const response = await fetch(`${credentials.apiUrl}/zbo/auth/whoami`, {
+      const url = getSecureUrl(`${credentials.apiUrl}/zbo/auth/whoami`);
+      const response = await fetch(url, {
         credentials: 'include',
       });
       const whoami = await response.json();

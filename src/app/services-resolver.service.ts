@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import { PreferencesStorage } from './preferences-storage.service';
+import { getSecureUrl } from './utils';
 
 @Injectable()
 export class ServicesResolver implements Resolve<string[]> {
@@ -19,7 +20,9 @@ export class ServicesResolver implements Resolve<string[]> {
     console.log('ServicesResolver::resolve', route, state);
     const credentials = this.preferences.getCredentials();
     const { sandboxId } = route.params;
-    const baseUrl = `${credentials.apiUrl}/zbo/orga/item/list/${sandboxId}`;
+    const baseUrl = getSecureUrl(
+      `${credentials.apiUrl}/zbo/orga/item/list/${sandboxId}`,
+    );
     let { content, pagination } = await this.request(baseUrl);
     let items = [...content];
     console.log('ServicesResolver::listItems', { content, pagination });

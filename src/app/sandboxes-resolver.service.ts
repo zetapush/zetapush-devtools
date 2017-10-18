@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import { PreferencesStorage } from './preferences-storage.service';
+import { getSecureUrl } from './utils';
 
 export interface Sandbox {
   businessId: string;
@@ -23,7 +24,9 @@ export class SandboxesResolver implements Resolve<Sandbox[]> {
   ): Promise<Sandbox[]> {
     console.log('SandboxesResolver::resolve', route);
     const credentials = this.preferences.getCredentials();
-    const url = `${credentials.apiUrl}/zbo/orga/business/list/mine`;
+    const url = getSecureUrl(
+      `${credentials.apiUrl}/zbo/orga/business/list/mine`,
+    );
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',

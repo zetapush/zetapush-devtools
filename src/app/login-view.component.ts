@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ENVIRONMENT_ID } from './env.module';
 import { Platform } from './environment.interface';
 import { Credentials } from './credentials.interface';
+import { getSecureUrl } from './utils';
 
 const CUSTOM_API_URL = '<custom>';
 
@@ -96,13 +97,12 @@ export class LoginViewComponent implements OnInit {
       this.connecting = true;
       try {
         const urls = {
-          login: `${credentials.apiUrl}/zbo/auth/login`,
-          logout: `${credentials.apiUrl}/zbo/auth/logout`,
+          login: getSecureUrl(`${credentials.apiUrl}/zbo/auth/login`),
+          logout: getSecureUrl(`${credentials.apiUrl}/zbo/auth/logout`),
         };
         console.log('LoginComponent::onSubmit', urls);
         await fetch(urls.logout, {
           method: 'GET',
-          body: {},
           credentials: 'include',
         });
         const response = await fetch(urls.login, {
