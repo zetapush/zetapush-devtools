@@ -23,6 +23,20 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 
+export class TraceDataSource extends DataSource<Trace> {
+  constructor(private _subject: BehaviorSubject<Trace[]>) {
+    super();
+    console.warn('TraceDataSource::constructor', _subject);
+  }
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<Trace[]> {
+    const changes = [this._subject];
+    return Observable.merge(...changes);
+  }
+
+  disconnect() {}
+}
+
 @Component({
   selector: 'zp-trace-view',
   template: `
@@ -212,7 +226,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   }
   onClearClick() {
     console.log('TraceViewComponent::onClearClick');
-    this.map = new Map<number, Trace[]>();
+    this.map.clear();
     this.traces = [];
     this.subject.next(this.traces);
     this.selection = null;
@@ -223,18 +237,4 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     console.log('TraceViewComponent::onRowClick', traces);
     this.selection = traces;
   }
-}
-
-export class TraceDataSource extends DataSource<Trace> {
-  constructor(private _subject: BehaviorSubject<Trace[]>) {
-    super();
-    console.warn('TraceDataSource::constructor', _subject);
-  }
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Trace[]> {
-    const changes = [this._subject];
-    return Observable.merge(...changes);
-  }
-
-  disconnect() {}
 }
