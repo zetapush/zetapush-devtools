@@ -38,6 +38,12 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/cdk@angular/cdk-builds":
+  version "2.0.0-beta.12-0ea4370"
+  resolved "https://codeload.github.com/angular/cdk-builds/tar.gz/d2683d04a1734b801dd1707c6183290093164647"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/cli@1.5.0-rc.3":
   version "1.5.0-rc.3"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-1.5.0-rc.3.tgz#26666c849332c23834c39611220753f36b3787ed"
@@ -148,6 +154,12 @@
 "@angular/material@2.0.0-beta.12":
   version "2.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-beta.12.tgz#71b6d0b7b021891e5d0e3688c1d4bd78c7457f58"
+  dependencies:
+    tslib "^1.7.1"
+
+"@angular/material@angular/material2-builds":
+  version "2.0.0-beta.12-0ea4370"
+  resolved "https://codeload.github.com/angular/material2-builds/tar.gz/ee47c9dde6a42f4db60e0d762f74d3d8ce6f6c28"
   dependencies:
     tslib "^1.7.1"
 
@@ -2401,6 +2413,10 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
 "graceful-readlink@>= 1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
+
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
 
 handle-thing@^1.2.5:
   version "1.2.5"
