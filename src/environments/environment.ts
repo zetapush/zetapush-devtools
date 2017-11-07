@@ -12,8 +12,12 @@ export const environment = {
       name: 'Production',
     },
     {
-      url: 'https://demo-2.zpush.io',
+      url: 'https://demo-1.zpush.io',
       name: 'Demonstration',
+    },
+    {
+      url: 'https://demo-2.zpush.io',
+      name: 'Demonstration (Legacy)',
     },
     {
       url: 'http://vm-zbo:8080',
