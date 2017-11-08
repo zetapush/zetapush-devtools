@@ -4,6 +4,8 @@ import { PathLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { Angulartics2Module, Angulartics2GoogleTagManager } from 'angulartics2';
+
 import { AppRoutingModule } from './app-routing.module';
 import { UiModule } from './ui.module';
 import { EnvModule } from './env.module';
@@ -37,6 +39,8 @@ import { PreferencesStorage } from './preferences-storage.service';
     // Provide Core Services
     AppRoutingModule,
     UiModule,
+    // Analytics
+    Angulartics2Module.forRoot([Angulartics2GoogleTagManager])
   ],
   providers: [
     DebugStatusApi,
@@ -45,4 +49,4 @@ import { PreferencesStorage } from './preferences-storage.service';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
