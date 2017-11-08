@@ -9,6 +9,7 @@ file=./archives/$artifact
 if [ -f $file ]; then
    echo "[LOG] Artifact already exists"
 else
+  mkdir -p ./archives
   echo "[LOG] Build application"
   yarn run build:optimized --base-href=/
   echo "[LOG] Inject revision in built ouput"
