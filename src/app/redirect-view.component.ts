@@ -7,13 +7,10 @@ import { Component, OnInit } from '@angular/core';
       redirect-view Works!
     </p>
   `,
-  styles: []
+  styles: [],
 })
 export class RedirectViewComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

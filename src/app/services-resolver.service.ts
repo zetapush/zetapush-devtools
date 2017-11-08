@@ -39,7 +39,9 @@ export class ServicesResolver implements Resolve<string[]> {
       .map(({ deploymentId }) => deploymentId);
     console.log('ServicesResolver::resolve', services);
 
-    const statusUrl = `http://<rt-node>/str/rest/deployed/${sandboxId}/<deployId>/debug/status`;
+    const statusUrl = `http://<rt-node>/str/rest/deployed/${
+      sandboxId
+    }/<deployId>/debug/status`;
     return services;
   }
 

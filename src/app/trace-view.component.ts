@@ -214,11 +214,9 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     this.client.connect();
     // Enable subscription for all deployed services
     this.services.forEach(deploymentId =>
-      this.createTraceObservable(
-        this.client,
-        this.map,
-        deploymentId,
-      ).subscribe(traces => this.subject.next(traces)),
+      this.createTraceObservable(this.client, this.map, deploymentId).subscribe(
+        traces => this.subject.next(traces),
+      ),
     );
   }
   ngOnDestroy() {

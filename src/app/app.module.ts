@@ -40,7 +40,7 @@ import { PreferencesStorage } from './preferences-storage.service';
     AppRoutingModule,
     UiModule,
     // Analytics
-    Angulartics2Module.forRoot([Angulartics2GoogleTagManager])
+    Angulartics2Module.forRoot([Angulartics2GoogleTagManager]),
   ],
   providers: [
     DebugStatusApi,
@@ -49,4 +49,4 @@ import { PreferencesStorage } from './preferences-storage.service';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
