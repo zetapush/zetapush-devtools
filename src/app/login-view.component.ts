@@ -87,7 +87,7 @@ export class LoginViewComponent implements OnInit {
       if (apiUrl === CUSTOM_API_URL) {
         credentials.apiUrl = apiUrl.replace(
           CUSTOM_API_URL,
-          this.form.value.customApiUrl,
+          this.getNormalizedApiUrl(this.form.value.customApiUrl),
         );
       }
       sessionStorage.setItem(
@@ -125,5 +125,12 @@ export class LoginViewComponent implements OnInit {
 
   isCustomApiUrl(): boolean {
     return this.form.value.apiUrl === CUSTOM_API_URL;
+  }
+
+  private getNormalizedApiUrl(apiUrl: string) {
+    const END_WITH_SLASH_PATTERN = /.*\/$/;
+    return END_WITH_SLASH_PATTERN.test(apiUrl)
+      ? apiUrl.substring(0, apiUrl.length - 1)
+      : apiUrl;
   }
 }
