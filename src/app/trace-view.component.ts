@@ -68,8 +68,9 @@ export class TraceDataSource extends DataSource<Trace> {
         <ng-container matColumnDef="actions">
           <mat-header-cell class="HeaderCell HeaderCell--Actions" *matHeaderCellDef> Actions </mat-header-cell>
           <mat-cell class="Cell Cell--Actions" *matCellDef="let row">
-            <mat-icon mat-list-icon (click)="onSaveClick(row)">save</mat-icon>
-            <mat-icon mat-list-icon (click)="onShowDetailsClick(row);sidenav.toggle()">launch</mat-icon>
+            <mat-icon mat-list-icon (click)="onDownloadClick(row)">get_app</mat-icon>
+            <mat-icon mat-list-icon (click)="onExportClick(row)">bug_report</mat-icon>
+            <mat-icon mat-list-icon (click)="onShowClick(row);sidenav.toggle()">launch</mat-icon>
           </mat-cell>
         </ng-container>
         <!-- Ts Column -->
@@ -242,14 +243,32 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     this.subject.next(this.traces);
     this.selection = null;
   }
-  onShowDetailsClick(trace: Trace) {
-    console.log('TraceViewComponent::onShowDetailsClick', trace);
+  onShowClick(trace: Trace) {
+    console.log('TraceViewComponent::onShowClick', trace);
     const traces = this.map.get(trace.ctx).filter(truthy => truthy);
-    console.log('TraceViewComponent::onShowDetailsClick', traces);
+    console.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
   }
-  onSaveClick(trace: Trace) {
-    console.log('TraceViewComponent::onSaveClick', trace);
+  onDownloadClick(trace: Trace) {
+    console.log('TraceViewComponent::onDownloadClick', trace);
+    if (trace.type === TraceType.MACRO_START) {
+      const filename = `${this.sandboxId}_${trace.ctx}_${trace.data.name}.log`;
+      const identity = truthy => truthy;
+      const stringify = object => JSON.stringify(object);
+      const append = suffix => value => `${value}${suffix}`;
+      const traces = this.map
+        .get(trace.ctx)
+        .filter(identity)
+        .map(stringify)
+        .map(append('\n'));
+      const blob = new Blob(traces, {
+        type: 'text/plain;charset=utf-8',
+      });
+      saveAs(blob, filename);
+    }
+  }
+  onExportClick(trace: Trace) {
+    console.log('TraceViewComponent::onExportClick', trace);
     if (trace.type === TraceType.MACRO_START) {
       const { data } = trace;
       const name = `test_${data.name}`;
