@@ -68,8 +68,8 @@ export class TraceDataSource extends DataSource<Trace> {
         <ng-container matColumnDef="actions">
           <mat-header-cell class="HeaderCell HeaderCell--Actions" *matHeaderCellDef> Actions </mat-header-cell>
           <mat-cell class="Cell Cell--Actions" *matCellDef="let row">
-          <mat-icon mat-list-icon (click)="onSaveClick(row)">save</mat-icon>
-          <mat-icon mat-list-icon (click)="onShowDetailsClick(row);sidenav.toggle()">launch</mat-icon>
+            <mat-icon mat-list-icon (click)="onSaveClick(row)">save</mat-icon>
+            <mat-icon mat-list-icon (click)="onShowDetailsClick(row);sidenav.toggle()">launch</mat-icon>
           </mat-cell>
         </ng-container>
         <!-- Ts Column -->
@@ -116,7 +116,6 @@ export class TraceDataSource extends DataSource<Trace> {
     .Table__Body {
     }
     .Table__Row {
-      cursor: pointer;
     }
     .Container--Sidenav {
       height: 100vh;
@@ -133,6 +132,9 @@ export class TraceDataSource extends DataSource<Trace> {
     .HeaderCell--Location,
     .Cell--Location {
       flex-grow: 2;
+    }
+    .Cell--Actions mat-icon {
+      cursor: pointer;
     }
   `,
   ],
