@@ -11,12 +11,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
+import { saveAs } from 'file-saver';
+
 import { PreferencesStorage } from './preferences-storage.service';
 import {
   Trace,
   TraceCompletion,
   TraceLocation,
   parseTraceLocation,
+  TraceType,
 } from './trace.interface';
 
 import 'rxjs/add/observable/of';
@@ -61,6 +64,14 @@ export class TraceDataSource extends DataSource<Trace> {
             {{row.ctx}}
           </mat-cell>
         </ng-container>
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell class="HeaderCell HeaderCell--Actions" *matHeaderCellDef> Actions </mat-header-cell>
+          <mat-cell class="Cell Cell--Actions" *matCellDef="let row">
+          <mat-icon mat-list-icon (click)="onSaveClick(row)">save</mat-icon>
+          <mat-icon mat-list-icon (click)="onShowDetailsClick(row);sidenav.toggle()">launch</mat-icon>
+          </mat-cell>
+        </ng-container>
         <!-- Ts Column -->
         <ng-container matColumnDef="ts">
           <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
@@ -84,7 +95,7 @@ export class TraceDataSource extends DataSource<Trace> {
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columns;" (click)="onRowClick(row);sidenav.toggle()" class="Table__Row"></mat-row>
+        <mat-row *matRowDef="let row; columns: columns;" class="Table__Row"></mat-row>
       </mat-table>
 
       <mat-sidenav #sidenav mode="over" position="end">
@@ -134,7 +145,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   connected = false;
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
-  columns = ['ctx', 'ts', 'location', 'owner'];
+  columns = ['ctx', 'actions', 'ts', 'location', 'owner'];
   selection: Trace[];
   services: string[] = [];
 
@@ -229,10 +240,39 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     this.subject.next(this.traces);
     this.selection = null;
   }
-  onRowClick(trace: Trace) {
-    console.log('TraceViewComponent::onRowClick', trace);
+  onShowDetailsClick(trace: Trace) {
+    console.log('TraceViewComponent::onShowDetailsClick', trace);
     const traces = this.map.get(trace.ctx).filter(truthy => truthy);
-    console.log('TraceViewComponent::onRowClick', traces);
+    console.log('TraceViewComponent::onShowDetailsClick', traces);
     this.selection = traces;
+  }
+  onSaveClick(trace: Trace) {
+    console.log('TraceViewComponent::onSaveClick', trace);
+    if (trace.type === TraceType.MACRO_START) {
+      const { data } = trace;
+      const name = `test_${data.name}`;
+      const content = [
+        `zms_test ${name} {
+  zms_test_setup {
+    zms_test_user user = zpRecipeUser::zpServiceSimpleAuth({
+      login: '<CHANGE-ME>',
+      password: '<CHANGE-ME>'
+    });
+  }
+  zms_add_handler(user, ${data.name}, (response, errors) => {
+    info(${data.name}.name, response, errors);
+
+    assert coll:size(errors) == 0 'CALL_MACRO_FAILED';
+
+    zms_test_success;
+  });
+  sudo user call ${data.name}(${JSON.stringify(data.parameters, null, 2)});
+}`,
+      ];
+      const blob = new Blob(content, {
+        type: 'application/octet-stream',
+      });
+      saveAs(blob, `${name}.zms`);
+    }
   }
 }
