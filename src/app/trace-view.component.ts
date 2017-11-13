@@ -60,7 +60,7 @@ export class TraceDataSource extends DataSource<Trace> {
         <!-- Ctx Column -->
         <ng-container matColumnDef="ctx">
           <mat-header-cell class="HeaderCell HeaderCell--Ctx" *matHeaderCellDef> Id </mat-header-cell>
-          <mat-cell class="Cell Cell--Ctx" *matCellDef="let row">
+          <mat-cell class="Cell Cell--Ctx" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
             {{row.ctx}}
           </mat-cell>
         </ng-container>
@@ -68,29 +68,32 @@ export class TraceDataSource extends DataSource<Trace> {
         <ng-container matColumnDef="actions">
           <mat-header-cell class="HeaderCell HeaderCell--Actions" *matHeaderCellDef> Actions </mat-header-cell>
           <mat-cell class="Cell Cell--Actions" *matCellDef="let row">
-            <mat-icon mat-list-icon (click)="onDownloadClick(row)">get_app</mat-icon>
-            <mat-icon mat-list-icon (click)="onExportClick(row)">bug_report</mat-icon>
-            <mat-icon mat-list-icon (click)="onShowClick(row);sidenav.toggle()">launch</mat-icon>
+            <button mat-icon-button>
+              <mat-icon aria-label="Download full trace" mat-list-icon (click)="onDownloadClick(row)">get_app</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon aria-label="Export trace as test case" mat-list-icon (click)="onExportClick(row)">bug_report</mat-icon>
+            </button>
           </mat-cell>
         </ng-container>
         <!-- Ts Column -->
         <ng-container matColumnDef="ts">
           <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
-          <mat-cell class="Cell Cell--Ts" *matCellDef="let row">
+          <mat-cell class="Cell Cell--Ts" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
             {{row.ts | date:'mediumTime'}}
           </mat-cell>
         </ng-container>
         <!-- Location Column -->
         <ng-container matColumnDef="location">
           <mat-header-cell class="HeaderCell HeaderCell--Location" *matHeaderCellDef> Location </mat-header-cell>
-          <mat-cell class="Cell Cell--Location" *matCellDef="let row">
+          <mat-cell class="Cell Cell--Location" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
             {{row.location.recipe}}@{{row.location.version}}:{{row.location.path}}
           </mat-cell>
         </ng-container>
         <!-- Owner Column -->
         <ng-container matColumnDef="owner">
           <mat-header-cell class="HeaderCell HeaderCell--Owner" *matHeaderCellDef> Owner </mat-header-cell>
-          <mat-cell class="Cell Cell--Owner" *matCellDef="let row">
+          <mat-cell class="Cell Cell--Owner" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
             {{row.owner}}
           </mat-cell>
         </ng-container>
@@ -134,7 +137,10 @@ export class TraceDataSource extends DataSource<Trace> {
     .Cell--Location {
       flex-grow: 2;
     }
-    .Cell--Actions mat-icon {
+    .Cell--Ctx,
+    .Cell--Ts,
+    .Cell--Location,
+    .Cell--Owner {
       cursor: pointer;
     }
   `,
