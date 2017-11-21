@@ -80,14 +80,14 @@ export class TraceDataSource extends DataSource<Trace> {
         <ng-container matColumnDef="ts">
           <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
           <mat-cell class="Cell Cell--Ts" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-            {{row.ts | date:'mediumTime'}}
+            {{row.ts | date:'HH:mm:SS'}}
           </mat-cell>
         </ng-container>
-        <!-- Location Column -->
-        <ng-container matColumnDef="location">
-          <mat-header-cell class="HeaderCell HeaderCell--Location" *matHeaderCellDef> Location </mat-header-cell>
-          <mat-cell class="Cell Cell--Location" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-            {{row.location.recipe}}@{{row.location.version}}:{{row.location.path}}
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell class="HeaderCell HeaderCell--Name" *matHeaderCellDef> Name </mat-header-cell>
+          <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
+            {{row.data.name ? row.data.name : 'UNAVAILABLE'}}
           </mat-cell>
         </ng-container>
         <!-- Owner Column -->
@@ -133,15 +133,18 @@ export class TraceDataSource extends DataSource<Trace> {
       display: flex;
       overflow-y: scroll;
     }
-    .HeaderCell--Location,
-    .Cell--Location {
+    .HeaderCell--Name,
+    .Cell--Name {
       flex-grow: 2;
     }
     .Cell--Ctx,
     .Cell--Ts,
-    .Cell--Location,
+    .Cell--Name,
     .Cell--Owner {
       cursor: pointer;
+    }
+    .Cell--Name {
+      font-weight: bold;
     }
   `,
   ],
@@ -154,7 +157,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   connected = false;
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
-  columns = ['ctx', 'actions', 'ts', 'location', 'owner'];
+  columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
   selection: Trace[];
   services: string[] = [];
 
@@ -166,8 +169,8 @@ export class TraceViewComponent implements OnDestroy, OnInit {
       console.log('TraceViewComponent::route.params', sandboxId);
       this.sandboxId = sandboxId;
     });
-    route.data.subscribe(({ services }) => {
-      console.log('TraceViewComponent::route.data', services);
+    route.data.subscribe(({ services, status }) => {
+      console.log('TraceViewComponent::route.data', services, status);
       this.services = services;
     });
   }

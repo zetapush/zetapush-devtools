@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IsAuthenticated } from './is-authenticated';
 import { SandboxesResolver } from './sandboxes-resolver.service';
 import { ServicesResolver } from './services-resolver.service';
+import { SandboxStatusResolver } from './sandbox-status-resolver.service';
 
 import { LoginViewComponent } from './login-view.component';
 import { SandboxesViewComponent } from './sandboxes-view.component';
@@ -29,6 +30,7 @@ const routes: Routes = [
     canActivate: [IsAuthenticated],
     component: TraceViewComponent,
     resolve: {
+      status: SandboxStatusResolver,
       services: ServicesResolver,
     },
   },
@@ -42,6 +44,11 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes), BrowserAnimationsModule],
   exports: [RouterModule],
-  providers: [IsAuthenticated, SandboxesResolver, ServicesResolver],
+  providers: [
+    IsAuthenticated,
+    SandboxesResolver,
+    SandboxStatusResolver,
+    ServicesResolver,
+  ],
 })
 export class AppRoutingModule {}

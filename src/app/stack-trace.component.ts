@@ -28,8 +28,7 @@ import {
         <tr>
           <th>N</th>
           <th>Type</th>
-          <th>Data</th>
-          <th>Location</th>
+          <th>Content</th>
           <th>Owner</th>
         </tr>
       </thead>
@@ -37,8 +36,11 @@ import {
         <tr *ngFor="let trace of filtered" [ngClass]="['Trace', 'Trace--' + trace.type]">
           <td>{{trace.n}}</td>
           <td>{{trace.type}}</td>
-          <td><pre>{{trace.data | json}}</pre></td>
-          <td>{{trace.location.recipe}}:{{trace.location.path}}#{{trace.line}}</td>
+          <td>
+            <zp-lazy-json *ngIf="trace.type == 'MS'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
+            <zp-lazy-json *ngIf="trace.type == 'ME'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
+            <zp-lazy-json *ngIf="trace.type == 'USR'" [value]="trace.data"></zp-lazy-json>
+          </td>
           <td>{{trace.owner}}</td>
         </tr>
       </tbody>
@@ -73,7 +75,7 @@ export class StackTraceComponent implements OnDestroy, OnInit {
   types = [
     { label: 'MS', selected: true },
     { label: 'ME', selected: true },
-    { label: 'CMT', selected: true },
+    { label: 'CMT', selected: false },
     { label: 'USR', selected: true },
   ];
   constructor() {}

@@ -19,6 +19,7 @@ import { TraceViewComponent } from './trace-view.component';
 import { DebugFormComponent } from './debug-form.component';
 import { DebugStatusApi } from './debug-status-api.service';
 import { PreferencesStorage } from './preferences-storage.service';
+import { LazyJsonComponent } from './lazy-json.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { PreferencesStorage } from './preferences-storage.service';
     TraceViewComponent,
     RedirectViewComponent,
     DebugFormComponent,
+    LazyJsonComponent,
   ],
   imports: [
     BrowserModule,

@@ -31,6 +31,13 @@ export interface Trace {
   ts: number;
 }
 
+export interface StackTrace {
+  name: string;
+  owner: string;
+  stack: Trace[];
+  ts: number;
+}
+
 export interface TraceCompletion {
   data: Trace;
 }
