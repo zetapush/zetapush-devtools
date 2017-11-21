@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Angulartics2GoogleTagManager } from 'angulartics2';
+import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 
 @Component({
   selector: 'zp-root',
