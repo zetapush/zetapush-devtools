@@ -10,7 +10,6 @@
     "build:optimized": "ng build --app=aot --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "deploy": "yarn run build:ghpages && angular-cli-ghpages",
     "precommit": "lint-staged",
     "prettify": "prettier --single-quote --trailing-comma all --write 'src/**/*.{*css,js,ts}'"
   },
