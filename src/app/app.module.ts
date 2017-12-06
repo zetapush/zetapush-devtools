@@ -3,13 +3,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PathLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 
 import { AppRoutingModule } from './app-routing.module';
 import { UiModule } from './ui.module';
-import { EnvModule } from './env.module';
+import { EnvModule, environment } from './env.module';
 
 import { AppComponent } from './app.component';
 import { LoginViewComponent } from './login-view.component';
@@ -44,6 +45,9 @@ import { LazyJsonComponent } from './lazy-json.component';
     UiModule,
     // Analytics
     Angulartics2Module.forRoot([Angulartics2GoogleTagManager]),
+    ServiceWorkerModule.register('/ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     DebugStatusApi,
