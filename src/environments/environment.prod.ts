@@ -11,10 +11,6 @@ export const environment = {
       name: 'Demonstration',
     },
     {
-      url: 'https://demo-2.zpush.io',
-      name: 'Demonstration (Legacy)',
-    },
-    {
       url: 'http://hq.zpush.io:9080',
       name: 'Pre-Production',
     },
