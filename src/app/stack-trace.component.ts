@@ -40,6 +40,7 @@ import {
             <zp-lazy-json *ngIf="trace.type == 'MS'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
             <zp-lazy-json *ngIf="trace.type == 'ME'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
             <zp-lazy-json *ngIf="trace.type == 'USR'" [value]="trace.data"></zp-lazy-json>
+            <pre *ngIf="trace.type == 'CMT'">{{trace.data}}</pre>
           </td>
           <td>{{trace.owner}}</td>
         </tr>
