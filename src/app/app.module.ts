@@ -7,6 +7,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 import { AppRoutingModule } from './app-routing.module';
 import { UiModule } from './ui.module';
@@ -45,8 +46,14 @@ import { LazyJsonComponent } from './lazy-json.component';
     UiModule,
     // Analytics
     Angulartics2Module.forRoot([Angulartics2GoogleTagManager]),
+    // Service worker
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production,
+    }),
+    // Logger
+    LoggerModule.forRoot({
+      level: NgxLoggerLevel.LOG,
+      serverLogLevel: NgxLoggerLevel.OFF,
     }),
   ],
   providers: [

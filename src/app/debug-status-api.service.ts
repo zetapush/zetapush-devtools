@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { NGXLogger } from 'ngx-logger';
+
 import { PreferencesStorage } from './preferences-storage.service';
 import { getSecureUrl } from './utils';
 
@@ -13,7 +15,10 @@ export interface DebugStatus {
 export class DebugStatusApi {
   private realTimeServerUrlList: string[] = [];
 
-  constructor(private preferences: PreferencesStorage) {}
+  constructor(
+    private preferences: PreferencesStorage,
+    private logger: NGXLogger,
+  ) {}
 
   async status(sandboxId: string, deploymentId: string): Promise<DebugStatus> {
     const credentials = this.preferences.getCredentials();
@@ -103,7 +108,7 @@ export class DebugStatusApi {
       credentials: 'include',
     });
     const { servers } = await response.json();
-    console.log('DebugStatus::servers', servers);
+    this.logger.log('DebugStatus::servers', servers);
     return servers as string[];
   }
 }

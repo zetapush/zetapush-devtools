@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material';
 import {
   Trace,
   TraceCompletion,
@@ -16,12 +17,20 @@ import {
   level: TraceLevel;
   ts: number;
 */
+
+interface ViewTypeFilter {
+  label: string;
+  selected: boolean;
+}
+
 @Component({
   selector: 'zp-stack-trace',
   template: `
     <form class="Form Form--Filter">
       <span>Filter: </span>
-      <mat-checkbox *ngFor="let type of types" [(ngModel)]="type.selected" name="filter" class="Filter">{{type.label}}</mat-checkbox>
+      <mat-checkbox *ngFor="let type of types" [checked]="type.selected" (change)="onChangeType($event, type)" name="filter" class="Filter">
+        {{type.label}}
+      </mat-checkbox>
     </form>
     <table>
       <thead>
@@ -71,15 +80,14 @@ import {
   `,
   ],
 })
-export class StackTraceComponent implements OnDestroy, OnInit {
+export class StackTraceComponent {
   @Input() traces: Trace[] = [];
-  types = [
+  types: ViewTypeFilter[] = [
     { label: 'MS', selected: true },
     { label: 'ME', selected: true },
     { label: 'CMT', selected: false },
     { label: 'USR', selected: true },
   ];
-  constructor() {}
   get filtered() {
     const types = this.types
       .filter(type => type.selected)
@@ -88,6 +96,12 @@ export class StackTraceComponent implements OnDestroy, OnInit {
       ? this.traces.filter(trace => types.includes(trace.type))
       : [];
   }
-  ngOnInit() {}
-  ngOnDestroy() {}
+  onChangeType($event: MatCheckboxChange, type) {
+    this.types = this.types.map(value => {
+      if (value.label === type.label) {
+        value.selected = $event.checked;
+      }
+      return value;
+    });
+  }
 }

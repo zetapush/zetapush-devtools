@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { NGXLogger } from 'ngx-logger';
+
 import { Sandbox } from './sandboxes-resolver.service';
 
 @Component({
@@ -27,9 +30,9 @@ import { Sandbox } from './sandboxes-resolver.service';
 })
 export class SandboxesViewComponent {
   sandboxes: Sandbox[] = [];
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private logger: NGXLogger) {
     route.data.subscribe(({ sandboxes = [] } = {}) => {
-      console.log('SandboxesComponent', sandboxes);
+      this.logger.log('SandboxesComponent', sandboxes);
       this.sandboxes = sandboxes;
     });
   }

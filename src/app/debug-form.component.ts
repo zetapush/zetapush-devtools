@@ -6,6 +6,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material';
+
+import { NGXLogger } from 'ngx-logger';
+
 import { DebugStatus, DebugStatusApi } from './debug-status-api.service';
 
 export interface DebugStatusView extends DebugStatus {
@@ -59,16 +62,16 @@ export class DebugFormComponent implements OnChanges, OnInit {
   models: DebugStatusView[] = [];
   checked = false;
 
-  constructor(private debug: DebugStatusApi) {}
+  constructor(private debug: DebugStatusApi, private logger: NGXLogger) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('DebugFormComponent::ngOnInit', changes);
+    this.logger.log('DebugFormComponent::ngOnInit', changes);
   }
 
   async ngOnInit() {
-    console.log('DebugFormComponent::ngOnInit', this.services);
+    this.logger.log('DebugFormComponent::ngOnInit', this.services);
     this.fetch();
-    console.log('DebugFormComponent::ngOnInit', this.models);
+    this.logger.log('DebugFormComponent::ngOnInit', this.models);
   }
 
   async fetch() {
@@ -85,19 +88,19 @@ export class DebugFormComponent implements OnChanges, OnInit {
       return enabled;
     }, models.length > 0);
     this.models = models;
-    console.log('DebugFormComponent::fetch', models);
+    this.logger.log('DebugFormComponent::fetch', models);
     return await models;
   }
 
   async onSubmit({ value, valid }: { value: any; valid: boolean }) {
-    console.log('DebugFormComponent::onSubmit', { valid, value });
+    this.logger.log('DebugFormComponent::onSubmit', { valid, value });
   }
 
   async onChangeDebugStatusByModel(
     model: DebugStatusView,
     change: MatSlideToggleChange,
   ) {
-    console.log(
+    this.logger.log(
       'DebugFormComponent::onChangeDebugStatusByModel',
       model,
       change,
@@ -111,7 +114,7 @@ export class DebugFormComponent implements OnChanges, OnInit {
   }
 
   async onChangeDebugStatus(change: MatSlideToggleChange) {
-    console.log('DebugFormComponent::onChangeDegugStatus', change);
+    this.logger.log('DebugFormComponent::onChangeDegugStatus', change);
     if (change.checked) {
       await Promise.all(
         this.models.map(model =>

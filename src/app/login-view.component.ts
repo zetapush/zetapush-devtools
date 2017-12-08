@@ -2,6 +2,8 @@ import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { NGXLogger } from 'ngx-logger';
+
 import { ENVIRONMENT_ID } from './env.module';
 import { Platform } from './environment.interface';
 import { Credentials } from './credentials.interface';
@@ -70,16 +72,20 @@ export class LoginViewComponent implements OnInit {
 
   @ViewChild(NgForm) form: NgForm;
 
-  constructor(private router: Router, injector: Injector) {
+  constructor(
+    private router: Router,
+    private logger: NGXLogger,
+    injector: Injector,
+  ) {
     this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
   }
 
   ngOnInit() {
-    console.log('LoginViewComponent::ngOnInit', this.form);
+    this.logger.log('LoginViewComponent::ngOnInit', this.form);
   }
 
   async onSubmit({ value, valid }: { value: Credentials; valid: boolean }) {
-    console.log('LoginComponent::onSubmit', value, valid);
+    this.logger.log('LoginComponent::onSubmit', value, valid);
 
     if (valid) {
       const { apiUrl, username, password } = value;
@@ -100,7 +106,7 @@ export class LoginViewComponent implements OnInit {
           login: getSecureUrl(`${credentials.apiUrl}/zbo/auth/login`),
           logout: getSecureUrl(`${credentials.apiUrl}/zbo/auth/logout`),
         };
-        console.log('LoginComponent::onSubmit', urls);
+        this.logger.log('LoginComponent::onSubmit', urls);
         await fetch(urls.logout, {
           method: 'GET',
           credentials: 'include',
@@ -114,11 +120,11 @@ export class LoginViewComponent implements OnInit {
           credentials: 'include',
         });
         const data = await response.json();
-        console.log('data', data);
+        this.logger.log('data', data);
         this.router.navigate(['/sandboxes']);
       } catch (e) {
         this.connecting = false;
-        console.error('error', e);
+        this.logger.error('error', e);
       }
     }
   }

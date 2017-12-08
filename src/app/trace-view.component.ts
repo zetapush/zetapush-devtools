@@ -7,11 +7,15 @@ import {
 } from '@angular/core';
 import { MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
+import { ActivatedRoute } from '@angular/router';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { ActivatedRoute } from '@angular/router';
+
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
+
 import { saveAs } from 'file-saver';
+import { NGXLogger } from 'ngx-logger';
 
 import { PreferencesStorage } from './preferences-storage.service';
 import {
@@ -27,9 +31,12 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 
 export class TraceDataSource extends DataSource<Trace> {
-  constructor(private _subject: BehaviorSubject<Trace[]>) {
+  constructor(
+    private _subject: BehaviorSubject<Trace[]>,
+    private logger: NGXLogger,
+  ) {
     super();
-    console.warn('TraceDataSource::constructor', _subject);
+    this.logger.warn('TraceDataSource::constructor', _subject);
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Trace[]> {
@@ -164,13 +171,14 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
+    private logger: NGXLogger,
   ) {
     route.params.subscribe(({ sandboxId }) => {
-      console.log('TraceViewComponent::route.params', sandboxId);
+      this.logger.log('TraceViewComponent::route.params', sandboxId);
       this.sandboxId = sandboxId;
     });
     route.data.subscribe(({ services, status }) => {
-      console.log('TraceViewComponent::route.data', services, status);
+      this.logger.log('TraceViewComponent::route.data', services, status);
       this.services = services;
     });
   }
@@ -199,7 +207,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
               queue[trace.n] = trace;
               dictionnary.set(trace.ctx, queue);
             } catch (e) {
-              // console.log(trace);
+              this.logger.error(trace);
             }
             const traces = Array.from(dictionnary.entries())
               .map(([ctx, list]) => {
@@ -217,7 +225,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.source = new TraceDataSource(this.subject /*, this.sort*/);
+    this.source = new TraceDataSource(this.subject, this.logger);
     const credentials = this.preferences.getCredentials();
     this.client = new Client({
       apiUrl: `${credentials.apiUrl}/zbo/pub/business/`,
@@ -231,7 +239,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
         }),
     });
     this.client.onSuccessfulHandshake(authentication => {
-      console.log('onSuccessfulHandshake', authentication);
+      this.logger.log('onSuccessfulHandshake', authentication);
       this.connected = true;
     });
     this.client.connect();
@@ -246,20 +254,20 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     this.client.disconnect();
   }
   onClearClick() {
-    console.log('TraceViewComponent::onClearClick');
+    this.logger.log('TraceViewComponent::onClearClick');
     this.map.clear();
     this.traces = [];
     this.subject.next(this.traces);
     this.selection = null;
   }
   onShowClick(trace: Trace) {
-    console.log('TraceViewComponent::onShowClick', trace);
+    this.logger.log('TraceViewComponent::onShowClick', trace);
     const traces = this.map.get(trace.ctx).filter(truthy => truthy);
-    console.log('TraceViewComponent::onShowClick', traces);
+    this.logger.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
   }
   onDownloadClick(trace: Trace) {
-    console.log('TraceViewComponent::onDownloadClick', trace);
+    this.logger.log('TraceViewComponent::onDownloadClick', trace);
     if (trace.type === TraceType.MACRO_START) {
       const filename = `${this.sandboxId}_${trace.ctx}_${trace.data.name}.log`;
       const identity = truthy => truthy;
@@ -277,7 +285,7 @@ export class TraceViewComponent implements OnDestroy, OnInit {
     }
   }
   onExportClick(trace: Trace) {
-    console.log('TraceViewComponent::onExportClick', trace);
+    this.logger.log('TraceViewComponent::onExportClick', trace);
     if (trace.type === TraceType.MACRO_START) {
       const { data } = trace;
       const name = `test_${data.name}`;

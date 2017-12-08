@@ -7,17 +7,22 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 
+import { NGXLogger } from 'ngx-logger';
+
 import { PreferencesStorage } from './preferences-storage.service';
 import { getSecureUrl } from './utils';
 
 @Injectable()
 export class ServicesResolver implements Resolve<string[]> {
-  constructor(private preferences: PreferencesStorage) {}
+  constructor(
+    private preferences: PreferencesStorage,
+    private logger: NGXLogger,
+  ) {}
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<string[]> {
-    console.log('ServicesResolver::resolve', route, state);
+    this.logger.log('ServicesResolver::resolve', route, state);
     const credentials = this.preferences.getCredentials();
     const { sandboxId } = route.params;
     const baseUrl = getSecureUrl(
@@ -25,23 +30,21 @@ export class ServicesResolver implements Resolve<string[]> {
     );
     let { content, pagination } = await this.request(baseUrl);
     let items = [...content];
-    console.log('ServicesResolver::listItems', { content, pagination });
+    this.logger.log('ServicesResolver::listItems', { content, pagination });
     while (!pagination.last) {
       const response = await this.request(baseUrl, pagination.number + 1);
       content = response.content;
       pagination = response.pagination;
       items = [...items, ...content];
-      console.log('ServicesResolver::listItems', { content, pagination });
+      this.logger.log('ServicesResolver::listItems', { content, pagination });
     }
-    console.log('ServicesResolver::listItems', items);
+    this.logger.log('ServicesResolver::listItems', items);
     const services = items
       .filter(({ itemId, type }) => itemId === 'macro' && type === 'SERVICE')
       .map(({ deploymentId }) => deploymentId);
-    console.log('ServicesResolver::resolve', services);
+    this.logger.log('ServicesResolver::resolve', services);
 
-    const statusUrl = `http://<rt-node>/str/rest/deployed/${
-      sandboxId
-    }/<deployId>/debug/status`;
+    const statusUrl = `http://<rt-node>/str/rest/deployed/${sandboxId}/<deployId>/debug/status`;
     return services;
   }
 
