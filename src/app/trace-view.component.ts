@@ -28,23 +28,84 @@ import {
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
+import { Subscription } from 'rxjs/Subscription';
+import { combineLatest } from 'rxjs/operators/combineLatest';
+import { map } from 'rxjs/operators/map';
 
 export class TraceDataSource extends DataSource<Trace> {
+  private _filter = new BehaviorSubject<string>('');
+  private _renderData = new BehaviorSubject<Trace[]>([]);
+
+  _renderChangesSubscription: Subscription;
+  filteredData: Trace[];
+
+  set filter(filter: string) {
+    this._filter.next(filter);
+  }
+  get filter(): string {
+    return this._filter.value;
+  }
+
   constructor(
     private _subject: BehaviorSubject<Trace[]>,
     private logger: NGXLogger,
   ) {
     super();
+    this._updateChangeSubscription();
     this.logger.warn('TraceDataSource::constructor', _subject);
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Trace[]> {
-    const changes = [this._subject];
+    const changes = [this._renderData];
     return Observable.merge(...changes);
   }
 
   disconnect() {}
+
+  /**
+   * Subcribe to changes, to update table when filter is updated
+   */
+  _updateChangeSubscription() {
+    if (this._renderChangesSubscription) {
+      this._renderChangesSubscription.unsubscribe();
+    }
+
+    // Watch for base data or filter changes to provide a filtered set of data.
+    this._renderChangesSubscription = this._subject
+      .pipe(
+        combineLatest(this._filter),
+        map(([data]) => this._filterData(data)),
+      )
+      .subscribe(data => this._renderData.next(data));
+  }
+
+  /**
+   * Checks if name or owner matches the data sources filter string
+   */
+  filterPredicate: ((data: any, filter: string) => boolean) = (
+    data: any,
+    filter: string,
+  ): boolean => {
+    const name = data.data.name.toLowerCase();
+    const owner = data.owner.toLowerCase();
+    const transformedFilter = filter.trim().toLowerCase();
+
+    return (
+      name.includes(transformedFilter) || owner.includes(transformedFilter)
+    );
+  };
+
+  /**
+   * Returns a filtered data array corresponding to the filter string.
+   * If no filter provided, returns the same array
+   */
+  _filterData(data) {
+    this.filteredData = !this.filter
+      ? data
+      : data.filter(obj => this.filterPredicate(obj, this.filter));
+
+    return this.filteredData;
+  }
 }
 
 @Component({
@@ -57,7 +118,9 @@ export class TraceDataSource extends DataSource<Trace> {
       </h1>
       <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
       <mat-toolbar>
-        <span>Actions</span>
+        <mat-form-field class="Filter">
+        <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
+        </mat-form-field>
         <span class="Spacer"></span>
         <button mat-icon-button>
           <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
@@ -118,6 +181,11 @@ export class TraceDataSource extends DataSource<Trace> {
     `
     .Spacer {
       flex: 1 1 auto;
+    }
+    .Filter {
+      font-size: 16px;
+      margin-right: 100px;
+      flex-grow: 1;
     }
     .Table {
       height: 80vh;
@@ -312,5 +380,9 @@ export class TraceViewComponent implements OnDestroy, OnInit {
       });
       saveAs(blob, `${name}.zms`);
     }
+  }
+  onFiltering(filterValue: string) {
+    filterValue = filterValue.trim();
+    this.source.filter = filterValue;
   }
 }
