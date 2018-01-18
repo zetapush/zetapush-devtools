@@ -118,11 +118,10 @@ export class TraceDataSource extends DataSource<Trace> {
       </h1>
       <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
       <mat-toolbar>
-        <span>Actions</span>
-        <span class="Spacer"></span>
         <mat-form-field class="Filter">
-          <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
+        <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
         </mat-form-field>
+        <span class="Spacer"></span>
         <button mat-icon-button>
           <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
         </button>
@@ -186,6 +185,7 @@ export class TraceDataSource extends DataSource<Trace> {
     .Filter {
       font-size: 16px;
       margin-right: 100px;
+      flex-grow: 1;
     }
     .Table {
       height: 80vh;
