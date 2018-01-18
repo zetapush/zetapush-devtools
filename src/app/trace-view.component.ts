@@ -55,7 +55,7 @@ export class TraceDataSource extends DataSource<Trace> {
     this.logger.warn('TraceDataSource::constructor', _subject);
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect() {
+  connect(): Observable<Trace[]> {
     const changes = [this._renderData];
     return Observable.merge(...changes);
   }
