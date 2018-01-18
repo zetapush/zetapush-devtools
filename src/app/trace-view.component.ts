@@ -56,7 +56,8 @@ export class TraceDataSource extends DataSource<Trace> {
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect() {
-    return this._renderData;
+    const changes = [this._renderData];
+    return Observable.merge(...changes);
   }
 
   disconnect() {}
