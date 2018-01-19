@@ -278,10 +278,12 @@ export class TraceViewComponent implements OnDestroy, OnInit {
               this.logger.error(trace);
             }
             const traces = Array.from(dictionnary.entries())
-              .map(([ctx, list]) => {
-                return list[1];
-              })
-              .filter(element => element);
+              .map(([ctx, list]) =>
+                list
+                  .filter(Boolean)
+                  .find(element => element.type === TraceType.MACRO_START),
+              )
+              .filter(Boolean);
             observer.next(traces);
           },
         },
