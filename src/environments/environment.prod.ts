@@ -3,7 +3,7 @@ export const environment = {
   hmr: false,
   plateforms: [
     {
-      url: 'http://zbo.zpush.io',
+      url: 'https://zbo.zpush.io',
       name: 'Production',
     },
     {
