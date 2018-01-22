@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PathLocationStrategy, LocationStrategy } from '@angular/common';
+import {
+  PathLocationStrategy,
+  LocationStrategy,
+  DatePipe,
+} from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -24,6 +28,7 @@ import { DebugFormComponent } from './debug-form.component';
 import { DebugStatusApi } from './debug-status-api.service';
 import { PreferencesStorage } from './preferences-storage.service';
 import { LazyJsonComponent } from './lazy-json.component';
+import { StackFilterComponent } from './stack-filter.component';
 
 import { ScrollGlueDirective } from './scrollGlue.directive';
 
@@ -39,6 +44,7 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     DebugFormComponent,
     LazyJsonComponent,
     ScrollGlueDirective,
+    StackFilterComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +71,7 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     DebugStatusApi,
     PreferencesStorage,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })
