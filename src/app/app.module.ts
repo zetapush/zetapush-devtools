@@ -19,10 +19,13 @@ import { SandboxesViewComponent } from './sandboxes-view.component';
 import { StackTraceComponent } from './stack-trace.component';
 import { RedirectViewComponent } from './redirect-view.component';
 import { TraceViewComponent } from './trace-view.component';
+import { TerminalViewComponent } from './terminal-view.component';
 import { DebugFormComponent } from './debug-form.component';
 import { DebugStatusApi } from './debug-status-api.service';
 import { PreferencesStorage } from './preferences-storage.service';
 import { LazyJsonComponent } from './lazy-json.component';
+
+import { ScrollGlueDirective } from './scrollGlue.directive';
 
 @NgModule({
   declarations: [
@@ -31,9 +34,11 @@ import { LazyJsonComponent } from './lazy-json.component';
     SandboxesViewComponent,
     StackTraceComponent,
     TraceViewComponent,
+    TerminalViewComponent,
     RedirectViewComponent,
     DebugFormComponent,
     LazyJsonComponent,
+    ScrollGlueDirective,
   ],
   imports: [
     BrowserModule,

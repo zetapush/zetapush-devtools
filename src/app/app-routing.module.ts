@@ -10,6 +10,7 @@ import { SandboxStatusResolver } from './sandbox-status-resolver.service';
 import { LoginViewComponent } from './login-view.component';
 import { SandboxesViewComponent } from './sandboxes-view.component';
 import { TraceViewComponent } from './trace-view.component';
+import { TerminalViewComponent } from './terminal-view.component';
 import { RedirectViewComponent } from './redirect-view.component';
 
 const routes: Routes = [
@@ -29,6 +30,15 @@ const routes: Routes = [
     path: 'trace/:sandboxId',
     canActivate: [IsAuthenticated],
     component: TraceViewComponent,
+    resolve: {
+      status: SandboxStatusResolver,
+      services: ServicesResolver,
+    },
+  },
+  {
+    path: 'terminal/:sandboxId',
+    canActivate: [IsAuthenticated],
+    component: TerminalViewComponent,
     resolve: {
       status: SandboxStatusResolver,
       services: ServicesResolver,
