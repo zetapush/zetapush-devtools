@@ -21,7 +21,7 @@ import { Sandbox } from './sandboxes-resolver.service';
       <mat-list>
         <h3 mat-subheader>Sandboxes terminal</h3>
         <mat-list-item *ngFor="let sandbox of sandboxes" [routerLink]="['/terminal', sandbox.businessId]">
-          <mat-icon mat-list-icon>receipt</mat-icon>
+          <mat-icon mat-list-icon>subtitles</mat-icon>
           <h4 mat-line><strong>{{sandbox.name}}</strong></h4>
           <p mat-line>{{sandbox.businessId}}</p>
         </mat-list-item>
