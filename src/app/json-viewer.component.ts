@@ -18,22 +18,15 @@ import JSONFormatter from 'json-formatter-js';
 export class JsonViewerComponent implements OnChanges {
   @ViewChild(`jsonViewer`)
   input: ElementRef;
-  open: number;
+  open: number = 1;
 
   @Input() json: Array<any> | Object | any;
   @Input() collapsed: boolean;
 
-  constructor() {
-    this.open = 1;
-    console.log('constructor !!!!');
-  }
+  constructor() {}
 
   ngOnChanges(changes) {
-    console.log(changes.collapsed);
-    console.log(this.open);
-
     if (!changes.collapsed.currentValue) {
-      console.log('pass');
       this.open = Infinity;
     }
 
