@@ -4,7 +4,9 @@ import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 import { NGXLogger } from 'ngx-logger';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ObserversModule } from '@angular/cdk/observers';
+import { DatePipe } from '@angular/common';
+
+import JSONFormatter from 'json-formatter-js';
 
 import { DebugStatusView } from './debug-form.component';
 import { Sandbox } from './sandboxes-resolver.service';
@@ -20,25 +22,31 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     .back-link {
       cursor: pointer;
     }
+    .collapsed {
+      margin-top: 10px;
+      padding-left: 0.5rem;
+    }
     .terminal {
       max-width: 800px;
       height: 600px;
       padding: 10px;
       margin: 20px auto;
       color: white;
-      background-color: black;
+      background-color: rgb(30, 30, 30);
       overflow-y: scroll;
       clear: both;
     }
+    .terminal-title {
+      font-family: 'monospace';
+      font-size: 14px;
+    }
     .terminal-content {
-      margin-bottom: 15px;
+      margin: 5px 0 10px 0;
+      display: block;
+    }
+    :host ::ng-deep .json-formatter-dark.json-formatter-row .json-formatter-string {
       white-space: pre-wrap;
     }
-    :host /deep/ .string { color: green; }
-    :host /deep/ .number { color: darkorange; }
-    :host /deep/ .boolean { color: blue; }
-    :host /deep/ .null { color: magenta; }
-    :host /deep/ .key { color: red; }
     .clear {
       float: right;
     }
@@ -51,13 +59,25 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
         <span>Terminal for {{ sandboxId }}</span>
       </h1>
       <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
-        <button mat-icon-button class="clear">
-          <mat-icon aria-label="Clear terminal" (click)="onClearClick()">clear</mat-icon>
-        </button>
+      <zp-stack-filter [traces]="traces" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+
+      <mat-slide-toggle
+          class="collapsed"
+          [color]="'accent'"
+          [checked]="collapsed"
+          labelPosition="before"
+          (change)="onChangeCollapseStatus($event)">
+        Collapsed
+      </mat-slide-toggle>
+
+      <button mat-icon-button class="clear">
+        <mat-icon aria-label="Clear terminal" (click)="onClearClick()">clear</mat-icon>
+      </button>
+
       <div class="terminal" *ngIf="subject._value.length; else watching" zpScrollGlue>
         <div *ngFor="let output of subject._value">
-          <span class="terminal-hour">{{ output.ts | date:'yyyy-MM-dd HH:mm:ss' }}</span>
-          <pre class="terminal-content" [innerHtml]="syntaxHighlight(output.data)"></pre>
+          <span class="terminal-title">{{ prepareTitle(output.owner, output.ts) }}</span>
+          <zp-json-viewer class="terminal-content" [json]="output.data" [collapsed]="collapsed"></zp-json-viewer>
         </div>
       </div>
 
@@ -66,7 +86,6 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
       </ng-template>
     </div>
   `,
-  providers: [ScrollGlueDirective],
 })
 export class TerminalViewComponent implements OnInit, OnDestroy {
   sandboxId: string;
@@ -76,6 +95,7 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
   subject = new BehaviorSubject<Trace[]>([]);
   connected = false;
   buffer = 1000;
+  collapsed = true;
 
   @Input() sandboxes: Sandbox[];
 
@@ -86,6 +106,7 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
     private preferences: PreferencesStorage,
     private debug: DebugStatusApi,
     private logger: NGXLogger,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit() {
@@ -121,22 +142,20 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
         deploymentId,
         listener: {
           trace: (message: TraceCompletion) => {
-            if (message.data && message.data.type === 'USR') {
-              const trace = {
-                ...message.data,
-                location: parseTraceLocation(message.data.location),
-                ts: Date.now(),
-              };
+            const trace = {
+              ...message.data,
+              location: parseTraceLocation(message.data.location),
+              ts: Date.now(),
+            };
 
-              this.traces.push(trace);
+            this.traces = [...this.traces, trace];
 
-              // Remove the 100 first entries if traces > buffer
-              if (this.traces.length > this.buffer) {
-                this.traces = this.traces.slice(100);
-              }
-
-              observer.next(this.traces);
+            // Remove the 100 first entries if traces > buffer
+            if (this.traces.length > this.buffer) {
+              this.traces = this.traces.slice(100);
             }
+
+            observer.next(this.traces);
           },
         },
       });
@@ -195,8 +214,21 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
         } else if (/null/.test(match)) {
           cls = 'null';
         }
-        return '<span class="' + cls + '">' + match + '</span>';
+        return `<span class="${cls}">${match}</span>`;
       },
     );
+  }
+
+  prepareTitle(owner, timestamp) {
+    const date = this.datePipe.transform(timestamp, 'yyyy-MM-dd HH:mm:ss');
+    return `${owner} - ${date}`;
+  }
+
+  filterTraces(filteredTraces: Trace[]) {
+    this.subject.next(filteredTraces);
+  }
+
+  onChangeCollapseStatus(event) {
+    this.collapsed = event.checked;
   }
 }

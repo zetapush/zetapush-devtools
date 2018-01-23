@@ -53,6 +53,7 @@ export class ScrollGlueDirective
         isLocked: this.isLocked,
         mutations,
       });
+
       if (this.isLocked) {
         this.el.scrollTop = this.el.scrollHeight;
         setTimeout(() => {

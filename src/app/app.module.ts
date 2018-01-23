@@ -29,6 +29,7 @@ import { DebugStatusApi } from './debug-status-api.service';
 import { PreferencesStorage } from './preferences-storage.service';
 import { LazyJsonComponent } from './lazy-json.component';
 import { StackFilterComponent } from './stack-filter.component';
+import { JsonViewerComponent } from './json-viewer.component';
 
 import { ScrollGlueDirective } from './scrollGlue.directive';
 
@@ -45,6 +46,7 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     LazyJsonComponent,
     ScrollGlueDirective,
     StackFilterComponent,
+    JsonViewerComponent,
   ],
   imports: [
     BrowserModule,
