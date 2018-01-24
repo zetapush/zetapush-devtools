@@ -1,10 +1,9 @@
-import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 import { NGXLogger } from 'ngx-logger';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { DatePipe } from '@angular/common';
 
 import JSONFormatter from 'json-formatter-js';
 
@@ -22,9 +21,23 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     .back-link {
       cursor: pointer;
     }
+    zp-stack-filter {
+      float: left;
+    }
     .collapsed {
       margin-top: 10px;
       padding-left: 0.5rem;
+    }
+    .collapse-toggle {
+      float: right;
+      padding-right: 0.5rem;
+    }
+    .collapse-button {
+      margin-left: 15px;
+    }
+    .clear {
+      float: right;
+      clear: both;
     }
     .terminal {
       max-width: 800px;
@@ -39,6 +52,7 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     .terminal-title {
       font-family: 'monospace';
       font-size: 14px;
+      color: orange;
     }
     .terminal-content {
       margin: 5px 0 10px 0;
@@ -46,9 +60,6 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
     }
     :host ::ng-deep .json-formatter-dark.json-formatter-row .json-formatter-string {
       white-space: pre-wrap;
-    }
-    .clear {
-      float: right;
     }
   `,
   ],
@@ -61,23 +72,41 @@ import { ScrollGlueDirective } from './scrollGlue.directive';
       <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
       <zp-stack-filter [traces]="traces" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
 
-      <mat-slide-toggle
-          class="collapsed"
-          [color]="'accent'"
-          [checked]="collapsed"
-          labelPosition="before"
-          (change)="onChangeCollapseStatus($event)">
-        Collapsed
-      </mat-slide-toggle>
+      <div class="collapse-toggle">
+        <mat-slide-toggle
+            class="collapsed"
+            [color]="'accent'"
+            [checked]="collapsed"
+            labelPosition="before"
+            (change)="onChangeCollapseOutput($event)">
+          Collapsed output
+        </mat-slide-toggle>
+
+        <button mat-raised-button
+          color="accent"
+          class="collapse-all"
+          [disabled]="!subject.getValue().length"
+          (click)="onClickCollapseAll()">
+          <mat-icon>import_export</mat-icon> {{ collapseToggle  ? 'Expand all' : 'Collapse all' }}
+        </button>
+      </div>
 
       <button mat-icon-button class="clear">
         <mat-icon aria-label="Clear terminal" (click)="onClearClick()">clear</mat-icon>
       </button>
 
-      <div class="terminal" *ngIf="subject._value.length; else watching" zpScrollGlue>
-        <div *ngFor="let output of subject._value">
-          <span class="terminal-title">{{ prepareTitle(output.owner, output.ts) }}</span>
-          <zp-json-viewer class="terminal-content" [json]="output.data" [collapsed]="collapsed"></zp-json-viewer>
+      <div class="terminal" *ngIf="subject.getValue().length; else watching" zpScrollGlue>
+        <div *ngFor="let output of subject.getValue()">
+          <div class="terminal-title">
+            <span class="owner">{{ output.owner }}</span>
+            <span class="separator">-</span>
+            <span class="time">{{ output.ts | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+          </div>
+          <zp-json-viewer class="terminal-content"
+            [json]="output.data"
+            [collapsed]="collapsed"
+            [collapsedTrace]="collapsedTrace">
+          </zp-json-viewer>
         </div>
       </div>
 
@@ -96,6 +125,11 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
   connected = false;
   buffer = 1000;
   collapsed = true;
+  collapsedTrace = {
+    toggle: true,
+    trace: null,
+  };
+  collapseToggle = true;
 
   @Input() sandboxes: Sandbox[];
 
@@ -106,7 +140,6 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
     private preferences: PreferencesStorage,
     private debug: DebugStatusApi,
     private logger: NGXLogger,
-    private datePipe: DatePipe,
   ) {}
 
   ngOnInit() {
@@ -127,7 +160,7 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
   }
 
   onClearClick() {
-    this.logger.log('TraceViewComponent::onClearClick');
+    this.logger.log('TerminalViewComponent::onClearClick');
     this.traces = [];
     this.subject.next(this.traces);
   }
@@ -151,6 +184,7 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
             this.traces = [...this.traces, trace];
 
             // Remove the 100 first entries if traces > buffer
+            // TODO: Improve
             if (this.traces.length > this.buffer) {
               this.traces = this.traces.slice(100);
             }
@@ -193,42 +227,24 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  syntaxHighlight(json) {
-    json = JSON.stringify(json, undefined, 2);
-    json = json
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-    return json.replace(
-      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-      match => {
-        let cls = 'number';
-        if (/^"/.test(match)) {
-          if (/:$/.test(match)) {
-            cls = 'key';
-          } else {
-            cls = 'string';
-          }
-        } else if (/true|false/.test(match)) {
-          cls = 'boolean';
-        } else if (/null/.test(match)) {
-          cls = 'null';
-        }
-        return `<span class="${cls}">${match}</span>`;
-      },
-    );
-  }
-
-  prepareTitle(owner, timestamp) {
-    const date = this.datePipe.transform(timestamp, 'yyyy-MM-dd HH:mm:ss');
-    return `${owner} - ${date}`;
-  }
-
   filterTraces(filteredTraces: Trace[]) {
     this.subject.next(filteredTraces);
   }
 
-  onChangeCollapseStatus(event) {
+  onChangeCollapseOutput(event) {
+    this.logger.log('TraceViewComponent::onChangeCollapseOutput');
     this.collapsed = event.checked;
+  }
+
+  onClickCollapseAll() {
+    this.logger.log('TraceViewComponent::onClickCollapseAll');
+    this.collapseToggle = !this.collapseToggle;
+
+    this.subject.getValue().map(trace => {
+      this.collapsedTrace = {
+        toggle: this.collapseToggle,
+        trace: trace,
+      };
+    });
   }
 }
