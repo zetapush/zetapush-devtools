@@ -37,9 +37,12 @@ export class ScrollGlueDirective
   @HostListener('scroll')
   onScroll() {
     const scrollTop = this.el.scrollTop;
+
     if (scrollTop === 0) {
       this.isTop.next();
     }
+
+    this.disableAutoScroll();
   }
 
   ngAfterContentInit() {
@@ -80,6 +83,21 @@ export class ScrollGlueDirective
      */
     if (this._observer) {
       this._observer.disconnect();
+    }
+  }
+
+  /**
+   * Disable scrollGlue if user is not at the bottom of the view
+   */
+  disableAutoScroll() {
+    const scrollTop = this.el.scrollTop;
+    const scrollHeight = this.el.scrollHeight;
+    const clientHeight = this.el.clientHeight;
+
+    if (scrollHeight - scrollTop === clientHeight) {
+      this.isLocked = true;
+    } else {
+      this.isLocked = false;
     }
   }
 }
