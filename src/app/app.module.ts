@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PathLocationStrategy, LocationStrategy } from '@angular/common';
+import {
+  PathLocationStrategy,
+  LocationStrategy,
+  DatePipe,
+} from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -19,10 +23,15 @@ import { SandboxesViewComponent } from './sandboxes-view.component';
 import { StackTraceComponent } from './stack-trace.component';
 import { RedirectViewComponent } from './redirect-view.component';
 import { TraceViewComponent } from './trace-view.component';
+import { TerminalViewComponent } from './terminal-view.component';
 import { DebugFormComponent } from './debug-form.component';
 import { DebugStatusApi } from './debug-status-api.service';
 import { PreferencesStorage } from './preferences-storage.service';
 import { LazyJsonComponent } from './lazy-json.component';
+import { StackFilterComponent } from './stack-filter.component';
+import { JsonViewerComponent } from './json-viewer.component';
+
+import { ScrollGlueDirective } from './scrollGlue.directive';
 
 @NgModule({
   declarations: [
@@ -31,9 +40,13 @@ import { LazyJsonComponent } from './lazy-json.component';
     SandboxesViewComponent,
     StackTraceComponent,
     TraceViewComponent,
+    TerminalViewComponent,
     RedirectViewComponent,
     DebugFormComponent,
     LazyJsonComponent,
+    ScrollGlueDirective,
+    StackFilterComponent,
+    JsonViewerComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +73,7 @@ import { LazyJsonComponent } from './lazy-json.component';
     DebugStatusApi,
     PreferencesStorage,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })
