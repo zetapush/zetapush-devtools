@@ -5,7 +5,7 @@ import {
   TraceCompletion,
   TraceLocation,
   parseTraceLocation,
-} from './trace.interface';
+} from '../../api/interfaces/trace.interface';
 /*
   ctx: number;
   type: TraceType;
@@ -51,23 +51,7 @@ interface ViewTypeFilter {
       </tbody>
     </table>
   `,
-  styles: [
-    `
-    .Trace {}
-    .Trace--USR {
-      color: #1B6FCB;
-      font-weight: bold;
-    }
-    .Trace--CMT {
-      color: #C1B8B6;
-    }
-    .Trace--MS,
-    .Trace--ME {
-      color: #919191;
-      font-weight: bold;
-    }
-  `,
-  ],
+  styleUrls: [],
 })
 export class StackTraceComponent {
   filtered: Trace[] = [];

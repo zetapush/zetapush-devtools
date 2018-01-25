@@ -3,15 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 
 import { NGXLogger } from 'ngx-logger';
 
-import { Sandbox } from './sandboxes-resolver.service';
+import { Sandbox } from '../../api/resolvers/sandboxes-resolver.service';
 
 @Component({
   selector: 'zp-sandboxes-view',
+  styleUrls: ['sandboxes-view.component.scss'],
   template: `
     <div class="sanboxes-container">
       <mat-list>
         <h3 mat-subheader>Sandboxes</h3>
-        <mat-list-item *ngFor="let sandbox of sandboxes" [routerLink]="['/trace', sandbox.businessId]">
+        <mat-list-item *ngFor="let sandbox of sandboxes" [routerLink]="['/traces', sandbox.businessId]">
           <mat-icon mat-list-icon>folder</mat-icon>
           <h4 mat-line><strong>{{sandbox.name}}</strong></h4>
           <p mat-line>{{sandbox.businessId}}</p>
@@ -28,20 +29,6 @@ import { Sandbox } from './sandboxes-resolver.service';
       </mat-list>
     </div>
   `,
-  styles: [
-    `
-    [mat-list-icon] {
-      color: rgba(0, 0, 0, 0.54);
-    }
-    .mat-list {
-      width: 50%;
-      float: left;
-    }
-    mat-list-item {
-      cursor: pointer;
-    }
-  `,
-  ],
 })
 export class SandboxesViewComponent {
   sandboxes: Sandbox[] = [];

@@ -1,5 +1,5 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { Environement, Platform } from './environment.interface';
+import { Environement, Platform } from './api/interfaces/environment.interface';
 import { environment } from '../environments/environment';
 
 export { environment };

@@ -14,8 +14,7 @@ import {
   TraceCompletion,
   TraceLocation,
   parseTraceLocation,
-} from './trace.interface';
-import {} from '@angular/core/src/metadata/lifecycle_hooks';
+} from '../../api/interfaces/trace.interface';
 
 interface ViewTypeFilter {
   label: string;
