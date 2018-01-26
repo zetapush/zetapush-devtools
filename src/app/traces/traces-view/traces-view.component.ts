@@ -17,14 +17,14 @@ import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 import { saveAs } from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 
-import { PreferencesStorage } from './preferences-storage.service';
+import { PreferencesStorage } from '../../api/services/preferences-storage.service';
 import {
   Trace,
   TraceCompletion,
   TraceLocation,
   parseTraceLocation,
   TraceType,
-} from './trace.interface';
+} from '../../api/interfaces/trace.interface';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
@@ -109,122 +109,11 @@ export class TraceDataSource extends DataSource<Trace> {
 }
 
 @Component({
-  selector: 'zp-trace-view',
-  template: `
-    <mat-sidenav-container class="Container--Sidenav">
-      <h1>
-        <mat-icon mat-list-icon [routerLink]="['/sandboxes']">arrow_back</mat-icon>
-        <span>Trace for {{sandboxId}}</span>
-      </h1>
-      <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
-      <mat-toolbar>
-        <mat-form-field class="Filter">
-        <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
-        </mat-form-field>
-        <span class="Spacer"></span>
-        <button mat-icon-button>
-          <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
-        </button>
-      </mat-toolbar>
-      <mat-table #table [dataSource]="source" class="Table">
-        <!-- Ctx Column -->
-        <ng-container matColumnDef="ctx">
-          <mat-header-cell class="HeaderCell HeaderCell--Ctx" *matHeaderCellDef> Id </mat-header-cell>
-          <mat-cell class="Cell Cell--Ctx" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-            {{row.ctx}}
-          </mat-cell>
-        </ng-container>
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-          <mat-header-cell class="HeaderCell HeaderCell--Actions" *matHeaderCellDef> Actions </mat-header-cell>
-          <mat-cell class="Cell Cell--Actions" *matCellDef="let row">
-            <button mat-icon-button>
-              <mat-icon aria-label="Download full trace" mat-list-icon (click)="onDownloadClick(row)">get_app</mat-icon>
-            </button>
-            <button mat-icon-button>
-              <mat-icon aria-label="Export trace as test case" mat-list-icon (click)="onExportClick(row)">bug_report</mat-icon>
-            </button>
-          </mat-cell>
-        </ng-container>
-        <!-- Ts Column -->
-        <ng-container matColumnDef="ts">
-          <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
-          <mat-cell class="Cell Cell--Ts" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-            {{row.ts | date:'HH:mm:SS'}}
-          </mat-cell>
-        </ng-container>
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <mat-header-cell class="HeaderCell HeaderCell--Name" *matHeaderCellDef> Name </mat-header-cell>
-          <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-            {{row.data.name ? row.data.name : 'UNAVAILABLE'}}
-          </mat-cell>
-        </ng-container>
-        <!-- Owner Column -->
-        <ng-container matColumnDef="owner">
-          <mat-header-cell class="HeaderCell HeaderCell--Owner" *matHeaderCellDef> Owner </mat-header-cell>
-          <mat-cell class="Cell Cell--Owner" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-            {{row.owner}}
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columns;" class="Table__Row"></mat-row>
-      </mat-table>
-
-      <mat-sidenav #sidenav mode="over" position="end">
-        <zp-stack-trace [traces]="selection"></zp-stack-trace>
-      </mat-sidenav>
-    </mat-sidenav-container>
-  `,
-  styles: [
-    `
-    .Spacer {
-      flex: 1 1 auto;
-    }
-    .Filter {
-      font-size: 16px;
-      margin-right: 100px;
-      flex-grow: 1;
-    }
-    .Table {
-      height: 80vh;
-      border: 1px dashed rgba(0,0,0,.12);
-      overflow-y: scroll;
-    }
-    .Table__Body {
-    }
-    .Table__Row {
-    }
-    .Container--Sidenav {
-      height: 100vh;
-    }
-    .Container--Sidenav mat-sidenav {
-      max-width: 75vw;
-      padding: 1rem;
-    }
-    .Container--Sidenav .mat-sidenav-content,
-    .Container--Sidenav mat-sidenav {
-      display: flex;
-      overflow-y: scroll;
-    }
-    .HeaderCell--Name,
-    .Cell--Name {
-      flex-grow: 2;
-    }
-    .Cell--Ctx,
-    .Cell--Ts,
-    .Cell--Name,
-    .Cell--Owner {
-      cursor: pointer;
-    }
-    .Cell--Name {
-      font-weight: bold;
-    }
-  `,
-  ],
+  selector: 'zp-traces-view',
+  templateUrl: 'traces-view.component.html',
+  styleUrls: ['traces-view.component.scss'],
 })
-export class TraceViewComponent implements OnDestroy, OnInit {
+export class TracesViewComponent implements OnDestroy, OnInit {
   sandboxId: string;
   traces: any[] = [];
   map = new Map<number, Trace[]>();
@@ -361,21 +250,25 @@ export class TraceViewComponent implements OnDestroy, OnInit {
       const name = `test_${data.name}`;
       const content = [
         `zms_test ${name} {
-  zms_test_setup {
-    zms_test_user user = zpRecipeUser::zpServiceSimpleAuth({
-      login: '<CHANGE-ME>',
-      password: '<CHANGE-ME>'
-    });
-  }
-  zms_add_handler(user, ${data.name}, (response, errors) => {
-    info(${data.name}.name, response, errors);
+          zms_test_setup {
+            zms_test_user user = zpRecipeUser::zpServiceSimpleAuth({
+              login: '<CHANGE-ME>',
+              password: '<CHANGE-ME>'
+            });
+          }
+          zms_add_handler(user, ${data.name}, (response, errors) => {
+            info(${data.name}.name, response, errors);
 
-    assert coll:size(errors) == 0 'CALL_MACRO_FAILED';
+            assert coll:size(errors) == 0 'CALL_MACRO_FAILED';
 
-    zms_test_success;
-  });
-  sudo user call ${data.name}(${JSON.stringify(data.parameters, null, 2)});
-}`,
+            zms_test_success;
+          });
+          sudo user call ${data.name}(${JSON.stringify(
+          data.parameters,
+          null,
+          2,
+        )});
+        }`,
       ];
       const blob = new Blob(content, {
         type: 'application/octet-stream',

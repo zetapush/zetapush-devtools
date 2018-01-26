@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 
 import { PreferencesStorage } from './preferences-storage.service';
-import { getSecureUrl } from './utils';
+import { getSecureUrl } from '../../utils';
 
 export interface DebugStatus {
   currentNb: number;

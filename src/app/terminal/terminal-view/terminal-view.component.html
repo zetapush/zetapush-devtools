@@ -1,0 +1,50 @@
+<div class="terminal-container">
+  <h1>
+    <mat-icon class="back-link" mat-list-icon [routerLink]="['/sandboxes']">arrow_back</mat-icon>
+    <span>Terminal for {{ sandboxId }}</span>
+  </h1>
+  <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
+  <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+
+  <div class="collapse-toggle">
+    <mat-slide-toggle
+        class="collapsed"
+        [color]="'accent'"
+        [checked]="collapsed"
+        labelPosition="before"
+        (change)="onChangeCollapseOutput($event)">
+      Collapsed output
+    </mat-slide-toggle>
+
+    <button mat-raised-button
+      color="accent"
+      class="collapse-all"
+      [disabled]="!subject.getValue().traces.length"
+      (click)="onClickCollapseAll()">
+      <mat-icon>import_export</mat-icon> {{ collapseToggle  ? 'Expand all' : 'Collapse all' }}
+    </button>
+  </div>
+
+  <button mat-icon-button class="clear">
+    <mat-icon aria-label="Clear terminal" (click)="onClearClick()">clear</mat-icon>
+  </button>
+
+  <div class="terminal" *ngIf="subject.getValue().traces.length; else watching" zpScrollGlue>
+    <div *ngFor="let output of subject.getValue().traces">
+      <div class="terminal-title">
+        <span class="owner">{{ output.owner }}</span>
+        <span class="separator">-</span>
+        <span class="time">{{ output.ts | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+      </div>
+      <zp-json-viewer class="terminal-content"
+        [json]="output.data"
+        [collapsed]="collapsed"
+        [collapseToggle]="subject.getValue().collapseToggle">
+      </zp-json-viewer>
+    </div>
+  </div>
+
+  <ng-template #watching>
+    <div class="terminal">Waiting for user traces ...</div>
+  </ng-template>
+</div>

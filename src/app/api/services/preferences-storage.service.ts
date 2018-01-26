@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Credentials } from './credentials.interface';
+import { Credentials } from '../interfaces/credentials.interface';
 
 @Injectable()
 export class PreferencesStorage {

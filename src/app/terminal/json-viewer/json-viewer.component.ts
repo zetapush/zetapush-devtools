@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import JSONFormatter from 'json-formatter-js';
 
-import { Trace } from './trace.interface';
+import { Trace } from '../../api/interfaces/trace.interface';
 
 @Component({
   selector: 'zp-json-viewer',
@@ -24,7 +24,7 @@ export class JsonViewerComponent implements OnChanges {
 
   @Input() json: Array<any> | Object | any;
   @Input() collapsed: boolean;
-  @Input() collapsedTrace: any;
+  @Input() collapseToggle: boolean;
 
   constructor() {}
 
@@ -35,13 +35,12 @@ export class JsonViewerComponent implements OnChanges {
     }
 
     // Toggle collapse for all traces in the terminal
-    if (changes.collapsedTrace && !changes.collapsedTrace.firstChange) {
-      const openAll: number = changes.collapsedTrace.currentValue.toggle
+    if (changes.collapseToggle && !changes.collapseToggle.firstChange) {
+      const openAll: number = changes.collapseToggle.currentValue
         ? 1
         : Infinity;
-
       this.input.nativeElement.innerHTML = '';
-      this._renderJSON(changes.collapsedTrace.currentValue.trace, openAll);
+      this._renderJSON(this.json, openAll);
 
       return;
     }

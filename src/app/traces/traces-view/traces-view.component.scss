@@ -1,0 +1,46 @@
+.Spacer {
+  flex: 1 1 auto;
+}
+.Filter {
+  font-size: 16px;
+  margin-right: 100px;
+  flex-grow: 1;
+}
+.Table {
+  height: 80vh;
+  border: 1px dashed rgba(0, 0, 0, 0.12);
+  overflow-y: scroll;
+}
+.Table__Body {
+}
+.Table__Row {
+}
+.Container--Sidenav {
+  height: 100vh;
+
+  h1 .mat-icon {
+    cursor: pointer;
+  }
+}
+.Container--Sidenav mat-sidenav {
+  max-width: 75vw;
+  padding: 1rem;
+}
+.Container--Sidenav .mat-sidenav-content,
+.Container--Sidenav mat-sidenav {
+  display: flex;
+  overflow-y: scroll;
+}
+.HeaderCell--Name,
+.Cell--Name {
+  flex-grow: 2;
+}
+.Cell--Ctx,
+.Cell--Ts,
+.Cell--Name,
+.Cell--Owner {
+  cursor: pointer;
+}
+.Cell--Name {
+  font-weight: bold;
+}

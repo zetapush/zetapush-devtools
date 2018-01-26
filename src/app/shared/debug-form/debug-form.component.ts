@@ -9,7 +9,10 @@ import { MatSlideToggleChange } from '@angular/material';
 
 import { NGXLogger } from 'ngx-logger';
 
-import { DebugStatus, DebugStatusApi } from './debug-status-api.service';
+import {
+  DebugStatus,
+  DebugStatusApi,
+} from '../../api/services/debug-status-api.service';
 
 export interface DebugStatusView extends DebugStatus {
   deploymentId: string;

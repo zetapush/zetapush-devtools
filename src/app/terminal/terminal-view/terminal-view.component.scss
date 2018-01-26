@@ -1,0 +1,43 @@
+.back-link {
+  cursor: pointer;
+}
+zp-stack-filter {
+  float: left;
+}
+.collapsed {
+  margin-top: 10px;
+  padding-left: 0.5rem;
+}
+.collapse-toggle {
+  float: right;
+  padding-right: 0.5rem;
+}
+.collapse-button {
+  margin-left: 15px;
+}
+.clear {
+  float: right;
+  clear: both;
+}
+.terminal {
+  max-width: 800px;
+  height: 600px;
+  padding: 10px;
+  margin: 20px auto;
+  color: white;
+  background-color: rgb(30, 30, 30);
+  overflow-y: scroll;
+  clear: both;
+}
+.terminal-title {
+  font-family: 'monospace';
+  font-size: 14px;
+  color: orange;
+}
+.terminal-content {
+  margin: 5px 0 10px 0;
+  display: block;
+}
+:host ::ng-deep .json-formatter-dark.json-formatter-row .json-formatter-string {
+  white-space: pre-wrap;
+}

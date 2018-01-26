@@ -9,8 +9,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { NGXLogger } from 'ngx-logger';
 
-import { PreferencesStorage } from './preferences-storage.service';
-import { getSecureUrl } from './utils';
+import { PreferencesStorage } from '../services/preferences-storage.service';
+import { getSecureUrl } from '../../utils';
 
 @Injectable()
 export class ServicesResolver implements Resolve<string[]> {

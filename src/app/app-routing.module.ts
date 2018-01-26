@@ -2,63 +2,38 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Routes, RouterModule } from '@angular/router';
 
-import { IsAuthenticated } from './is-authenticated';
-import { SandboxesResolver } from './sandboxes-resolver.service';
-import { ServicesResolver } from './services-resolver.service';
-import { SandboxStatusResolver } from './sandbox-status-resolver.service';
-
-import { LoginViewComponent } from './login-view.component';
-import { SandboxesViewComponent } from './sandboxes-view.component';
-import { TraceViewComponent } from './trace-view.component';
-import { TerminalViewComponent } from './terminal-view.component';
-import { RedirectViewComponent } from './redirect-view.component';
+import { IsAuthenticated } from './api/guards/is-authenticated';
 
 const routes: Routes = [
   {
-    path: 'login',
-    component: LoginViewComponent,
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'sandboxes',
+  },
+  {
+    path: 'auth',
+    loadChildren: './auth/auth.module#AuthModule',
   },
   {
     path: 'sandboxes',
     canActivate: [IsAuthenticated],
-    component: SandboxesViewComponent,
-    resolve: {
-      sandboxes: SandboxesResolver,
-    },
+    loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
   },
   {
-    path: 'trace/:sandboxId',
+    path: 'traces',
     canActivate: [IsAuthenticated],
-    component: TraceViewComponent,
-    resolve: {
-      status: SandboxStatusResolver,
-      services: ServicesResolver,
-    },
+    loadChildren: './traces/traces.module#TracesModule',
   },
   {
-    path: 'terminal/:sandboxId',
+    path: 'terminal',
     canActivate: [IsAuthenticated],
-    component: TerminalViewComponent,
-    resolve: {
-      status: SandboxStatusResolver,
-      services: ServicesResolver,
-    },
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: '/sandboxes',
+    loadChildren: './terminal/terminal.module#TerminalModule',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), BrowserAnimationsModule],
   exports: [RouterModule],
-  providers: [
-    IsAuthenticated,
-    SandboxesResolver,
-    SandboxStatusResolver,
-    ServicesResolver,
-  ],
+  providers: [IsAuthenticated],
 })
 export class AppRoutingModule {}

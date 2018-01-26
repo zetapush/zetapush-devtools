@@ -7,8 +7,8 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { PreferencesStorage } from './preferences-storage.service';
-import { getSecureUrl } from './utils';
+import { PreferencesStorage } from '../services/preferences-storage.service';
+import { getSecureUrl } from '../../utils';
 
 @Injectable()
 export class IsAuthenticated implements CanActivate {
@@ -29,7 +29,7 @@ export class IsAuthenticated implements CanActivate {
       const whoami = await response.json();
       return true;
     } catch (e) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return false;
     }
   }

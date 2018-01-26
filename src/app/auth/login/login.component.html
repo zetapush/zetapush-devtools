@@ -1,0 +1,32 @@
+<form (ngSubmit)="onSubmit(form)" novalidate #form="ngForm">
+  <mat-card *ngIf="!connecting">
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput placeholder="Username" name="username" type="text" required ngModel>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Password" name="password" type="password" required ngModel>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Api Url" name="apiUrl" required ngModel>
+          <mat-option *ngFor="let platform of platforms" [value]="platform.url">
+            {{ platform.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="isCustomApiUrl()">
+        <input matInput placeholder="Custom Api Url" name="customApiUrl" type="text" required ngModel>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button>Connect</button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card *ngIf="connecting">
+    <mat-card-title>Connecting ...</mat-card-title>
+    <mat-card-content>
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </mat-card-content>
+  </mat-card>
+</form>
