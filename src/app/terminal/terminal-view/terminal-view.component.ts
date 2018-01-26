@@ -12,14 +12,10 @@ import { PreferencesStorage } from '../../api/services/preferences-storage.servi
 import {
   Trace,
   TraceCompletion,
+  TerminalTraces,
   parseTraceLocation,
 } from '../../api/interfaces/trace.interface';
 import { ScrollGlueDirective } from '../../shared/scroll-glue/scroll-glue.directive';
-
-export interface TerminalTraces {
-  traces: Trace[];
-  collapseToggle: boolean;
-}
 
 @Component({
   selector: 'zp-terminal',

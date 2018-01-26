@@ -42,6 +42,11 @@ export interface TraceCompletion {
   data: Trace;
 }
 
+export interface TerminalTraces {
+  traces: Trace[];
+  collapseToggle: boolean;
+}
+
 const LOCATION_PATTERN = /^(.*)\|(.*)\:(.*)$/;
 
 export const parseTraceLocation = (location): TraceLocation => {
