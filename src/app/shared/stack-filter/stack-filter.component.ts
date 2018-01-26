@@ -15,11 +15,7 @@ import {
   TraceLocation,
   parseTraceLocation,
 } from '../../api/interfaces/trace.interface';
-
-interface ViewTypeFilter {
-  label: string;
-  selected: boolean;
-}
+import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 
 @Component({
   selector: 'zp-stack-filter',
@@ -47,15 +43,9 @@ interface ViewTypeFilter {
 })
 export class StackFilterComponent implements OnChanges {
   @Input() traces: Trace[] = [];
+  @Input() types: ViewTypeFilter[];
 
   @Output() filteredTraces = new EventEmitter<Trace[]>();
-
-  types: ViewTypeFilter[] = [
-    { label: 'MS', selected: false },
-    { label: 'ME', selected: false },
-    { label: 'CMT', selected: false },
-    { label: 'USR', selected: true },
-  ];
 
   ngOnChanges(changes: SimpleChanges) {
     this.filteredTraces.emit(this.filtered);

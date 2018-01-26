@@ -6,27 +6,12 @@ import {
   TraceLocation,
   parseTraceLocation,
 } from '../../api/interfaces/trace.interface';
-/*
-  ctx: number;
-  type: TraceType;
-  n: number;
-  data: any;
-  line: number;
-  location: TraceLocation;
-  owner: string;
-  level: TraceLevel;
-  ts: number;
-*/
-
-interface ViewTypeFilter {
-  label: string;
-  selected: boolean;
-}
+import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 
 @Component({
   selector: 'zp-stack-trace',
   template: `
-    <zp-stack-filter [traces]="traces" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+    <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
     <table>
       <thead>
         <tr>
@@ -55,6 +40,12 @@ interface ViewTypeFilter {
 })
 export class StackTraceComponent {
   filtered: Trace[] = [];
+  types: ViewTypeFilter[] = [
+    { label: 'MS', selected: true },
+    { label: 'ME', selected: true },
+    { label: 'CMT', selected: false },
+    { label: 'USR', selected: true },
+  ];
 
   @Input() traces: Trace[] = [];
 

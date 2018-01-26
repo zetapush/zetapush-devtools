@@ -15,6 +15,7 @@ import {
   TerminalTraces,
   parseTraceLocation,
 } from '../../api/interfaces/trace.interface';
+import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 import { ScrollGlueDirective } from '../../shared/scroll-glue/scroll-glue.directive';
 
 @Component({
@@ -35,6 +36,12 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
   buffer = 1000;
   collapsed = true;
   collapseToggle = true;
+  types: ViewTypeFilter[] = [
+    { label: 'MS', selected: false },
+    { label: 'ME', selected: false },
+    { label: 'CMT', selected: false },
+    { label: 'USR', selected: true },
+  ];
 
   @Input() sandboxes: Sandbox[];
 

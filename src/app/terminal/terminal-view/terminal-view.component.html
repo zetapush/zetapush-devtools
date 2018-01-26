@@ -4,7 +4,7 @@
     <span>Terminal for {{ sandboxId }}</span>
   </h1>
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
-  <zp-stack-filter [traces]="traces" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+  <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
 
   <div class="collapse-toggle">
     <mat-slide-toggle

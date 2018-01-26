@@ -17,6 +17,10 @@
 }
 .Container--Sidenav {
   height: 100vh;
+
+  h1 .mat-icon {
+    cursor: pointer;
+  }
 }
 .Container--Sidenav mat-sidenav {
   max-width: 75vw;
