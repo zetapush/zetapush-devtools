@@ -36,7 +36,7 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
       </tbody>
     </table>
   `,
-  styleUrls: [],
+  styleUrls: ['stack-trace.component.scss'],
 })
 export class StackTraceComponent {
   filtered: Trace[] = [];
