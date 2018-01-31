@@ -43,8 +43,6 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
     { label: 'USR', selected: true },
   ];
 
-  @Input() sandboxes: Sandbox[];
-
   @ViewChild(ScrollGlueDirective) messageListRef: ScrollGlueDirective;
 
   constructor(
@@ -138,10 +136,8 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
 
     // Enable subscription for all deployed services
     this.services.forEach(deploymentId =>
-      this.createTraceObservable(this.client, deploymentId).subscribe(
-        traces => {
-          this.subject.next(traces);
-        },
+      this.createTraceObservable(this.client, deploymentId).subscribe(traces =>
+        this.subject.next(traces),
       ),
     );
   }
