@@ -9,28 +9,22 @@ import { Observable } from 'rxjs/Observable';
 
 import { PreferencesStorage } from '../services/preferences-storage.service';
 import { getSecureUrl } from '../../utils';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
-export class IsAuthenticated implements CanActivate {
+export class AuthGuard implements CanActivate {
   constructor(
     private preferences: PreferencesStorage,
+    private authService: AuthService,
     private router: Router,
   ) {}
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<boolean> {
-    try {
-      const credentials = this.preferences.getCredentials();
-      const url = getSecureUrl(`${credentials.apiUrl}/zbo/auth/whoami`);
-      const response = await fetch(url, {
-        credentials: 'include',
-      });
-      const whoami = await response.json();
-      return true;
-    } catch (e) {
+    if (!await this.authService.isAuthenticated()) {
       this.router.navigate(['/auth/login']);
-      return false;
     }
+    return true;
   }
 }

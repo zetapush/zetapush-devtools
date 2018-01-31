@@ -8,6 +8,7 @@ import { ENVIRONMENT_ID } from '../../env.module';
 import { Platform } from '../../api/interfaces/environment.interface';
 import { Credentials } from '../../api/interfaces/credentials.interface';
 import { getSecureUrl } from '../../utils';
+import { AuthService } from './../../api/services/auth.service';
 
 const CUSTOM_API_URL = '<custom>';
 
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private logger: NGXLogger,
     injector: Injector,
+    private authService: AuthService,
   ) {
     this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
   }
@@ -57,19 +59,11 @@ export class LoginComponent implements OnInit {
           logout: getSecureUrl(`${credentials.apiUrl}/zbo/auth/logout`),
         };
         this.logger.log('LoginComponent::onSubmit', urls);
-        await fetch(urls.logout, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        const response = await fetch(urls.login, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-          credentials: 'include',
-        });
-        const data = await response.json();
+
+        this.authService.logout(urls.logout);
+        const response = await this.authService.login(credentials, urls.login);
+
+        const data = response.json();
         this.logger.log('data', data);
         this.router.navigate(['/sandboxes']);
       } catch (e) {
