@@ -1,13 +1,11 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { NGXLogger } from 'ngx-logger';
 
 import { ENVIRONMENT_ID } from '../../env.module';
 import { Platform } from '../../api/interfaces/environment.interface';
 import { Credentials } from '../../api/interfaces/credentials.interface';
-import { getSecureUrl } from '../../utils';
 import { AuthService } from './../../api/services/auth.service';
 
 const CUSTOM_API_URL = '<custom>';
@@ -17,23 +15,18 @@ const CUSTOM_API_URL = '<custom>';
   templateUrl: 'login.component.html',
   styleUrls: ['login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   platforms: Platform[];
   connecting = false;
 
   @ViewChild(NgForm) form: NgForm;
 
   constructor(
-    private router: Router,
     private logger: NGXLogger,
     injector: Injector,
     private authService: AuthService,
   ) {
     this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
-  }
-
-  ngOnInit() {
-    this.logger.log('LoginComponent::ngOnInit', this.form);
   }
 
   async onSubmit({ value, valid }: { value: Credentials; valid: boolean }) {
@@ -54,18 +47,10 @@ export class LoginComponent implements OnInit {
       );
       this.connecting = true;
       try {
-        const urls = {
-          login: getSecureUrl(`${credentials.apiUrl}/zbo/auth/login`),
-          logout: getSecureUrl(`${credentials.apiUrl}/zbo/auth/logout`),
-        };
-        this.logger.log('LoginComponent::onSubmit', urls);
-
-        this.authService.logout(urls.logout);
-        const response = await this.authService.login(credentials, urls.login);
+        const response = await this.authService.login(credentials);
 
         const data = response.json();
         this.logger.log('data', data);
-        this.router.navigate(['/sandboxes']);
       } catch (e) {
         this.connecting = false;
         this.logger.error('error', e);

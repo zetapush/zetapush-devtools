@@ -1,31 +1,50 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PreferencesStorage } from '../services/preferences-storage.service';
 import { getSecureUrl } from '../../utils';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
-  constructor(private preferences: PreferencesStorage) {}
+  private loggedIn = new BehaviorSubject<boolean>(false);
 
-  async login(credentials, loginUrl): Promise<Response> {
-    return await fetch(loginUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  constructor(
+    private router: Router,
+    private preferences: PreferencesStorage,
+  ) {}
+
+  async login(credentials): Promise<Response> {
+    const response = await fetch(
+      getSecureUrl(`${credentials.apiUrl}/zbo/auth/login`),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+        credentials: 'include',
       },
-      body: JSON.stringify(credentials),
-      credentials: 'include',
-    });
+    );
+
+    this.loggedIn.next(true);
+    this.router.navigate(['/sandboxes']);
+
+    return response;
   }
 
-  async logout(logoutUrl) {
-    await fetch(logoutUrl, {
+  async logout() {
+    const credentials = this.preferences.getCredentials();
+    await fetch(getSecureUrl(`${credentials.apiUrl}/zbo/auth/logout`), {
       method: 'GET',
       credentials: 'include',
     });
+
+    this.loggedIn.next(false);
+    this.router.navigate(['/auth/login']);
   }
 
-  async isAuthenticated(): Promise<boolean> {
+  async checkCredentials(): Promise<boolean> {
     try {
       const credentials = this.preferences.getCredentials();
       const url = getSecureUrl(`${credentials.apiUrl}/zbo/auth/whoami`);
@@ -33,9 +52,15 @@ export class AuthService {
         credentials: 'include',
       });
       const whoami = await response.json();
+      this.loggedIn.next(true);
       return true;
     } catch (e) {
+      this.loggedIn.next(false);
       return false;
     }
+  }
+
+  isLoggedIn() {
+    return this.loggedIn;
   }
 }
