@@ -17,6 +17,7 @@ const CUSTOM_API_URL = '<custom>';
 })
 export class LoginComponent {
   platforms: Platform[];
+  selectedPlatform: string;
   connecting = false;
 
   @ViewChild(NgForm) form: NgForm;
@@ -27,6 +28,7 @@ export class LoginComponent {
     private authService: AuthService,
   ) {
     this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
+    this.selectedPlatform = this.platforms[0].url;
   }
 
   async onSubmit({ value, valid }: { value: Credentials; valid: boolean }) {
