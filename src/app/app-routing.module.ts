@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Routes, RouterModule } from '@angular/router';
 
-import { IsAuthenticated } from './api/guards/is-authenticated';
+import { AuthGuard } from './api/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -16,17 +16,17 @@ const routes: Routes = [
   },
   {
     path: 'sandboxes',
-    canActivate: [IsAuthenticated],
+    canActivate: [AuthGuard],
     loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
   },
   {
     path: 'traces',
-    canActivate: [IsAuthenticated],
+    canActivate: [AuthGuard],
     loadChildren: './traces/traces.module#TracesModule',
   },
   {
     path: 'terminal',
-    canActivate: [IsAuthenticated],
+    canActivate: [AuthGuard],
     loadChildren: './terminal/terminal.module#TerminalModule',
   },
 ];
@@ -34,6 +34,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes), BrowserAnimationsModule],
   exports: [RouterModule],
-  providers: [IsAuthenticated],
+  providers: [AuthGuard],
 })
 export class AppRoutingModule {}

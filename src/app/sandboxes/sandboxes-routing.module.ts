@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { IsAuthenticated } from '../api/guards/is-authenticated';
+import { AuthGuard } from '../api/guards/auth.guard';
 import { SandboxesResolver } from '../api/resolvers/sandboxes-resolver.service';
 
 import { SandboxesViewComponent } from './sandboxes-view/sandboxes-view.component';
@@ -9,7 +9,7 @@ import { SandboxesViewComponent } from './sandboxes-view/sandboxes-view.componen
 const ROUTES: Routes = [
   {
     path: '',
-    canActivate: [IsAuthenticated],
+    canActivate: [AuthGuard],
     component: SandboxesViewComponent,
     resolve: {
       sandboxes: SandboxesResolver,
@@ -20,6 +20,6 @@ const ROUTES: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(ROUTES)],
   exports: [RouterModule],
-  providers: [IsAuthenticated, SandboxesResolver],
+  providers: [AuthGuard, SandboxesResolver],
 })
 export class SandboxesRoutingModule {}

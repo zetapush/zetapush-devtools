@@ -9,6 +9,7 @@ import { UiModule } from '../ui.module';
 import { DebugFormComponent } from './debug-form/debug-form.component';
 import { StackFilterComponent } from './stack-filter/stack-filter.component';
 import { RedirectViewComponent } from './redirect-view/redirect-view.component';
+import { HeaderComponent } from './header/header.component';
 
 // Directives
 import { ScrollGlueDirective } from './scroll-glue/scroll-glue.directive';
@@ -18,6 +19,7 @@ const COMPONENTS = [
   StackFilterComponent,
   RedirectViewComponent,
   ScrollGlueDirective,
+  HeaderComponent,
 ];
 
 @NgModule({

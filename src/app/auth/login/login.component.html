@@ -9,7 +9,7 @@
         <input matInput placeholder="Password" name="password" type="password" required ngModel>
       </mat-form-field>
       <mat-form-field>
-        <mat-select placeholder="Api Url" name="apiUrl" required ngModel>
+        <mat-select placeholder="Api Url" name="apiUrl" required [(ngModel)]="selectedPlatform">
           <mat-option *ngFor="let platform of platforms" [value]="platform.url">
             {{ platform.name }}
           </mat-option>

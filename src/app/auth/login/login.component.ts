@@ -1,13 +1,12 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { NGXLogger } from 'ngx-logger';
 
 import { ENVIRONMENT_ID } from '../../env.module';
 import { Platform } from '../../api/interfaces/environment.interface';
 import { Credentials } from '../../api/interfaces/credentials.interface';
-import { getSecureUrl } from '../../utils';
+import { AuthService } from './../../api/services/auth.service';
 
 const CUSTOM_API_URL = '<custom>';
 
@@ -16,22 +15,20 @@ const CUSTOM_API_URL = '<custom>';
   templateUrl: 'login.component.html',
   styleUrls: ['login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   platforms: Platform[];
+  selectedPlatform: string;
   connecting = false;
 
   @ViewChild(NgForm) form: NgForm;
 
   constructor(
-    private router: Router,
     private logger: NGXLogger,
     injector: Injector,
+    private authService: AuthService,
   ) {
     this.platforms = injector.get(ENVIRONMENT_ID).plateforms;
-  }
-
-  ngOnInit() {
-    this.logger.log('LoginComponent::ngOnInit', this.form);
+    this.selectedPlatform = this.platforms[0].url;
   }
 
   async onSubmit({ value, valid }: { value: Credentials; valid: boolean }) {
@@ -52,26 +49,10 @@ export class LoginComponent implements OnInit {
       );
       this.connecting = true;
       try {
-        const urls = {
-          login: getSecureUrl(`${credentials.apiUrl}/zbo/auth/login`),
-          logout: getSecureUrl(`${credentials.apiUrl}/zbo/auth/logout`),
-        };
-        this.logger.log('LoginComponent::onSubmit', urls);
-        await fetch(urls.logout, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        const response = await fetch(urls.login, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-          credentials: 'include',
-        });
-        const data = await response.json();
+        const response = await this.authService.login(credentials);
+
+        const data = response.json();
         this.logger.log('data', data);
-        this.router.navigate(['/sandboxes']);
       } catch (e) {
         this.connecting = false;
         this.logger.error('error', e);
