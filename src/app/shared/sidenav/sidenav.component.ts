@@ -9,6 +9,7 @@ import {
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { Sandbox } from './../../api/interfaces/sandboxe.interface';
+import { SandboxeService } from './../../api/services/sandboxe.service';
 
 @Component({
   selector: 'zp-sidenav',
@@ -18,20 +19,25 @@ import { Sandbox } from './../../api/interfaces/sandboxe.interface';
 export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
+  sandboxes: Array<Sandbox>;
 
   @Input() toggle: boolean;
-  @Input() sandboxes: Array<Sandbox>;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
+    private sandboxeService: SandboxeService,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sandboxeService.getSandboxes().then(sandboxes => {
+      this.sandboxes = sandboxes;
+    });
+  }
 
   ngAfterViewChecked() {
     this.changeDetectorRef.detectChanges();
