@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
+import { Sandbox } from './../../api/interfaces/sandboxe.interface';
+
 @Component({
   selector: 'zp-sidenav',
   styleUrls: ['sidenav.component.scss'],
@@ -18,6 +20,7 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
   private _mobileQueryListener: () => void;
 
   @Input() toggle: boolean;
+  @Input() sandboxes: Array<Sandbox>;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,

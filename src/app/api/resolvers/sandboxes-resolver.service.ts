@@ -11,32 +11,22 @@ import { NGXLogger } from 'ngx-logger';
 
 import { PreferencesStorage } from '../services/preferences-storage.service';
 import { getSecureUrl } from '../../utils';
-
-export interface Sandbox {
-  businessId: string;
-  name?: string;
-}
+import { Sandbox } from '../interfaces/sandboxe.interface';
+import { SandboxeService } from '../services/sandboxe.service';
 
 @Injectable()
 export class SandboxesResolver implements Resolve<Sandbox[]> {
   constructor(
     private preferences: PreferencesStorage,
     private logger: NGXLogger,
+    private sandboxeService: SandboxeService,
   ) {}
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<Sandbox[]> {
     this.logger.log('SandboxesResolver::resolve', route);
-    const credentials = this.preferences.getCredentials();
-    const url = getSecureUrl(
-      `${credentials.apiUrl}/zbo/orga/business/list/mine`,
-    );
-    const response = await fetch(url, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    const { content } = await response.json();
-    return content.map(({ businessId, name }) => ({ businessId, name }));
+
+    return await this.sandboxeService.getSandboxes();
   }
 }

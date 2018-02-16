@@ -3,23 +3,22 @@
 
     <mat-list>
       <h3 mat-subheader>Sandboxes</h3>
-      <!-- <div class="sanboxes-list" *ngIf="sandboxes | async">
-        <mat-list-item *ngFor="let sanboxe of sanboxes | async" routerLinkActive="active" [routerLink]="['../messages', room._id]">
+      <div class="sandboxe-list" *ngIf="sandboxes">
+        <mat-list-item *ngFor="let sandboxe of sandboxes" routerLinkActive="active" [routerLink]="['traces', sandboxe.businessId]">
           <mat-icon mat-list-icon>folder</mat-icon>
-          <p mat-line>{{ room.name }}</p>
+          <p mat-line>{{ sandboxe.name }}</p>
         </mat-list-item>
-      </div> -->
+      </div>
 
       <mat-divider></mat-divider>
 
       <h3 mat-subheader>Sandboxes Terminal</h3>
-      <!-- <div class="user-list" *ngIf="users | async">
-        <mat-list-item *ngFor="let user of users | async" routerLinkActive="active" [routerLink]="['../messages', user._id]">
-          <mat-icon *ngIf="user.connected" style="color:green" mat-list-icon>radio_button_checked</mat-icon>
-          <mat-icon *ngIf="!user.connected" mat-list-icon>radio_button_unchecked</mat-icon>
-          <p mat-line>{{ user.username }}</p>
+      <div class="sandboxe-list" *ngIf="sandboxes">
+        <mat-list-item *ngFor="let sandboxe of sandboxes" routerLinkActive="active" [routerLink]="['terminal', sandboxe.businessId]">
+          <mat-icon mat-list-icon>subtitles</mat-icon>
+          <p mat-line>{{ sandboxe.name }}</p>
         </mat-list-item>
-      </div> -->
+      </div>
     </mat-list>
 
   </mat-sidenav>

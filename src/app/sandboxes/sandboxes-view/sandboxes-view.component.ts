@@ -3,13 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { NGXLogger } from 'ngx-logger';
 
-import { Sandbox } from '../../api/resolvers/sandboxes-resolver.service';
+import { Sandbox } from '../../api/interfaces/sandboxe.interface';
 
 @Component({
   selector: 'zp-sandboxes-view',
   styleUrls: ['sandboxes-view.component.scss'],
   template: `
-    <div class="sanboxes-container">
+    <div class="sandboxes-container">
       <mat-list>
         <h3 mat-subheader>Sandboxes</h3>
         <mat-list-item *ngFor="let sandbox of sandboxes" [routerLink]="['/traces', sandbox.businessId]">
