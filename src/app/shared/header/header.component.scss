@@ -1,6 +1,8 @@
 .header {
   background: #383839;
   color: white;
+  position: fixed;
+  z-index: 999;
 
   .brand {
     cursor: pointer;

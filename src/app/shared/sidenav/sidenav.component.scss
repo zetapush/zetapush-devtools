@@ -46,10 +46,13 @@
 
   .wrapper {
     background-color: #fff;
+    margin-top: 64px;
+    height: calc(100vh - 64px);
 
     mat-spinner {
       margin: 25px auto;
       display: none;
+      top: 50px;
     }
     router-outlet + mat-spinner {
       display: block;
