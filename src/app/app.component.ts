@@ -22,11 +22,16 @@ import { Observable } from 'rxjs/Observable';
 })
 export class AppComponent {
   isLoggedIn$: Observable<boolean>;
+  toggledSidenav = true;
 
   constructor(
     authService: AuthService,
     analytics: Angulartics2GoogleTagManager,
   ) {
     this.isLoggedIn$ = authService.isLoggedIn();
+  }
+
+  onToggledSidenav(event: boolean) {
+    this.toggledSidenav = event;
   }
 }
