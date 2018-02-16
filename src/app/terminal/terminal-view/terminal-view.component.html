@@ -2,6 +2,7 @@
   <h1>
     <mat-icon class="back-link" mat-list-icon [routerLink]="['/sandboxes']">arrow_back</mat-icon>
     <span>Terminal for {{ sandboxId }}</span>
+    <a mat-raised-button [routerLink]="['/traces', sandboxId]" color="primary"><mat-icon>folder</mat-icon> Table View</a>
   </h1>
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
   <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>

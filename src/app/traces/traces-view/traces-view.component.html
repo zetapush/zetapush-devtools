@@ -2,6 +2,7 @@
   <h1>
     <mat-icon mat-list-icon [routerLink]="['/sandboxes']">arrow_back</mat-icon>
     <span>Trace for {{sandboxId}}</span>
+    <a mat-raised-button [routerLink]="['/terminal', sandboxId]" color="primary"><mat-icon>subtitles</mat-icon> Terminal View</a>
   </h1>
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
   <mat-toolbar>
