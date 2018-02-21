@@ -20,7 +20,7 @@ import { DebugStatusApi } from './../../api/services/debug-status-api.service';
 export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
-  sandboxes: Array<Sandbox>;
+  sandboxes: Sandbox[] = [];
 
   @Input() toggle: boolean;
 
@@ -37,6 +37,18 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnInit() {
     this.getSandboxes();
+
+    // Subscribe to the debug state change
+    this.debugService.subject.subscribe(data => {
+      for (let i = 0, length = this.sandboxes.length; i < length; i++) {
+        if (
+          this.sandboxes[i].businessId === data.sandboxId &&
+          this.sandboxes[i].debug !== data.debug
+        ) {
+          this.sandboxes[i].debug = data.debug;
+        }
+      }
+    });
   }
 
   ngAfterViewChecked() {

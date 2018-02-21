@@ -64,11 +64,11 @@ export class DebugFormComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.sandboxId) {
       this.logger.log('DebugFormComponent::ngOnChanges', changes);
-      this.fetch();
+      this.fetch(true);
     }
   }
 
-  async fetch() {
+  async fetch(routeChange: boolean = false) {
     const models = await Promise.all(
       this.services.map(deploymentId =>
         this.debug.status(this.sandboxId, deploymentId).then(status => ({
@@ -83,6 +83,18 @@ export class DebugFormComponent implements OnChanges {
     }, models.length > 0);
     this.models = models;
     this.logger.log('DebugFormComponent::fetch', models);
+
+    // Feed the new value of debug to the sidenav
+    if (!routeChange) {
+      const sandboxDebug = { sandboxId: this.sandboxId, debug: false };
+      const result = models.map(model => {
+        if (model.debug) {
+          sandboxDebug.debug = true;
+        }
+      });
+      this.debug.subject.next(sandboxDebug);
+    }
+
     return await models;
   }
 
