@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material';
 
 import { NGXLogger } from 'ngx-logger';
@@ -58,7 +52,7 @@ export interface DebugStatusView extends DebugStatus {
   `,
   ],
 })
-export class DebugFormComponent implements OnChanges, OnInit {
+export class DebugFormComponent implements OnChanges {
   @Input() sandboxId: string;
   @Input() services: string[] = [];
 
@@ -68,16 +62,13 @@ export class DebugFormComponent implements OnChanges, OnInit {
   constructor(private debug: DebugStatusApi, private logger: NGXLogger) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    this.logger.log('DebugFormComponent::ngOnInit', changes);
+    if (changes.sandboxId) {
+      this.logger.log('DebugFormComponent::ngOnChanges', changes);
+      this.fetch(true);
+    }
   }
 
-  async ngOnInit() {
-    this.logger.log('DebugFormComponent::ngOnInit', this.services);
-    this.fetch();
-    this.logger.log('DebugFormComponent::ngOnInit', this.models);
-  }
-
-  async fetch() {
+  async fetch(routeChange: boolean = false) {
     const models = await Promise.all(
       this.services.map(deploymentId =>
         this.debug.status(this.sandboxId, deploymentId).then(status => ({
@@ -92,6 +83,18 @@ export class DebugFormComponent implements OnChanges, OnInit {
     }, models.length > 0);
     this.models = models;
     this.logger.log('DebugFormComponent::fetch', models);
+
+    // Feed the new value of debug to the sidenav
+    if (!routeChange) {
+      const sandboxDebug = { sandboxId: this.sandboxId, debug: false };
+      const result = models.map(model => {
+        if (model.debug) {
+          sandboxDebug.debug = true;
+        }
+      });
+      this.debug.subject.next(sandboxDebug);
+    }
+
     return await models;
   }
 

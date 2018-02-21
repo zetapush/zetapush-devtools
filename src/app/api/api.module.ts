@@ -8,6 +8,7 @@ import { ServicesResolver } from './resolvers/services-resolver.service';
 import { PreferencesStorage } from './services/preferences-storage.service';
 import { DebugStatusApi } from './services/debug-status-api.service';
 import { AuthService } from './services/auth.service';
+import { SandboxService } from './services/sandbox.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -19,6 +20,7 @@ import { AuthService } from './services/auth.service';
     PreferencesStorage,
     DebugStatusApi,
     AuthService,
+    SandboxService,
   ],
 })
 export class ApiModule {}

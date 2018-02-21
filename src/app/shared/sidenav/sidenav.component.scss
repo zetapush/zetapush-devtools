@@ -1,0 +1,69 @@
+.sidenav {
+  background-color: #fff;
+
+  .container {
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    min-width: 260px;
+    box-shadow: 6px 0 6px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 64px);
+
+    .link {
+      position: absolute;
+      display: inline-block;
+      right: 14px;
+      color: rgba(0, 0, 0, 0.54);
+      top: 12px;
+
+      &:hover {
+        color: rgba(0, 0, 0, 1);
+      }
+    }
+
+    .sandboxe-list {
+      margin-bottom: 15px;
+
+      mat-list-item {
+        height: 30px;
+        font-size: 14px;
+        cursor: pointer;
+
+        &:hover,
+        &.active {
+          background-color: rgba(128, 128, 128, 0.5);
+        }
+        &.debug {
+          color: #f1452a;
+          &.active,
+          &:hover {
+            background-color: #f1452a;
+            color: white;
+          }
+        }
+      }
+      mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+      }
+    }
+  }
+
+  .wrapper {
+    background-color: #fff;
+    margin-top: 64px;
+    height: calc(100vh - 64px);
+
+    mat-spinner {
+      margin: 25px auto;
+      display: none;
+      top: 50px;
+    }
+    router-outlet + mat-spinner {
+      display: block;
+    }
+  }
+}

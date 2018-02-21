@@ -8,17 +8,22 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'sandboxes',
+    redirectTo: 'dashboard',
   },
   {
     path: 'auth',
     loadChildren: './auth/auth.module#AuthModule',
   },
   {
-    path: 'sandboxes',
+    path: 'dashboard',
     canActivate: [AuthGuard],
-    loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
+    loadChildren: './dashboard/dashboard.module#DashboardModule',
   },
+  // {
+  //   path: 'sandboxes',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
+  // },
   {
     path: 'traces',
     canActivate: [AuthGuard],

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 import { AuthService } from './../../api/services/auth.service';
 
@@ -8,7 +8,7 @@ import { AuthService } from './../../api/services/auth.service';
   template: `
     <mat-toolbar class="header">
       <mat-toolbar-row>
-        <div class="brand">
+        <div class="brand" (click)="toggleSidenav()">
           <img src="../../../assets/zt_logo.png" title="ZetaPush">
         </div>
         <span class="space"></span>
@@ -30,9 +30,21 @@ import { AuthService } from './../../api/services/auth.service';
   `,
 })
 export class HeaderComponent {
+  toggled = true;
+
+  @Output() toggledSidenav = new EventEmitter<boolean>();
+
   constructor(private authService: AuthService) {}
 
   logoutUser() {
     this.authService.logout();
+  }
+
+  /**
+   * Launch an event to open or close the sidenav
+   */
+  toggleSidenav() {
+    this.toggled = !this.toggled;
+    this.toggledSidenav.emit(this.toggled);
   }
 }

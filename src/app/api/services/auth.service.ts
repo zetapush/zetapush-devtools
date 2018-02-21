@@ -28,7 +28,7 @@ export class AuthService {
     );
 
     this.loggedIn.next(true);
-    this.router.navigate(['/sandboxes']);
+    this.router.navigate(['/dashboard']);
 
     return response;
   }

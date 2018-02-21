@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { NGXLogger } from 'ngx-logger';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { PreferencesStorage } from './preferences-storage.service';
 import { getSecureUrl } from '../../utils';
@@ -14,6 +15,7 @@ export interface DebugStatus {
 @Injectable()
 export class DebugStatusApi {
   private realTimeServerUrlList: string[] = [];
+  subject = new BehaviorSubject<any>({});
 
   constructor(
     private preferences: PreferencesStorage,
@@ -43,6 +45,7 @@ export class DebugStatusApi {
 
     const requests = servers.map(server => getStatusByServer(server));
     const responses = await Promise.all(requests);
+
     return responses.reduce(
       (status, next) => {
         status.currentNb += next.currentNb;
@@ -73,6 +76,7 @@ export class DebugStatusApi {
     };
     const requests = servers.map(server => enableStatusByServer(server));
     const responses = await Promise.all(requests);
+
     return responses.reduce(success => {
       return success;
     }, true);
@@ -93,6 +97,7 @@ export class DebugStatusApi {
     };
     const requests = servers.map(server => enableStatusByServer(server));
     const responses = await Promise.all(requests);
+
     return responses.reduce(success => {
       return success;
     }, true);
@@ -109,6 +114,7 @@ export class DebugStatusApi {
     });
     const { servers } = await response.json();
     this.logger.log('DebugStatus::servers', servers);
+
     return servers as string[];
   }
 }

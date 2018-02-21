@@ -1,0 +1,45 @@
+<mat-sidenav-container class="sidenav">
+  <mat-sidenav #sidenav [opened]="toggle" [mode]="getMode()" class="container" [fixedInViewport]="mobileQuery.matches" fixedTopGap="64">
+
+    <mat-list>
+      <h3 mat-subheader>Sandboxes</h3>
+      <div class="sandboxe-list" *ngIf="sandboxes">
+        <mat-list-item *ngFor="let sandbox of sandboxes"
+          routerLinkActive="active"
+          [routerLink]="['traces', sandbox.businessId]"
+          [ngClass]="{'debug': sandbox.debug}"
+          matTooltip="Debug active"
+          matTooltipPosition="after"
+          [matTooltipDisabled]="!sandbox.debug">
+          <mat-icon mat-list-icon>folder</mat-icon>
+          <p mat-line>{{ sandbox.name }}</p>
+        </mat-list-item>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <h3 mat-subheader>Sandboxes Terminal</h3>
+      <div class="sandboxe-list" *ngIf="sandboxes">
+        <mat-list-item *ngFor="let sandbox of sandboxes"
+          routerLinkActive="active"
+          [routerLink]="['terminal', sandbox.businessId]" 
+          [ngClass]="{'debug': sandbox.debug}"
+          matTooltip="Debug active"
+          matTooltipPosition="after"
+          [matTooltipDisabled]="!sandbox.debug">
+          <mat-icon mat-list-icon>subtitles</mat-icon>
+          <p mat-line>{{ sandbox.name }}</p>
+        </mat-list-item>
+      </div>
+    </mat-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="wrapper">
+      <router-outlet></router-outlet>
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

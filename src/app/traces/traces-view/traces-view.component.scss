@@ -11,15 +11,21 @@
   border: 1px dashed rgba(0, 0, 0, 0.12);
   overflow-y: scroll;
 }
-.Table__Body {
-}
-.Table__Row {
-}
+
 .Container--Sidenav {
   height: 100vh;
 
-  h1 .mat-icon {
-    cursor: pointer;
+  h1 {
+    margin-left: 10px;
+
+    a {
+      float: right;
+      margin-right: 15px;
+    }
+
+    .mat-icon {
+      cursor: pointer;
+    }
   }
 }
 .Container--Sidenav mat-sidenav {
