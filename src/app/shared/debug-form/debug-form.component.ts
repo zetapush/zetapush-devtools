@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material';
 
 import { NGXLogger } from 'ngx-logger';
@@ -58,7 +52,7 @@ export interface DebugStatusView extends DebugStatus {
   `,
   ],
 })
-export class DebugFormComponent implements OnChanges, OnInit {
+export class DebugFormComponent implements OnChanges {
   @Input() sandboxId: string;
   @Input() services: string[] = [];
 
@@ -68,13 +62,10 @@ export class DebugFormComponent implements OnChanges, OnInit {
   constructor(private debug: DebugStatusApi, private logger: NGXLogger) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    this.logger.log('DebugFormComponent::ngOnInit', changes);
-  }
-
-  async ngOnInit() {
-    this.logger.log('DebugFormComponent::ngOnInit', this.services);
-    this.fetch();
-    this.logger.log('DebugFormComponent::ngOnInit', this.models);
+    if (changes.sandboxId) {
+      this.logger.log('DebugFormComponent::ngOnChanges', changes);
+      this.fetch();
+    }
   }
 
   async fetch() {
