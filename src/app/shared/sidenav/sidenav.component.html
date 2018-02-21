@@ -4,9 +4,15 @@
     <mat-list>
       <h3 mat-subheader>Sandboxes</h3>
       <div class="sandboxe-list" *ngIf="sandboxes">
-        <mat-list-item *ngFor="let sandboxe of sandboxes" routerLinkActive="active" [routerLink]="['traces', sandboxe.businessId]">
+        <mat-list-item *ngFor="let sandbox of sandboxes"
+          routerLinkActive="active"
+          [routerLink]="['traces', sandbox.businessId]"
+          [ngClass]="{'debug': sandbox.debug}"
+          matTooltip="Debug active"
+          matTooltipPosition="after"
+          [matTooltipDisabled]="!sandbox.debug">
           <mat-icon mat-list-icon>folder</mat-icon>
-          <p mat-line>{{ sandboxe.name }}</p>
+          <p mat-line>{{ sandbox.name }}</p>
         </mat-list-item>
       </div>
 
@@ -14,9 +20,15 @@
 
       <h3 mat-subheader>Sandboxes Terminal</h3>
       <div class="sandboxe-list" *ngIf="sandboxes">
-        <mat-list-item *ngFor="let sandboxe of sandboxes" routerLinkActive="active" [routerLink]="['terminal', sandboxe.businessId]">
+        <mat-list-item *ngFor="let sandbox of sandboxes"
+          routerLinkActive="active"
+          [routerLink]="['terminal', sandbox.businessId]" 
+          [ngClass]="{'debug': sandbox.debug}"
+          matTooltip="Debug active"
+          matTooltipPosition="after"
+          [matTooltipDisabled]="!sandbox.debug">
           <mat-icon mat-list-icon>subtitles</mat-icon>
-          <p mat-line>{{ sandboxe.name }}</p>
+          <p mat-line>{{ sandbox.name }}</p>
         </mat-list-item>
       </div>
     </mat-list>

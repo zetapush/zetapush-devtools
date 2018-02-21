@@ -35,6 +35,14 @@
         &.active {
           background-color: rgba(128, 128, 128, 0.5);
         }
+        &.debug {
+          color: #fbc81e;
+          &.active,
+          &:hover {
+            background-color: #fbc81e;
+            color: white;
+          }
+        }
       }
       mat-icon {
         font-size: 18px;

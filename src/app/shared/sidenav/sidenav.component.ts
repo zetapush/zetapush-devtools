@@ -8,8 +8,9 @@ import {
 } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
-import { Sandbox } from './../../api/interfaces/sandboxe.interface';
-import { SandboxeService } from './../../api/services/sandboxe.service';
+import { Sandbox } from './../../api/interfaces/sandbox.interface';
+import { SandboxService } from './../../api/services/sandbox.service';
+import { DebugStatusApi } from './../../api/services/debug-status-api.service';
 
 @Component({
   selector: 'zp-sidenav',
@@ -26,7 +27,8 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    private sandboxeService: SandboxeService,
+    private sandboxService: SandboxService,
+    private debugService: DebugStatusApi,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -34,9 +36,7 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.sandboxeService.getSandboxes().then(sandboxes => {
-      this.sandboxes = sandboxes;
-    });
+    this.getSandboxes();
   }
 
   ngAfterViewChecked() {
@@ -52,5 +52,32 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
    */
   getMode() {
     return this.mobileQuery.matches ? 'over' : 'side';
+  }
+
+  /**
+   * Prepares sandboxes to display them in the sidenav
+   */
+  async getSandboxes() {
+    let services: string[];
+    this.sandboxes = await this.sandboxService.getSandboxes();
+
+    for (let i = 0, length = this.sandboxes.length; i < length; i++) {
+      // Initialize the debug status
+      this.sandboxes[i].debug = false;
+
+      services = await this.sandboxService.getSandboxServices(
+        this.sandboxes[i].businessId,
+      );
+      for (let j = 0, lengthJ = services.length; j < lengthJ; j++) {
+        const status = await this.debugService.status(
+          this.sandboxes[i].businessId,
+          services[j],
+        );
+
+        if (status.debug) {
+          this.sandboxes[i].debug = true;
+        }
+      }
+    }
   }
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { NGXLogger } from 'ngx-logger';
 
-import { Sandbox } from '../../api/interfaces/sandboxe.interface';
+import { Sandbox } from '../../api/interfaces/sandbox.interface';
 
 @Component({
   selector: 'zp-sandboxes-view',

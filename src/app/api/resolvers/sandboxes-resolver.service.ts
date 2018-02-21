@@ -11,15 +11,15 @@ import { NGXLogger } from 'ngx-logger';
 
 import { PreferencesStorage } from '../services/preferences-storage.service';
 import { getSecureUrl } from '../../utils';
-import { Sandbox } from '../interfaces/sandboxe.interface';
-import { SandboxeService } from '../services/sandboxe.service';
+import { Sandbox } from '../interfaces/sandbox.interface';
+import { SandboxService } from '../services/sandbox.service';
 
 @Injectable()
 export class SandboxesResolver implements Resolve<Sandbox[]> {
   constructor(
     private preferences: PreferencesStorage,
     private logger: NGXLogger,
-    private sandboxeService: SandboxeService,
+    private sandboxeService: SandboxService,
   ) {}
   async resolve(
     route: ActivatedRouteSnapshot,

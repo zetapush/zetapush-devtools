@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import JSONFormatter from 'json-formatter-js';
 
-import { Sandbox } from '../../api/interfaces/sandboxe.interface';
+import { Sandbox } from '../../api/interfaces/sandbox.interface';
 import { PreferencesStorage } from '../../api/services/preferences-storage.service';
 import {
   Trace,
