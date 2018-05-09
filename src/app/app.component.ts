@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 import { AuthService } from './api/services/auth.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'zp-root',

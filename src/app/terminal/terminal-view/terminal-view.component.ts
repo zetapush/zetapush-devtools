@@ -2,8 +2,7 @@ import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 import { NGXLogger } from 'ngx-logger';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import JSONFormatter from 'json-formatter-js';
 

@@ -6,7 +6,7 @@ import {
   OnDestroy,
   HostListener,
 } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { NGXLogger } from 'ngx-logger';
 

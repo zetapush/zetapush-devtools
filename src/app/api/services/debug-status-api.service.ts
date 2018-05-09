@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { NGXLogger } from 'ngx-logger';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { PreferencesStorage } from './preferences-storage.service';
 import { getSecureUrl } from '../../utils';

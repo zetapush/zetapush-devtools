@@ -8,9 +8,13 @@ import {
 import { MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { ActivatedRoute } from '@angular/router';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import {
+  merge as observableMerge,
+  BehaviorSubject,
+  Observable,
+  Subscription,
+} from 'rxjs';
+import { combineLatest, map } from 'rxjs/operators';
 
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 
@@ -25,12 +29,6 @@ import {
   parseTraceLocation,
   TraceType,
 } from '../../api/interfaces/trace.interface';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/merge';
-import { Subscription } from 'rxjs/Subscription';
-import { combineLatest } from 'rxjs/operators/combineLatest';
-import { map } from 'rxjs/operators/map';
 
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
@@ -57,7 +55,7 @@ export class TraceDataSource extends DataSource<Trace> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Trace[]> {
     const changes = [this._renderData];
-    return Observable.merge(...changes);
+    return observableMerge(...changes);
   }
 
   disconnect() {}
