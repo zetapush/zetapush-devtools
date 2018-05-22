@@ -76,7 +76,7 @@ export class TraceDataSource extends DataSource<Trace> {
         combineLatest(this._filter),
         map(([data]) => this._filterData(data)),
       )
-      .subscribe(data => this._renderData.next(data));
+      .subscribe((data) => this._renderData.next(data));
   }
 
   /**
@@ -102,7 +102,7 @@ export class TraceDataSource extends DataSource<Trace> {
   _filterData(data) {
     this.filteredData = !this.filter
       ? data
-      : data.filter(obj => this.filterPredicate(obj, this.filter));
+      : data.filter((obj) => this.filterPredicate(obj, this.filter));
 
     return this.filteredData;
   }
@@ -145,7 +145,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     dictionnary: Map<number, Trace[]>,
     deploymentId = SERVICES.Macro.DEFAULT_DEPLOYMENT_ID,
   ): Observable<Trace[]> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const api = client.createService({
         Type: SERVICES.Macro,
         deploymentId,
@@ -170,7 +170,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
               .map(([ctx, list]) =>
                 list
                   .filter(Boolean)
-                  .find(element => element.type === TraceType.MACRO_START),
+                  .find((element) => element.type === TraceType.MACRO_START),
               )
               .filter(Boolean);
             observer.next(traces);
@@ -197,15 +197,15 @@ export class TracesViewComponent implements OnDestroy, OnInit {
           password: credentials.password,
         }),
     });
-    this.client.onSuccessfulHandshake(authentication => {
+    this.client.onSuccessfulHandshake((authentication) => {
       this.logger.log('onSuccessfulHandshake', authentication);
       this.connected = true;
     });
     this.client.connect();
     // Enable subscription for all deployed services
-    this.services.forEach(deploymentId =>
+    this.services.forEach((deploymentId) =>
       this.createTraceObservable(this.client, this.map, deploymentId).subscribe(
-        traces => this.subject.next(traces),
+        (traces) => this.subject.next(traces),
       ),
     );
   }
@@ -221,7 +221,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   }
   onShowClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onShowClick', trace);
-    const traces = this.map.get(trace.ctx).filter(truthy => truthy);
+    const traces = this.map.get(trace.ctx).filter((truthy) => truthy);
     this.logger.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
   }
@@ -229,9 +229,9 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     this.logger.log('TraceViewComponent::onDownloadClick', trace);
     if (trace.type === TraceType.MACRO_START) {
       const filename = `${this.sandboxId}_${trace.ctx}_${trace.data.name}.log`;
-      const identity = truthy => truthy;
-      const stringify = object => JSON.stringify(object);
-      const append = suffix => value => `${value}${suffix}`;
+      const identity = (truthy) => truthy;
+      const stringify = (object) => JSON.stringify(object);
+      const append = (suffix) => (value) => `${value}${suffix}`;
       const traces = this.map
         .get(trace.ctx)
         .filter(identity)

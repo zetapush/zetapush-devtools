@@ -39,7 +39,7 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.getSandboxes();
 
     // Subscribe to the debug state change
-    this.debugService.subject.subscribe(data => {
+    this.debugService.subject.subscribe((data) => {
       for (let i = 0, length = this.sandboxes.length; i < length; i++) {
         if (
           this.sandboxes[i].businessId === data.sandboxId &&
