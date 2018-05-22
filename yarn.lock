@@ -181,6 +181,15 @@
   dependencies:
     tslib "^1.9.0"
 
+"@angular/pwa@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@angular/pwa/-/pwa-0.6.3.tgz#d76ad3eaace3215421592e5675f27e8c3ac33288"
+  dependencies:
+    "@angular-devkit/core" "0.6.3"
+    "@angular-devkit/schematics" "0.6.3"
+    "@schematics/angular" "0.6.3"
+    typescript "~2.6.2"
+
 "@angular/router@^6.0.2":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-6.0.2.tgz#a7c925751accede6c5b4a8369170a53f3a48b940"
@@ -6312,6 +6321,10 @@ typedarray@^0.0.6:
 "typescript@>=2.6.2 <2.8", typescript@~2.7.2:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
+
+typescript@~2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 
 uglify-es@^3.3.4:
   version "3.3.9"
