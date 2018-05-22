@@ -81,7 +81,7 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
     client: Client,
     deploymentId = SERVICES.Macro.DEFAULT_DEPLOYMENT_ID,
   ): Observable<TerminalTraces> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const api = client.createService({
         Type: SERVICES.Macro,
         deploymentId,
@@ -128,16 +128,16 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
           password: credentials.password,
         }),
     });
-    this.client.onSuccessfulHandshake(authentication => {
+    this.client.onSuccessfulHandshake((authentication) => {
       this.logger.log('onSuccessfulHandshake', authentication);
       this.connected = true;
     });
     this.client.connect();
 
     // Enable subscription for all deployed services
-    this.services.forEach(deploymentId =>
-      this.createTraceObservable(this.client, deploymentId).subscribe(traces =>
-        this.subject.next(traces),
+    this.services.forEach((deploymentId) =>
+      this.createTraceObservable(this.client, deploymentId).subscribe(
+        (traces) => this.subject.next(traces),
       ),
     );
   }

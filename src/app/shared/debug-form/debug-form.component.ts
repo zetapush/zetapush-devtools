@@ -70,8 +70,8 @@ export class DebugFormComponent implements OnChanges {
 
   async fetch(routeChange: boolean = false) {
     const models = await Promise.all(
-      this.services.map(deploymentId =>
-        this.debug.status(this.sandboxId, deploymentId).then(status => ({
+      this.services.map((deploymentId) =>
+        this.debug.status(this.sandboxId, deploymentId).then((status) => ({
           deploymentId,
           ...status,
         })),
@@ -87,7 +87,7 @@ export class DebugFormComponent implements OnChanges {
     // Feed the new value of debug to the sidenav
     if (!routeChange) {
       const sandboxDebug = { sandboxId: this.sandboxId, debug: false };
-      const result = models.map(model => {
+      const result = models.map((model) => {
         if (model.debug) {
           sandboxDebug.debug = true;
         }
@@ -123,13 +123,13 @@ export class DebugFormComponent implements OnChanges {
     this.logger.log('DebugFormComponent::onChangeDegugStatus', change);
     if (change.checked) {
       await Promise.all(
-        this.models.map(model =>
+        this.models.map((model) =>
           this.debug.enable(this.sandboxId, model.deploymentId),
         ),
       );
     } else {
       await Promise.all(
-        this.models.map(model =>
+        this.models.map((model) =>
           this.debug.disable(this.sandboxId, model.deploymentId),
         ),
       );

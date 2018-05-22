@@ -53,15 +53,15 @@ export class StackFilterComponent implements OnChanges {
 
   get filtered() {
     const types = this.types
-      .filter(type => type.selected)
-      .map(type => type.label);
+      .filter((type) => type.selected)
+      .map((type) => type.label);
     return this.traces
-      ? this.traces.filter(trace => types.includes(trace.type))
+      ? this.traces.filter((trace) => types.includes(trace.type))
       : [];
   }
 
   onChangeType($event: MatCheckboxChange, type) {
-    this.types = this.types.map(value => {
+    this.types = this.types.map((value) => {
       if (value.label === type.label) {
         value.selected = $event.checked;
       }

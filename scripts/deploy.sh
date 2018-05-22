@@ -11,7 +11,7 @@ if [ -f $file ]; then
 else
   mkdir -p ./archives
   echo "[LOG] Build application"
-  yarn run build:optimized --base-href=/
+  yarn run build --base-href=/
   echo "[LOG] Inject revision in built ouput"
   echo $revision > ./dist/revision.txt
   echo "[LOG] Package application"

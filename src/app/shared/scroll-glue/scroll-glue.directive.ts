@@ -49,7 +49,7 @@ export class ScrollGlueDirective
     this.el.scrollTop = this.el.scrollHeight;
 
     // create an observer instance
-    this._observer = new MutationObserver(mutations => {
+    this._observer = new MutationObserver((mutations) => {
       this.logger.log('ScrollGlueDirective::MutationObserver', {
         scrollHeight: this.el.scrollHeight,
         scrollTop: this.el.scrollTop,

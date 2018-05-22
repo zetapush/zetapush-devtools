@@ -35,7 +35,7 @@ export class DebugStatusApi {
           'X-Authorization': JSON.stringify(credentials),
         },
       })
-        .then(response => response.json())
+        .then((response) => response.json())
         .then(({ currentNb, debug, totalNb }) => ({
           currentNb,
           debug,
@@ -43,7 +43,7 @@ export class DebugStatusApi {
         }));
     };
 
-    const requests = servers.map(server => getStatusByServer(server));
+    const requests = servers.map((server) => getStatusByServer(server));
     const responses = await Promise.all(requests);
 
     return responses.reduce(
@@ -74,10 +74,10 @@ export class DebugStatusApi {
         },
       });
     };
-    const requests = servers.map(server => enableStatusByServer(server));
+    const requests = servers.map((server) => enableStatusByServer(server));
     const responses = await Promise.all(requests);
 
-    return responses.reduce(success => {
+    return responses.reduce((success) => {
       return success;
     }, true);
   }
@@ -95,10 +95,10 @@ export class DebugStatusApi {
         },
       });
     };
-    const requests = servers.map(server => enableStatusByServer(server));
+    const requests = servers.map((server) => enableStatusByServer(server));
     const responses = await Promise.all(requests);
 
-    return responses.reduce(success => {
+    return responses.reduce((success) => {
       return success;
     }, true);
   }
