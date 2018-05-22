@@ -19,6 +19,19 @@ import { Observable } from 'rxjs/Observable';
 
     <router-outlet name="login"></router-outlet>
   `,
+  styles: [
+    `
+    :host::after {
+      content: "Built with angular@" attr(ng-version);
+      right: 0;
+      padding: 0.5rem;
+      color: rgba(0,0,0,0.25);
+      font-weight: bold;
+      position: fixed;
+      bottom: 0;
+    }
+  `,
+  ],
 })
 export class AppComponent {
   isLoggedIn$: Observable<boolean>;
