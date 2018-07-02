@@ -3,7 +3,7 @@ import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 // Pop-up
-import { PopupComponent } from '../pop-up/popup.component';
+import { PopupComponent } from '../../shared/pop-up/popup.component';
 import { MatDialog } from '@angular/material/dialog';
 
 export interface CanDeactivateComponent {
@@ -19,7 +19,13 @@ export class CanDeactivateGuard
 
   canDeactivate() {
     const dialogRef = this.dialog.open(PopupComponent, { width: '500px' });
-    console.log('CD works');
-    return this.changeView;
+    
+    return dialogRef.beforeClose().toPromise().then(answere =>{
+      if(answere === "confirm"){
+        this.changeView = true;
+      }
+      return this.changeView;
+    })
+    
   }
 }

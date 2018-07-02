@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './api/guards/auth.guard';
-import { CanDeactivateGuard } from './shared/guard/canDeactivate-guard.service';
+import { CanDeactivateGuard } from './api/guards/canDeactivate-guard.service';
 //
 const routes: Routes = [
   {

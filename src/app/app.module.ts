@@ -16,7 +16,7 @@ import { ApiModule } from './api/api.module';
 
 import { PopupComponent } from './shared/pop-up/popup.component';
 import { AppComponent } from './app.component';
-import { CanDeactivateGuard } from './shared/guard/canDeactivate-guard.service';
+import { CanDeactivateGuard } from './api/guards/canDeactivate-guard.service';
 
 @NgModule({
   declarations: [AppComponent],

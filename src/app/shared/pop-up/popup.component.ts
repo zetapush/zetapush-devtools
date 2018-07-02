@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./popup-view.component.css'],
 })
 export class PopupComponent {
-  answere: boolean;
+  answere: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<PopupComponent>) {}
 
@@ -15,10 +15,7 @@ export class PopupComponent {
     this.dialogRef.close();
   }
 
-  onSetTrue(): void {
-    this.answere = true;
-  }
-  OnSetFalse(): void {
-    this.answere = false;
+  onConfirm(): void {
+    this.dialogRef.close('confirm');
   }
 }

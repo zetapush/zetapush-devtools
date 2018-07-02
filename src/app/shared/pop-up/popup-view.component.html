@@ -3,6 +3,6 @@
     L'action que vous venez de faire va effacer toutes les entrées affichées. Êtes-vous sûr de vouloir faire ça ?
 </p>
 <div id='Container'>
-    <button mat-button id='AcceptButton' (click)="onSetTrue">Quitter la vue</button>
-    <button mat-button id='CancelButton' (click)="onSetFalse">Rester sur cette vue</button>
+    <button mat-button id='AcceptButton' (click)="onConfirm()">Quitter la vue</button>
+    <button mat-button id='CancelButton' (click)="dialogRef.close()">Rester sur cette vue</button>
 </div>
