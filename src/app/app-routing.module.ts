@@ -3,7 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './api/guards/auth.guard';
-
+import { CanDeactivateGuard } from './shared/guard/canDeactivate-guard.service';
+//
 const routes: Routes = [
   {
     path: '',
@@ -19,14 +20,16 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: './dashboard/dashboard.module#DashboardModule',
   },
-  // {
-  //   path: 'sandboxes',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
-  // },
+  {
+    path: 'sandboxes',
+    canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
+    loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
+  },
   {
     path: 'traces',
     canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
     loadChildren: './traces/traces.module#TracesModule',
   },
   {
@@ -34,11 +37,16 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: './terminal/terminal.module#TerminalModule',
   },
+  {
+    path: 'about',
+    canDeactivate: [CanDeactivateGuard],
+    loadChildren: './about/about.module#AboutModule',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), BrowserAnimationsModule],
   exports: [RouterModule],
-  providers: [AuthGuard],
+  providers: [AuthGuard, CanDeactivateGuard],
 })
 export class AppRoutingModule {}

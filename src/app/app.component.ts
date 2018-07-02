@@ -7,17 +7,18 @@ import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'zp-root',
   template: `
-    <div class="zp-layout" *ngIf="isLoggedIn$ | async">
-      <zp-header
-        (toggledSidenav)="onToggledSidenav($event)">
-      </zp-header>
+  <div class="zp-layout" *ngIf="isLoggedIn$ | async">
+    <zp-header
+      (toggledSidenav)="onToggledSidenav($event)">
+    </zp-header>
+    <zp-sidenav
+      [toggle]="toggledSidenav">
+    </zp-sidenav>
+  </div>
 
-      <zp-sidenav
-        [toggle]="toggledSidenav">
-      </zp-sidenav>
-    </div>
 
-    <router-outlet name="login"></router-outlet>
+  <router-outlet name="login"></router-outlet>
+
   `,
   styles: [
     `
