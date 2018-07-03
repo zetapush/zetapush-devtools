@@ -1,3 +1,5 @@
+// Barre de filtres avec checkboxes (affichée dans le stack-trace component)
+
 import {
   Component,
   Input,

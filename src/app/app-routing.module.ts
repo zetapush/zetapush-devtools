@@ -35,11 +35,11 @@ const routes: Routes = [
   {
     path: 'terminal',
     canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
     loadChildren: './terminal/terminal.module#TerminalModule',
   },
   {
     path: 'about',
-    canDeactivate: [CanDeactivateGuard],
     loadChildren: './about/about.module#AboutModule',
   },
 ];

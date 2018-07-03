@@ -1,3 +1,5 @@
+// component d'affichage de la trace
+
 import {
   Component,
   ElementRef,

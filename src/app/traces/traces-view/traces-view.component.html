@@ -1,10 +1,13 @@
 <mat-sidenav-container class="Container--Sidenav">
+  <!-- Header/titre de l'affichage trace -->
   <h1>
     <mat-icon mat-list-icon [routerLink]="['/dashboard']">arrow_back</mat-icon>
     <span>Trace for {{sandboxId}}</span>
     <a mat-raised-button [routerLink]="['/terminal', sandboxId]" color="primary"><mat-icon>subtitles</mat-icon> Terminal View</a>
   </h1>
+  <!-- Filtres toggle -->
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
+  <!-- barre de recherche filter-->
   <mat-toolbar>
     <mat-form-field class="Filter">
     <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
@@ -14,6 +17,8 @@
       <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
     </button>
   </mat-toolbar>
+
+  <!-- Table des traces-->
   <mat-table #table [dataSource]="source" class="Table">
     <!-- Ctx Column -->
     <ng-container matColumnDef="ctx">

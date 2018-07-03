@@ -1,3 +1,5 @@
+// Panneau latéral ouvert lors d'un clic sur une ligne
+
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
 import {

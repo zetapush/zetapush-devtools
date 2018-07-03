@@ -15,17 +15,19 @@ export class CanDeactivateGuard
   implements CanDeactivate<CanDeactivateComponent> {
   constructor(public dialog: MatDialog) {}
 
-  changeView: boolean = false;
+  enableChangeView: boolean = false;
 
   canDeactivate() {
     const dialogRef = this.dialog.open(PopupComponent, { width: '500px' });
-    
-    return dialogRef.beforeClose().toPromise().then(answere =>{
-      if(answere === "confirm"){
-        this.changeView = true;
-      }
-      return this.changeView;
-    })
-    
+
+    return dialogRef
+      .beforeClose()
+      .toPromise()
+      .then((answere) => {
+        if (answere === 'confirm') {
+          this.enableChangeView = true;
+        }
+        return this.enableChangeView;
+      });
   }
 }

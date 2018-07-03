@@ -47,6 +47,7 @@ export class SandboxService {
     const baseUrl = getSecureUrl(
       `${credentials.apiUrl}/zbo/orga/item/list/${sandboxId}`,
     );
+    console.log(await this.request(baseUrl)); //<-----
     let { content, pagination } = await this.request(baseUrl);
     let items = [...content];
 
