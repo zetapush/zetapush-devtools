@@ -35,6 +35,7 @@ const routes: Routes = [
   {
     path: 'terminal',
     canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
     loadChildren: './terminal/terminal.module#TerminalModule',
   },
   {

@@ -34,6 +34,5 @@ const COMPONENTS = [
   imports: [CommonModule, FormsModule, UiModule, RouterModule],
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
-  providers: [CanDeactivateGuard],
 })
 export class SharedModule {}

@@ -7,8 +7,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./popup-view.component.css'],
 })
 export class PopupComponent {
-  answere: boolean = false;
-
   constructor(public dialogRef: MatDialogRef<PopupComponent>) {}
 
   onNoClick(): void {
