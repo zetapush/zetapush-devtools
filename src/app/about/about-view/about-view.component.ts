@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 // Angular Matelial
 import { MatDialog } from '@angular/material/dialog';
@@ -9,10 +9,8 @@ import { PopupComponent } from '../../shared/pop-up/popup.component';
   templateUrl: './about-view.component.html',
   styleUrls: [],
 })
-export class AboutViewComponent implements OnInit {
+export class AboutViewComponent {
   constructor(public dialog: MatDialog) {}
-
-  ngOnInit() {}
 
   onThrowPop() {
     const dialogRef = this.dialog.open(PopupComponent, { width: '500px' });

@@ -21,13 +21,13 @@ export interface TraceLocation {
 
 export interface Trace {
   ctx: number;
-  type: TraceType;
-  n: number;
-  data: any;
+  type: TraceType; //
+  n: number; // numero de la trace
+  data: any; // Content de la trace
   line: number;
   location: TraceLocation;
-  owner: string;
-  level: TraceLevel;
+  owner: string; //
+  level: TraceLevel; //
   ts: number;
 }
 

@@ -1,4 +1,4 @@
-// component d'affichage de la trace
+// component d'affichage du tableau des traces
 
 import {
   Component,

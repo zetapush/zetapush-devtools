@@ -1,0 +1,10 @@
+.nested-tree-invisible {
+  display: none;
+}
+
+.nested-tree ul,
+.nested-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}

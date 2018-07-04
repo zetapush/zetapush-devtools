@@ -33,8 +33,8 @@ export class AboutTreeComponent {
     );
   }
 
-  // return true if the node's type is false
-  hasNestedChild = (nodeData: FileNode) => !nodeData.type;
+  // return true if the node's type is false ??? what the heck is dis hasNestedChild ???
+  hasNestedChild = (_: number, nodeData: FileNode) => !nodeData.type;
 
   // return an observable of the node children
   private _getChildren = (node: FileNode) => observableOf(node.children);
