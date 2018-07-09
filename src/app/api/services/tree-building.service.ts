@@ -5,10 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { FileNode } from '../interfaces/tree.interface';
 import { Trace } from '../interfaces/trace.interface';
 
-// Tree
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -19,23 +15,36 @@ export class TreeBuilder {
 
   constructor() {}
 
+  recursiveLength(node: FileNode): number {
+    let length: number = 0;
+    node.children.forEach((element) => {
+      length += this.recursiveLength(element);
+    });
+    return length;
+  }
+
+  traceToNode(trace: Trace): FileNode {
+    const node = new FileNode();
+    node.filename = trace.data.toString();
+    node.type = trace.type.toString();
+    node.children = [];
+
+    return node;
+  }
+
   buildTreeFromTrace(traces: Trace[], index: number): FileNode[] {
     let accumulator: FileNode[] = [];
     for (let i = index; i < traces.length; i++) {
-      const node: FileNode = new FileNode();
-      node.filename = traces[i].data.toString();
-      node.type = traces[i].type.toString();
-      node.children = [];
+      const node: FileNode = this.traceToNode(traces[i]);
 
-      for (
-        let j = i + 1;
-        j < traces.length && traces[j].indent == traces[i].indent + 1;
-        j++
-      ) {
-        node.children = this.buildTreeFromTrace(traces, j);
-        i++;
+      let j = i + 1;
+      let k = 0;
+      while (j < traces.length && traces[j].indent == traces[i].indent + 1) {
+        node.children.push(this.traceToNode(traces[j]));
+        j++;
+        k++;
       }
-
+      i += k;
       accumulator.push(node);
     }
     return accumulator;

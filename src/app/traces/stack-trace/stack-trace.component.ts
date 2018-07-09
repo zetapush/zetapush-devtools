@@ -50,11 +50,11 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
       </tbody>
     </table>
 
-    <mat-tree [dataSource]="treeData" [treeControl]="treeControl" class="nested-tree">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node">
           <button mat-icon-button disabled></button>
-          {{node.filename}}
+          {{node.filename}}:  {{node.type}}
         </li>
       </mat-tree-node>
 
@@ -67,7 +67,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
                 {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
               </mat-icon>
             </button>
-            --{{node.filename}}
+            {{node.filename}}
           </div>
           <ul [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)">
             <ng-container matTreeNodeOutlet></ng-container>
@@ -75,15 +75,16 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
         </li>
       </mat-nested-tree-node>
     </mat-tree>
+
       
   `,
-  styleUrls: ['stack-trace-tree.component.css', 'stack-trace.component.scss'],
+  styleUrls: ['stack-trace-tree.component.css'], //, 'stack-trace.component.scss'
   providers: [],
 })
 export class StackTraceComponent {
   @Input() traces: Trace[] = []; //données injectées par variable selection de trace-view
-  treeControl: NestedTreeControl<FileNode>;
-  @Input() treeData: MatTreeNestedDataSource<FileNode>;
+  nestedTreeControl: NestedTreeControl<FileNode>; //nestedTreeControl
+  @Input() nestedDataSource: MatTreeNestedDataSource<FileNode>;
   filtered: Trace[] = [];
   types: ViewTypeFilter[] = [
     { label: 'MS', selected: true },
@@ -99,11 +100,11 @@ export class StackTraceComponent {
   ngOnInit() {}
 
   constructor() {
-    this.treeControl = new NestedTreeControl<FileNode>(this._getChildren);
+    this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
   }
 
   // return true if the node's type is false ??? what the heck is dis hasNestedChild ???
-  hasNestedChild = (_: number, nodeData: FileNode) => !nodeData.type;
+  hasNestedChild = (_: number, nodeData: FileNode) => nodeData.children.length;
 
   private _getChildren = (node: FileNode) => observableOf(node.children);
 }

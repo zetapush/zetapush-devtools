@@ -258,7 +258,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     console.log(this.selection);
     this.treeInput.data = this.builder.buildTreeFromTrace(this.selection, 0);
     console.log(this.treeInput.data);
-    console.log(this.builder.displayTree(this.treeInput.data));
+    // console.log(this.builder.displayTree(this.treeInput.data));
   }
   onDownloadClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onDownloadClick', trace);
