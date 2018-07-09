@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 // Interfaces
 import { FileNode } from '../interfaces/tree.interface';
+import { Trace } from '../interfaces/trace.interface';
 
 /**
  * The Json tree data in string. The data could be parsed into Json object
@@ -68,7 +69,9 @@ export class FileDatabase {
 
     // Build the tree nodes from Json object. The result is a list of `FileNode` with nested
     //     file node as children.
-    const data = this.buildFileTree(dataObject, 0);
+    const data = this.buildFileTree(dataObject, 0); // -------------- buildTreeFromNode (selection) puis push sur stack-trace.compoenent
+    console.log('------');
+    console.log(data);
 
     // Notify the change.
     this.dataChange.next(data);
@@ -94,5 +97,29 @@ export class FileDatabase {
 
       return accumulator.concat(node);
     }, []);
+  }
+
+  /*
+  Build an array of FileNode from an array of Trace recursively, in a way that each node beneath another in the tree hierarchy is a children of the upper node
+  */
+  buildTreeFromTrace(traces: Trace[], index: number): FileNode[] {
+    let accumulator: FileNode[];
+    for (let i = index; i < traces.length; i++) {
+      const node: FileNode = new FileNode();
+      node.filename = traces[i].data;
+      node.type = traces[i].type;
+
+      for (
+        let j = i + 1;
+        j < traces.length && traces[j].indent == traces[i].indent + 1;
+        j++
+      ) {
+        node.children = this.buildTreeFromTrace(traces, j);
+        i++;
+      }
+
+      accumulator.push(node);
+    }
+    return accumulator;
   }
 }

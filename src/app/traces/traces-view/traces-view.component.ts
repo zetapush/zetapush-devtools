@@ -7,19 +7,32 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+
+// Utils
 import { MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { ActivatedRoute } from '@angular/router';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 
 import { saveAs } from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+
+// RxJS
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/merge';
+import { Subscription } from 'rxjs/Subscription';
+import { combineLatest } from 'rxjs/operators/combineLatest';
+import { map } from 'rxjs/operators/map';
+
+// Service
 import { PreferencesStorage } from '../../api/services/preferences-storage.service';
+import { TreeBuilder } from '../../api/services/tree-building.service';
+
+// Interfaces
 import {
   Trace,
   TraceCompletion,
@@ -27,12 +40,7 @@ import {
   parseTraceLocation,
   TraceType,
 } from '../../api/interfaces/trace.interface';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/merge';
-import { Subscription } from 'rxjs/Subscription';
-import { combineLatest } from 'rxjs/operators/combineLatest';
-import { map } from 'rxjs/operators/map';
+import { FileNode } from '../../api/interfaces/tree.interface';
 
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
@@ -125,12 +133,14 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   source: TraceDataSource | null;
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
   selection: Trace[];
+  treeInput: MatTreeNestedDataSource<FileNode>; // variable à injecter dans la stack-trace
   services: string[] = [];
 
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
     private logger: NGXLogger,
+    private builder: TreeBuilder,
   ) {
     route.params.subscribe(({ sandboxId }) => {
       this.logger.log('TraceViewComponent::route.params', sandboxId);
@@ -140,6 +150,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
       this.logger.log('TraceViewComponent::route.data', services, status);
       this.services = services;
     });
+    this.treeInput = new MatTreeNestedDataSource();
   }
 
   createTraceObservable(
@@ -160,6 +171,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
             };
             try {
               const { level, ...infos } = trace;
+
               const queue = dictionnary.has(trace.ctx)
                 ? dictionnary.get(trace.ctx)
                 : [];
@@ -183,6 +195,21 @@ export class TracesViewComponent implements OnDestroy, OnInit {
         client.unsubscribe(api);
       };
     });
+  }
+
+  // function to set the differents lvls of indentation that traces will have in the tree displaying
+  setIndex(traces: Trace[]): Trace[] {
+    let indentCounter: number = 0;
+    traces.forEach((element) => {
+      if (element.type === 'MS') {
+        indentCounter++;
+      }
+      element.indent = indentCounter;
+      if (element.type === 'ME') {
+        indentCounter--;
+      }
+    });
+    return traces;
   }
 
   ngOnInit() {
@@ -226,6 +253,12 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     const traces = this.map.get(trace.ctx).filter((truthy) => truthy);
     this.logger.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
+    this.setIndex(this.selection);
+    console.log('----------HERE--------');
+    console.log(this.selection);
+    this.treeInput.data = this.builder.buildTreeFromTrace(this.selection, 0);
+    console.log(this.treeInput.data);
+    console.log(this.builder.displayTree(this.treeInput.data));
   }
   onDownloadClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onDownloadClick', trace);

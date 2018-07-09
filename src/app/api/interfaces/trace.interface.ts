@@ -22,13 +22,14 @@ export interface TraceLocation {
 export interface Trace {
   ctx: number;
   type: TraceType; //
-  n: number; // numero de la trace
-  data: any; // Content de la trace
+  n: number;
+  data: any;
   line: number;
   location: TraceLocation;
-  owner: string; //
-  level: TraceLevel; //
+  owner: string;
+  level: TraceLevel;
   ts: number;
+  indent?: number; //niveau d'indentation dans l'arbre
 }
 
 export interface StackTrace {
