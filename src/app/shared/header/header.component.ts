@@ -12,9 +12,6 @@ import { AuthService } from './../../api/services/auth.service';
           <img src="../../../assets/zt_logo.png" title="ZetaPush">
         </div>
         <span class="space"></span>
-        <div id="about-link">
-           <a routerLink="/about">About</a>
-        </div>
         <div>
           <button mat-icon-button matTooltip="Account" [mat-menu-trigger-for]="userMenu" tabindex="-1">
             <mat-icon>account_circle</mat-icon>

@@ -1,8 +1,8 @@
 <p>
-    <strong>Attention !</strong>
-    L'action que vous venez de faire va effacer toutes les entrées affichées. Êtes-vous sûr de vouloir faire ça ?
+    <strong>Warning !</strong>
+    Requested action will clear content! Do you want to continue?
 </p>
 <div id='Container'>
-    <button mat-button id='AcceptButton' (click)="onConfirm()">Quitter la vue</button>
-    <button mat-button id='CancelButton' (click)="dialogRef.close()">Rester sur cette vue</button>
+    <button mat-button id='CancelButton' (click)="onNoClick()">Stay on view</button>
+    <button mat-button id='AcceptButton' (click)="onConfirm()">Continue</button>
 </div>

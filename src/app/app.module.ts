@@ -16,7 +16,6 @@ import { ApiModule } from './api/api.module';
 
 import { PopupComponent } from './shared/pop-up/popup.component';
 import { AppComponent } from './app.component';
-import { CanDeactivateGuard } from './api/guards/canDeactivate-guard.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -43,10 +42,7 @@ import { CanDeactivateGuard } from './api/guards/canDeactivate-guard.service';
     // Shared
     SharedModule,
   ],
-  providers: [
-    { provide: LocationStrategy, useClass: PathLocationStrategy },
-    CanDeactivateGuard,
-  ],
+  providers: [{ provide: LocationStrategy, useClass: PathLocationStrategy }],
   bootstrap: [AppComponent],
   entryComponents: [PopupComponent],
 })
