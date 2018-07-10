@@ -17,7 +17,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 @Component({
   selector: 'zp-about-tree',
   templateUrl: 'about-tree.component.html',
-  styleUrls: [], //'about-tree.component.css'
+  styleUrls: ['about-tree.component.css'], //
   providers: [FileDatabase],
 })
 export class AboutTreeComponent {
