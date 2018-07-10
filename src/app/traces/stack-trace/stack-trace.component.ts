@@ -7,7 +7,7 @@ import { of as observableOf } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 
 // Interfaces
-import { FileNode } from '../../api/interfaces/tree.interface';
+import { TreeNode } from '../../api/interfaces/tree.interface';
 import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 import { Trace } from '../../api/interfaces/trace.interface';
 
@@ -24,6 +24,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
   selector: 'zp-stack-trace',
   template: `
     <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+    
     <table>
       <thead>
         <tr>
@@ -51,23 +52,42 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
     </table>
 
     <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
-      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle >
         <li class="mat-tree-node">
-          <button mat-icon-button disabled></button>
-          {{node.filename}}:  {{node.type}}
+          <tr>
+            <td><button mat-icon-button disabled></button><td>
+            <td>{{node.type}}</td>
+            <td>
+              <zp-lazy-json *ngIf="node.type == 'MS'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
+              <zp-lazy-json *ngIf="node.type == 'ME'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
+              <zp-lazy-json *ngIf="node.type == 'USR'" [value]="node.data"></zp-lazy-json>
+              <pre *ngIf="node.type == 'CMT'">{{node.data}}</pre>
+            </td>
+            <td>{{node.owner}}</td>
+          </tr>
         </li>
       </mat-tree-node>
 
       <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
         <li>
           <div class="mat-tree-node">
-            <button mat-icon-button matTreeNodeToggle
-                    [attr.aria-label]="'toggle ' + node.filename">
-              <mat-icon class="mat-icon-rtl-mirror">
-                {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-              </mat-icon>
-            </button>
-            {{node.filename}}
+            <tr>
+              <td>
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                  </mat-icon>
+                </button>
+              </td>
+              <td>{{node.type}}</td>
+              <td>
+                <zp-lazy-json *ngIf="node.type == 'MS'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
+                <zp-lazy-json *ngIf="node.type == 'ME'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
+                <zp-lazy-json *ngIf="node.type == 'USR'" [value]="node.data"></zp-lazy-json>
+                <pre *ngIf="node.type == 'CMT'">{{node.data}}</pre>
+              </td>
+              <td>{{node.owner}}</td>
+            </tr>
           </div>
           <ul [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)">
             <ng-container matTreeNodeOutlet></ng-container>
@@ -75,16 +95,15 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
         </li>
       </mat-nested-tree-node>
     </mat-tree>
-
-      
   `,
+
   styleUrls: ['stack-trace-tree.component.css', 'stack-trace.component.scss'],
   providers: [],
 })
 export class StackTraceComponent {
   @Input() traces: Trace[] = []; //données injectées par variable selection de trace-view
-  nestedTreeControl: NestedTreeControl<FileNode>; //nestedTreeControl
-  @Input() nestedDataSource: MatTreeNestedDataSource<FileNode>;
+  nestedTreeControl: NestedTreeControl<TreeNode>; //nestedTreeControl
+  @Input() nestedDataSource: MatTreeNestedDataSource<TreeNode>;
   filtered: Trace[] = [];
   types: ViewTypeFilter[] = [
     { label: 'MS', selected: true },
@@ -100,11 +119,11 @@ export class StackTraceComponent {
   ngOnInit() {}
 
   constructor() {
-    this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
+    this.nestedTreeControl = new NestedTreeControl<TreeNode>(this._getChildren);
   }
 
   // return true if the node's type is false ??? what the heck is dis hasNestedChild ???
-  hasNestedChild = (_: number, nodeData: FileNode) => nodeData.children.length;
+  hasNestedChild = (_: number, nodeData: TreeNode) => nodeData.children.length;
 
-  private _getChildren = (node: FileNode) => observableOf(node.children);
+  private _getChildren = (node: TreeNode) => observableOf(node.children);
 }

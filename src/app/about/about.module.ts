@@ -16,7 +16,6 @@ import { AboutRoutingModule } from './about-routing.module';
 // Components
 import { AboutViewComponent } from './about-view/about-view.component';
 import { PopupComponent } from '../shared/pop-up/popup.component';
-import { AboutTreeComponent } from './about-view/about-tree.component';
 
 @NgModule({
   imports: [
@@ -28,7 +27,7 @@ import { AboutTreeComponent } from './about-view/about-tree.component';
     MatIconModule,
     MatButtonModule,
   ],
-  declarations: [AboutViewComponent, AboutTreeComponent],
+  declarations: [AboutViewComponent],
   bootstrap: [PopupComponent],
 })
 export class AboutModule {}

@@ -40,7 +40,7 @@ import {
   parseTraceLocation,
   TraceType,
 } from '../../api/interfaces/trace.interface';
-import { FileNode } from '../../api/interfaces/tree.interface';
+import { TreeNode } from '../../api/interfaces/tree.interface';
 
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
@@ -133,7 +133,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   source: TraceDataSource | null;
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
   selection: Trace[];
-  treeInput: MatTreeNestedDataSource<FileNode>; // variable à injecter dans la stack-trace
+  treeInput: MatTreeNestedDataSource<TreeNode>; // variable à injecter dans la stack-trace
   services: string[] = [];
 
   constructor(
