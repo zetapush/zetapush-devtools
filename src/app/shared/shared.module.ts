@@ -17,9 +17,6 @@ import { PopupComponent } from './pop-up/popup.component';
 // Directives
 import { ScrollGlueDirective } from './scroll-glue/scroll-glue.directive';
 
-// Services
-import { CanDeactivateGuard } from '../api/guards/canDeactivate-guard.service';
-
 const COMPONENTS = [
   DebugFormComponent,
   StackFilterComponent,
