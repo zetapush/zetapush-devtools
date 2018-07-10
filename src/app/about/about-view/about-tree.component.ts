@@ -17,7 +17,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 @Component({
   selector: 'zp-about-tree',
   templateUrl: 'about-tree.component.html',
-  styleUrls: ['about-tree.component.css'], //
+  styleUrls: [], //
   providers: [FileDatabase],
 })
 export class AboutTreeComponent {
@@ -35,7 +35,8 @@ export class AboutTreeComponent {
   }
 
   // return true if the node's type doesn't exists ??? what the heck is dis hasNestedChild ???
-  hasNestedChild = (_: number, nodeData: FileNode) => nodeData.children.length;
+  hasNestedChild = (_: number, nodeData: FileNode) =>
+    nodeData.children.length > 0;
 
   // return an observable of the node children
   private _getChildren = (node: FileNode) => observableOf(node.children);

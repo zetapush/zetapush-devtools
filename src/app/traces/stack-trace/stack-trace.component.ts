@@ -78,7 +78,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 
       
   `,
-  styleUrls: ['stack-trace-tree.component.css'], //, 'stack-trace.component.scss'
+  styleUrls: ['stack-trace-tree.component.css', 'stack-trace.component.scss'],
   providers: [],
 })
 export class StackTraceComponent {

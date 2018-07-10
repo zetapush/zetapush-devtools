@@ -33,7 +33,7 @@ export class TreeBuilder {
   recursiveLength(node: FileNode): number {
     let length: number = 0;
     node.children.forEach((element) => {
-      length += this.recursiveLength(element);
+      length += this.recursiveLength(element) + 1;
     });
     return length;
   }
@@ -50,21 +50,21 @@ export class TreeBuilder {
 
   // a function applyed on an array of traces, to transform it into data that can be displayed by the mat-tree tag
   // TODO recursive length, and recursive nesting. Then, trying to find why css is foiring
-  buildTreeFromTrace(traces: Trace[], index: number): FileNode[] {
+  buildTreeFromTrace(traces: Trace[], begin: number): FileNode[] {
     let accumulator: FileNode[] = [];
-    for (let i = index; i < traces.length; i++) {
-      const node: FileNode = this.traceToNode(traces[i]);
+    accumulator.push(this.traceToNode(traces[begin]));
+    console.log('damn');
 
-      let j = i + 1;
-      let k = 0;
-      while (j < traces.length && traces[j].indent == traces[i].indent + 1) {
-        node.children.push(this.traceToNode(traces[j]));
-        j++;
-        k++;
+    for (let i = 1 + begin; i < traces.length; i++) {
+      const node: FileNode = this.traceToNode(traces[i]);
+      console.log(i);
+      if (traces[i - 1].indent < traces[i].indent) {
+        node.children = this.buildTreeFromTrace(traces, i);
+        i = +this.recursiveLength(node);
       }
-      i += k;
       accumulator.push(node);
     }
+    console.log('hey');
     return accumulator;
   }
 
@@ -79,5 +79,30 @@ export class TreeBuilder {
     });
     result += ' ] ';
     return result;
+  }
+
+  unitTest(): number {
+    let node1: FileNode = new FileNode();
+    node1.filename = 'node1';
+    node1.type = 'node';
+    let node2: FileNode = new FileNode();
+    node2.filename = 'node2';
+    node2.type = 'node';
+    node2.children = [];
+    let node3: FileNode = new FileNode();
+    node3.filename = 'node3';
+    node3.type = 'node';
+    let node4: FileNode = new FileNode();
+    node4.filename = 'node4';
+    node4.type = 'node';
+    node4.children = [];
+    let node5: FileNode = new FileNode();
+    node5.filename = 'node5';
+    node5.type = 'node';
+    node5.children = [];
+
+    node3.children = [node4, node5];
+    node1.children = [node2, node3];
+    return this.recursiveLength(node1);
   }
 }
