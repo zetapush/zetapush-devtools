@@ -8,7 +8,10 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 import { Trace } from '../../api/interfaces/trace.interface';
 
 // Tree
-import { MatTreeNestedDataSource } from '@angular/material/tree';
+import {
+  MatTreeNestedDataSource,
+  MatNestedTreeNode,
+} from '@angular/material/tree';
 
 // Service
 import { TreeBuilder } from '../../api/services/tree-building.service';
@@ -26,7 +29,7 @@ import { TreeBuilder } from '../../api/services/tree-building.service';
 })
 export class StackTraceComponent {
   @Input() traces: Trace[] = []; //données injectées par variable selection de trace-view
-  @Input() nestedDataSource: MatTreeNestedDataSource<TreeNode>;
+  nestedDataSource: MatTreeNestedDataSource<TreeNode>;
 
   filtered: Trace[] = [];
   display: String = 'Tree';
@@ -39,7 +42,17 @@ export class StackTraceComponent {
 
   ngOnInit() {}
 
-  constructor() {}
+  ngOnChanges() {
+    this.builder.setIndex(this.traces);
+    this.nestedDataSource.data = this.builder.buildTreeFromTrace(
+      this.traces,
+      0,
+    );
+  }
+
+  constructor(private builder: TreeBuilder) {
+    this.nestedDataSource = new MatTreeNestedDataSource();
+  }
 
   filterTraces(filteredTraces: Trace[]) {
     this.filtered = filteredTraces;

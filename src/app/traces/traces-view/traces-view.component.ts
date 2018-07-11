@@ -133,15 +133,15 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   source: TraceDataSource | null;
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
   selection: Trace[];
-  treeInput: MatTreeNestedDataSource<TreeNode>; // variable à injecter dans la stack-trace
+  // treeInput: MatTreeNestedDataSource<TreeNode>; // variable à injecter dans la stack-trace
   services: string[] = [];
 
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
     private logger: NGXLogger,
-    private builder: TreeBuilder,
-  ) {
+  ) // private builder: TreeBuilder, ////
+  {
     route.params.subscribe(({ sandboxId }) => {
       this.logger.log('TraceViewComponent::route.params', sandboxId);
       this.sandboxId = sandboxId;
@@ -150,7 +150,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
       this.logger.log('TraceViewComponent::route.data', services, status);
       this.services = services;
     });
-    this.treeInput = new MatTreeNestedDataSource();
+    // this.treeInput = new MatTreeNestedDataSource(); ////
   }
 
   createTraceObservable(
@@ -197,21 +197,6 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     });
   }
 
-  // function to set the differents lvls of indentation that traces will have in the tree displaying
-  setIndex(traces: Trace[]): Trace[] {
-    let indentCounter: number = 0;
-    traces.forEach((element) => {
-      if (element.type === 'MS') {
-        indentCounter++;
-      }
-      element.indent = indentCounter;
-      if (element.type === 'ME') {
-        indentCounter--;
-      }
-    });
-    return traces;
-  }
-
   ngOnInit() {
     this.source = new TraceDataSource(this.subject, this.logger);
     const credentials = this.preferences.getCredentials();
@@ -253,9 +238,8 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     const traces = this.map.get(trace.ctx).filter((truthy) => truthy);
     this.logger.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
-    this.builder.setIndex(this.selection);
-    this.treeInput.data = this.builder.buildTreeFromTrace(this.selection, 0);
-    console.log(this.treeInput.data);
+    //this.builder.setIndex(this.selection); //
+    //this.treeInput.data = this.builder.buildTreeFromTrace(this.selection, 0);//
   }
   onDownloadClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onDownloadClick', trace);
