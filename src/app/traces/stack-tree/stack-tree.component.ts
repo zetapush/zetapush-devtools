@@ -13,7 +13,7 @@ import { of as observableOf } from 'rxjs';
 @Component({
   selector: 'zp-stack-tree',
   templateUrl: './stack-tree.component.html',
-  styleUrls: ['./stack-tree.component.css'],
+  styleUrls: ['./stack-tree.component.css', './stack-tree.component.scss'],
 })
 export class StackTreeComponent implements OnInit {
   nestedTreeControl: NestedTreeControl<TreeNode>;

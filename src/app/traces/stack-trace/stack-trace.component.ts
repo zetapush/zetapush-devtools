@@ -10,6 +10,9 @@ import { Trace } from '../../api/interfaces/trace.interface';
 // Tree
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
+// Service
+import { TreeBuilder } from '../../api/services/tree-building.service';
+
 @Component({
   selector: 'zp-stack-trace',
   template: `
@@ -34,6 +37,10 @@ export class StackTraceComponent {
     { label: 'USR', selected: true },
   ];
 
+  ngOnInit() {}
+
+  constructor() {}
+
   filterTraces(filteredTraces: Trace[]) {
     this.filtered = filteredTraces;
   }
@@ -41,8 +48,4 @@ export class StackTraceComponent {
   filterDisplay(filteredDisplay: string) {
     this.display = filteredDisplay;
   }
-
-  ngOnInit() {}
-
-  constructor() {}
 }

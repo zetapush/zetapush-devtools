@@ -9,10 +9,6 @@ import { Trace } from '../interfaces/trace.interface';
   providedIn: 'root',
 })
 export class TreeBuilder {
-  /*dataChange = new BehaviorSubject<FileNode[]>([]);
-    nestedTreeControl: NestedTreeControl<FileNode>;
-    nestedDataSource: MatTreeNestedDataSource<FileNode>;*/
-
   constructor() {}
 
   // function to set the different lvls that the traces will take in the tree
@@ -64,14 +60,10 @@ export class TreeBuilder {
       const node: TreeNode = this.traceToNode(traces[i]);
       if (traces[i].indent < traces[i + 1].indent) {
         node.children = this.buildTreeFromTrace(traces, i + 1);
-        i = +this.recursiveLength(node);
+        i += this.recursiveLength(node);
       }
       accumulator.push(node);
       i++;
-    }
-
-    if (i > traces.length - 1) {
-      i = traces.length - 1;
     }
     accumulator.push(this.traceToNode(traces[i]));
     return accumulator;
