@@ -10,7 +10,7 @@ import {
   ChangeDetectionStrategy,
   SimpleChanges,
 } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
+import { MatCheckboxChange, MatButtonToggleModule } from '@angular/material';
 import {
   Trace,
   TraceCompletion,
@@ -40,6 +40,11 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
       <mat-checkbox *ngFor="let type of types" [checked]="type.selected" (change)="onChangeType($event, type)" name="filter" class="Filter">
         {{type.label}}
       </mat-checkbox>
+      <mat-button-toggle-group name="displayStyle" #displayStyle="matButtonToggleGroup" (change)="onChangeDisplay(displayStyle.value)">
+        <mat-button-toggle value="Tree">Tree</mat-button-toggle>
+        <mat-button-toggle value="List">List</mat-button-toggle>
+      </mat-button-toggle-group>
+
     </form>
   `,
 })
@@ -48,6 +53,7 @@ export class StackFilterComponent implements OnChanges {
   @Input() types: ViewTypeFilter[];
 
   @Output() filteredTraces = new EventEmitter<Trace[]>();
+  @Output() filteredDisplay = new EventEmitter();
 
   ngOnChanges(changes: SimpleChanges) {
     this.filteredTraces.emit(this.filtered);
@@ -72,4 +78,10 @@ export class StackFilterComponent implements OnChanges {
 
     this.filteredTraces.emit(this.filtered);
   }
+
+  onChangeDisplay(choice: string) {
+    this.filteredDisplay.emit(choice);
+  }
+
+  //displayStyle.value
 }

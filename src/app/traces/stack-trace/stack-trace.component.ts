@@ -23,9 +23,9 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 @Component({
   selector: 'zp-stack-trace',
   template: `
-    <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+    <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)" (filteredDisplay)="filterDisplay($event)"></zp-stack-filter>
     
-    <table>
+    <table *ngIf="display == 'List'">
       <thead>
         <tr>
           <th>N</th>
@@ -51,7 +51,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
       </tbody>
     </table>
 
-    <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
+    <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree" *ngIf="display == 'Tree'">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle >
         <li class="mat-tree-node">
           <tr>
@@ -105,6 +105,7 @@ export class StackTraceComponent {
   nestedTreeControl: NestedTreeControl<TreeNode>; //nestedTreeControl
   @Input() nestedDataSource: MatTreeNestedDataSource<TreeNode>;
   filtered: Trace[] = [];
+  display: String = 'Tree';
   types: ViewTypeFilter[] = [
     { label: 'MS', selected: true },
     { label: 'ME', selected: true },
@@ -114,6 +115,10 @@ export class StackTraceComponent {
 
   filterTraces(filteredTraces: Trace[]) {
     this.filtered = filteredTraces;
+  }
+
+  filterDisplay(filteredDisplay: string) {
+    this.display = filteredDisplay;
   }
 
   ngOnInit() {}

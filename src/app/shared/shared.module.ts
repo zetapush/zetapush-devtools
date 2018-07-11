@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 // Feature modules
 import { UiModule } from '../ui.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 // Components
 import { DebugFormComponent } from './debug-form/debug-form.component';
@@ -31,7 +32,13 @@ const COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, UiModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    UiModule,
+    RouterModule,
+    MatButtonToggleModule,
+  ],
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
   providers: [CanDeactivateGuard],

@@ -13,6 +13,8 @@ import { TracesRoutingModule } from './traces-routing.module';
 import { TracesViewComponent } from './traces-view/traces-view.component';
 import { StackTraceComponent } from './stack-trace/stack-trace.component';
 import { LazyJsonComponent } from './lazy-json/lazy-json.component';
+import { StackListComponent } from './stack-list/stack-list.component';
+import { StackTreeComponent } from './stack-tree/stack-tree.component';
 
 @NgModule({
   imports: [
@@ -22,7 +24,13 @@ import { LazyJsonComponent } from './lazy-json/lazy-json.component';
     SharedModule,
     MatTreeModule,
   ],
-  declarations: [TracesViewComponent, StackTraceComponent, LazyJsonComponent],
+  declarations: [
+    TracesViewComponent,
+    StackTraceComponent,
+    LazyJsonComponent,
+    StackListComponent,
+    StackTreeComponent,
+  ],
   providers: [],
 })
 export class TracesModule {}

@@ -55,32 +55,25 @@ export class TreeBuilder {
   // TODO recursive length, and recursive nesting. Then, trying to find why css is foiring
   buildTreeFromTrace(traces: Trace[], begin: number): TreeNode[] {
     let accumulator: TreeNode[] = [];
-    accumulator.push(this.traceToNode(traces[begin]));
-    console.log('damn');
 
-    for (let i = 1 + begin; i < traces.length; i++) {
+    let i = begin;
+    while (
+      i < traces.length - 1 &&
+      traces[i + 1].indent >= traces[begin].indent
+    ) {
       const node: TreeNode = this.traceToNode(traces[i]);
-      console.log(i);
-      if (traces[i - 1].indent < traces[i].indent) {
-        node.children = this.buildTreeFromTrace(traces, i);
+      if (traces[i].indent < traces[i + 1].indent) {
+        node.children = this.buildTreeFromTrace(traces, i + 1);
         i = +this.recursiveLength(node);
       }
       accumulator.push(node);
+      i++;
     }
-    console.log('hey');
-    return accumulator;
-  }
 
-  displayTree(tree: TreeNode[]): string {
-    let result: string = ' [ ';
-    tree.forEach((element) => {
-      result += element.name;
-      if (element.children != []) {
-        result += this.displayTree(element.children);
-      }
-      result += ',';
-    });
-    result += ' ] ';
-    return result;
+    if (i > traces.length - 1) {
+      i = traces.length - 1;
+    }
+    accumulator.push(this.traceToNode(traces[i]));
+    return accumulator;
   }
 }
