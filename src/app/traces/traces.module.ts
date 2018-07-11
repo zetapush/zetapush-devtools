@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { UiModule } from '../ui.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatTreeModule } from '@angular/material/tree';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Routing
 import { TracesRoutingModule } from './traces-routing.module';
@@ -23,6 +25,8 @@ import { StackTreeComponent } from './stack-tree/stack-tree.component';
     UiModule,
     SharedModule,
     MatTreeModule,
+    ClipboardModule,
+    MatSnackBarModule,
   ],
   declarations: [
     TracesViewComponent,

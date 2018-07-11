@@ -24,14 +24,14 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
-    .Form--Filter {
-      font-weight: bold;
-      margin-top: 10px;
-      padding-left: 0.5rem;
-    }
-    .Filter {
-      padding-right: 0.25rem;
-    }
+      .Form--Filter {
+        font-weight: bold;
+        margin-top: 10px;
+        padding-left: 0.5rem;
+      }
+      .Filter {
+        padding-right: 0.25rem;
+      }
     `,
   ],
   template: `
@@ -52,7 +52,7 @@ export class StackFilterComponent implements OnChanges {
   @Input() traces: Trace[] = [];
   @Input() types: ViewTypeFilter[];
 
-  @Output() filteredTraces = new EventEmitter<Trace[]>();
+  @Output() filteredTraces = new EventEmitter<Trace[]>(); // the old one, by Gregory
   @Output() filteredDisplay = new EventEmitter();
 
   ngOnChanges(changes: SimpleChanges) {

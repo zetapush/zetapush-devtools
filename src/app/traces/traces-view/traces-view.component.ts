@@ -132,16 +132,14 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   subject = new BehaviorSubject<Trace[]>([]);
   source: TraceDataSource | null;
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
-  selection: Trace[];
-  // treeInput: MatTreeNestedDataSource<TreeNode>; // variable à injecter dans la stack-trace
+  selection: Trace[] = [];
   services: string[] = [];
 
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
     private logger: NGXLogger,
-  ) // private builder: TreeBuilder, ////
-  {
+  ) {
     route.params.subscribe(({ sandboxId }) => {
       this.logger.log('TraceViewComponent::route.params', sandboxId);
       this.sandboxId = sandboxId;
@@ -150,7 +148,6 @@ export class TracesViewComponent implements OnDestroy, OnInit {
       this.logger.log('TraceViewComponent::route.data', services, status);
       this.services = services;
     });
-    // this.treeInput = new MatTreeNestedDataSource(); ////
   }
 
   createTraceObservable(
@@ -238,8 +235,6 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     const traces = this.map.get(trace.ctx).filter((truthy) => truthy);
     this.logger.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
-    //this.builder.setIndex(this.selection); //
-    //this.treeInput.data = this.builder.buildTreeFromTrace(this.selection, 0);//
   }
   onDownloadClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onDownloadClick', trace);

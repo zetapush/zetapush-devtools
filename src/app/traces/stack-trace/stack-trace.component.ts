@@ -40,14 +40,23 @@ export class StackTraceComponent {
     { label: 'USR', selected: true },
   ];
 
+  /*filter: Map<String, Boolean> = new Map([
+    ['MS', true],
+    ['ME', true],
+    ['CMT', false],
+    ['USR', true]
+  ]); */
+
   ngOnInit() {}
 
   ngOnChanges() {
-    this.builder.setIndex(this.traces);
-    this.nestedDataSource.data = this.builder.buildTreeFromTrace(
-      this.traces,
-      0,
-    );
+    if (this.traces.length) {
+      this.builder.setIndex(this.traces);
+      this.nestedDataSource.data = this.builder.buildTreeFromTrace(
+        this.traces,
+        0,
+      );
+    }
   }
 
   constructor(private builder: TreeBuilder) {

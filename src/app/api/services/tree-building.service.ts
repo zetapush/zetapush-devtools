@@ -47,8 +47,7 @@ export class TreeBuilder {
     return node;
   }
 
-  // a function applyed on an array of traces, to transform it into data that can be displayed by the mat-tree tag
-  // TODO recursive length, and recursive nesting. Then, trying to find why css is foiring
+  // a function appliyed on an array of traces, to transform it into data that can be displayed by the mat-tree tag
   buildTreeFromTrace(traces: Trace[], begin: number): TreeNode[] {
     let accumulator: TreeNode[] = [];
 
