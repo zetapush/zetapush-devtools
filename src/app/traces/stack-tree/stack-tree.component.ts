@@ -6,6 +6,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 
 // Interfaces
 import { TreeNode } from '../../api/interfaces/tree.interface';
+import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 
 // RxJS
 import { of as observableOf } from 'rxjs';
@@ -18,7 +19,7 @@ import { of as observableOf } from 'rxjs';
 export class StackTreeComponent implements OnInit {
   nestedTreeControl: NestedTreeControl<TreeNode>;
   @Input() nestedDataSource: MatTreeNestedDataSource<TreeNode>;
-  // TODO nestedDataSource à importer, puis faire des tests sur la fonctionnalitée
+  @Input() filter: ViewTypeFilter[];
 
   constructor() {
     this.nestedTreeControl = new NestedTreeControl<TreeNode>(this._getChildren);
@@ -28,5 +29,20 @@ export class StackTreeComponent implements OnInit {
 
   hasNestedChild = (_: number, nodeData: TreeNode) => nodeData.children.length;
 
+  // return true if the data node is to be displayed
+  isFiltered = (nodeData: TreeNode) => {
+    let filterOn: boolean = true;
+    this.filter.map((value) => {
+      if (value.label == nodeData.type) {
+        filterOn = value.selected;
+      }
+    });
+    return filterOn;
+  };
+
   private _getChildren = (node: TreeNode) => observableOf(node.children);
+
+  /*checkFilter (type: string) : boolean {
+    
+  }*/
 }

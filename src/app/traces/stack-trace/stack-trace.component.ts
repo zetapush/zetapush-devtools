@@ -20,8 +20,8 @@ import { TreeBuilder } from '../../api/services/tree-building.service';
   selector: 'zp-stack-trace',
   template: `
     <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)" (filteredDisplay)="filterDisplay($event)"></zp-stack-filter>
-    <zp-stack-list *ngIf="display == 'List'" [traces]="filtered"></zp-stack-list>
-    <zp-stack-tree *ngIf="display == 'Tree'" [nestedDataSource]="nestedDataSource"></zp-stack-tree>
+    <zp-stack-list *ngIf="display == 'List'" [traces]="traces" [filter]="types"></zp-stack-list>
+    <zp-stack-tree *ngIf="display == 'Tree'" [nestedDataSource]="nestedDataSource" [filter]="types"></zp-stack-tree>
   `,
 
   styleUrls: ['stack-trace-tree.component.css'],
@@ -40,18 +40,11 @@ export class StackTraceComponent {
     { label: 'USR', selected: true },
   ];
 
-  /*filter: Map<String, Boolean> = new Map([
-    ['MS', true],
-    ['ME', true],
-    ['CMT', false],
-    ['USR', true]
-  ]); */
-
   ngOnInit() {}
 
   ngOnChanges() {
     if (this.traces.length) {
-      this.builder.setIndex(this.traces);
+      this.builder.setIndent(this.traces);
       this.nestedDataSource.data = this.builder.buildTreeFromTrace(
         this.traces,
         0,
@@ -63,8 +56,10 @@ export class StackTraceComponent {
     this.nestedDataSource = new MatTreeNestedDataSource();
   }
 
-  filterTraces(filteredTraces: Trace[]) {
-    this.filtered = filteredTraces;
+  filterTraces(filter: ViewTypeFilter[]) {
+    //this.filtered = filteredTraces;
+    this.types = filter;
+    console.log(this.types);
   }
 
   filterDisplay(filteredDisplay: string) {

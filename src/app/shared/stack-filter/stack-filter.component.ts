@@ -52,21 +52,10 @@ export class StackFilterComponent implements OnChanges {
   @Input() traces: Trace[] = [];
   @Input() types: ViewTypeFilter[];
 
-  @Output() filteredTraces = new EventEmitter<Trace[]>(); // the old one, by Gregory
+  @Output() filteredTraces = new EventEmitter<ViewTypeFilter[]>(); // the old one, by Gregory
   @Output() filteredDisplay = new EventEmitter();
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.filteredTraces.emit(this.filtered);
-  }
-
-  get filtered() {
-    const types = this.types
-      .filter((type) => type.selected)
-      .map((type) => type.label);
-    return this.traces
-      ? this.traces.filter((trace) => types.includes(trace.type))
-      : [];
-  }
+  ngOnChanges() {}
 
   onChangeType($event: MatCheckboxChange, type) {
     this.types = this.types.map((value) => {
@@ -75,13 +64,10 @@ export class StackFilterComponent implements OnChanges {
       }
       return value;
     });
-
-    this.filteredTraces.emit(this.filtered);
+    this.filteredTraces.emit(this.types);
   }
 
   onChangeDisplay(choice: string) {
     this.filteredDisplay.emit(choice);
   }
-
-  //displayStyle.value
 }

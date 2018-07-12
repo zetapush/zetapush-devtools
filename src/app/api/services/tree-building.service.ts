@@ -11,8 +11,8 @@ import { Trace } from '../interfaces/trace.interface';
 export class TreeBuilder {
   constructor() {}
 
-  // function to set the different lvls that the traces will take in the tree
-  setIndex(traces: Trace[]) {
+  // function to set the different lvls of indentation that the traces will take in the tree
+  setIndent(traces: Trace[]) {
     let indentCounter: number = 1;
     traces.forEach((element) => {
       if (element.type === 'ME') {
@@ -25,7 +25,7 @@ export class TreeBuilder {
     });
   }
 
-  // auxiliary function that calculate the number of nodes as child of the one in parameter, or child of the childens ...
+  // auxiliary function calculating the number of child nodes of the one in parameter, or child of the childens ...
   recursiveLength(node: TreeNode): number {
     let length: number = 0;
     node.children.forEach((element) => {
@@ -34,7 +34,7 @@ export class TreeBuilder {
     return length;
   }
 
-  // auxiliary function that convert a trace input into a Node output
+  // auxiliary function converting a Trace input into a Node output
   traceToNode(trace: Trace): TreeNode {
     const node = new TreeNode();
     node.data = trace.data;

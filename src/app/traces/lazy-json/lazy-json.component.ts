@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material';
   template: `
     <div class="LazyJson" [ngClass]="{'LazyJson--Hidden': !show }" >
       <pre *ngIf="show">{{value | json}}</pre>
-      <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (click)="onThrowSnackbar()">
+      <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()">
         <mat-icon aria-label="Modez, copy dat json!">file_copy</mat-icon>
       </button>
       <button *ngIf="!show" mat-button (click)="onLazyClick()">
@@ -33,7 +33,7 @@ export class LazyJsonComponent {
   show = false;
 
   ngOnChanges() {
-    this.json = JSON.stringify(this.value);
+    this.json = JSON.stringify(this.value, null, 2);
   }
 
   constructor(private snackBar: MatSnackBar) {}
