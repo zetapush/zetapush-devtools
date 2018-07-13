@@ -1,17 +1,7 @@
-// component d'affichage du tableau des traces
-
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-
-// Utils
-import { MatSort } from '@angular/material';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { ActivatedRoute } from '@angular/router';
+
 import { Authentication, Client, services as SERVICES } from 'zetapush-js';
 
 import { saveAs } from 'file-saver';
@@ -27,20 +17,20 @@ import 'rxjs/add/observable/merge';
 import { Subscription } from 'rxjs/Subscription';
 import { combineLatest } from 'rxjs/operators/combineLatest';
 import { map } from 'rxjs/operators/map';
+import { combineLatest as combine } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 // Service
 import { PreferencesStorage } from '../../api/services/preferences-storage.service';
-import { TreeBuilder } from '../../api/services/tree-building.service';
 
 // Interfaces
 import {
   Trace,
   TraceCompletion,
-  TraceLocation,
   parseTraceLocation,
   TraceType,
 } from '../../api/interfaces/trace.interface';
-import { TreeNode } from '../../api/interfaces/tree.interface';
+import { CanLeaveViewGuard } from '../../api/guards/canleaveview.guard';
 
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
@@ -134,20 +124,34 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
   selection: Trace[] = [];
   services: string[] = [];
-
+  initialized = false;
   constructor(
     private preferences: PreferencesStorage,
     private route: ActivatedRoute,
     private logger: NGXLogger,
+    private guard: CanLeaveViewGuard,
   ) {
-    route.params.subscribe(({ sandboxId }) => {
-      this.logger.log('TraceViewComponent::route.params', sandboxId);
-      this.sandboxId = sandboxId;
-    });
-    route.data.subscribe(({ services, status }) => {
-      this.logger.log('TraceViewComponent::route.data', services, status);
-      this.services = services;
-    });
+    combine(route.params, route.data)
+      .pipe(
+        distinctUntilChanged(
+          (current, next) => current[0].sandboxId === next[0].sandboxId,
+        ),
+      )
+      .subscribe(([params, data]) => {
+        this.logger.log('TracesViewComponent::route', params, data);
+        if (this.initialized) {
+          guard.canDeactivate().then((can) => {
+            if (can) {
+              this.sandboxId = params.sandboxId;
+              this.services = data.services;
+            }
+          });
+        } else {
+          this.initialized = true;
+          this.sandboxId = params.sandboxId;
+          this.services = data.services;
+        }
+      });
   }
 
   createTraceObservable(

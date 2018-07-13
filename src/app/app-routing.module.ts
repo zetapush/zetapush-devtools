@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './api/guards/auth.guard';
-import { CanDeactivateGuard } from './api/guards/canDeactivate-guard.service';
+import { CanLeaveViewGuard } from './api/guards/canleaveview.guard';
 //
 const routes: Routes = [
   {
@@ -23,30 +23,26 @@ const routes: Routes = [
   {
     path: 'sandboxes',
     canActivate: [AuthGuard],
-    canDeactivate: [CanDeactivateGuard],
+    canDeactivate: [CanLeaveViewGuard],
     loadChildren: './sandboxes/sandboxes.module#SandboxesModule',
   },
   {
     path: 'traces',
     canActivate: [AuthGuard],
-    canDeactivate: [CanDeactivateGuard],
+    canDeactivate: [CanLeaveViewGuard],
     loadChildren: './traces/traces.module#TracesModule',
   },
   {
     path: 'terminal',
     canActivate: [AuthGuard],
-    canDeactivate: [CanDeactivateGuard],
+    canDeactivate: [CanLeaveViewGuard],
     loadChildren: './terminal/terminal.module#TerminalModule',
-  },
-  {
-    path: 'about',
-    loadChildren: './about/about.module#AboutModule',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), BrowserAnimationsModule],
   exports: [RouterModule],
-  providers: [AuthGuard, CanDeactivateGuard],
+  providers: [AuthGuard, CanLeaveViewGuard],
 })
 export class AppRoutingModule {}
