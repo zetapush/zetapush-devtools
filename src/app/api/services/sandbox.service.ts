@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { NGXLogger } from 'ngx-logger';
 
 import { PreferencesStorage } from '../services/preferences-storage.service';
-import { getSecureUrl } from '../../utils';
+import { getSecureUrl, shuffle } from '../../utils';
 import { Sandbox } from '../interfaces/sandbox.interface';
 
 @Injectable()
@@ -65,6 +65,23 @@ export class SandboxService {
     return services;
   }
 
+  async getSandboxErrorPaginatedList(sandboxId: string, page = 0) {
+    const servers = await this.servers(sandboxId);
+    const server = shuffle(servers);
+
+    const url = `${getSecureUrl(
+      `${server}/rest/b2b/errors/${sandboxId}`,
+    )}?page=${page}`;
+
+    const credentials = this.preferences.getCredentials();
+
+    return fetch(url, {
+      headers: {
+        'X-Authorization': JSON.stringify(credentials),
+      },
+    }).then((response) => response.json());
+  }
+
   async request(baseUrl: string, page: number = 0) {
     const url = `${baseUrl}?page=${page}`;
     const response = await fetch(url, {
@@ -73,5 +90,20 @@ export class SandboxService {
     });
     const { content, ...pagination } = await response.json();
     return { content, pagination };
+  }
+
+  async servers(sandboxId: string): Promise<string[]> {
+    const credentials = this.preferences.getCredentials();
+    const url = getSecureUrl(
+      `${credentials.apiUrl}/zbo/pub/business/${sandboxId}`,
+    );
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const { servers } = await response.json();
+    this.logger.log('DebugStatus::servers', servers);
+
+    return servers as string[];
   }
 }
