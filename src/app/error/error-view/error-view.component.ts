@@ -36,7 +36,6 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
 import { MatTable, MatPaginator, PageEvent } from '@angular/material';
 
-// TODO : traceDataSource extends DataSource, so it must contain a paginator onwhich we can rely on. Then, try to handle the pagination
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
   private _renderData = new BehaviorSubject<Trace[]>([]);
@@ -237,6 +236,8 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
       this.createTraceObservable(this.client, this.map, deploymentId).subscribe(
         (traces) => {
           this.subject.next(traces);
+          console.log(traces);
+          this.paginator.length++;
         },
       ),
     );
@@ -244,15 +245,13 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.client.disconnect();
   }
+
   onClearClick() {
     this.logger.log('TraceViewComponent::onClearClick');
     this.map.clear();
     this.traces = [];
     this.subject.next(this.traces);
     this.selection = null;
-    console.log(
-      this.sandBoxService.getSandboxErrorPaginatedList(this.sandboxId),
-    ); // TODO
   }
   onShowClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onShowClick', trace);
@@ -316,5 +315,10 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
     this.source.filter = filterValue;
   }
 
-  pageHandling(event: PageEvent) {}
+  pageHandling(event: PageEvent) {
+    console.log(
+      this.sandBoxService.getSandboxErrorPaginatedList(this.sandboxId),
+    );
+    console.log('HEY');
+  }
 }
