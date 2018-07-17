@@ -4,33 +4,47 @@
     <mat-list>
       <h3 mat-subheader>Sandboxes</h3>
       <div class="sandboxe-list" *ngIf="sandboxes">
-        <mat-list-item *ngFor="let sandbox of sandboxes"
-          routerLinkActive="active"
-          [routerLink]="['traces', sandbox.businessId]"
-          [ngClass]="{'debug': sandbox.debug}"
-          matTooltip="Debug active"
-          matTooltipPosition="after"
-          [matTooltipDisabled]="!sandbox.debug">
-          <mat-icon mat-list-icon>folder</mat-icon>
+        <mat-list-item *ngFor="let sandbox of sandboxes">
           <p mat-line>{{ sandbox.name }}</p>
+          <mat-icon mat-list-icon
+            routerLinkActive="active"
+            [routerLink]="['traces', sandbox.businessId]"
+            [ngClass]="{'debug': sandbox.debug}"
+            matTooltip="Debug active"
+            matTooltipPosition="after"
+            [matTooltipDisabled]="!sandbox.debug">view_list</mat-icon>
+          <mat-icon mat-list-icon
+            routerLinkActive="active"
+            [routerLink]="['terminal', sandbox.businessId]"
+            [ngClass]="{'debug': sandbox.debug}"
+            matTooltip="Debug active"
+            matTooltipPosition="after"
+            [matTooltipDisabled]="!sandbox.debug">dvr</mat-icon>
+          <mat-icon mat-list-icon
+            routerLinkActive="active"
+            [routerLink]="['error', sandbox.businessId]"
+            [ngClass]="{'debug': sandbox.debug}"
+            matTooltip="Debug active"
+            matTooltipPosition="after"
+            [matTooltipDisabled]="!sandbox.debug">error</mat-icon>
         </mat-list-item>
       </div>
+    </mat-list>
 
+    <mat-list class=legend>
       <mat-divider></mat-divider>
-
-      <h3 mat-subheader>Sandboxes Terminal</h3>
-      <div class="sandboxe-list" *ngIf="sandboxes">
-        <mat-list-item *ngFor="let sandbox of sandboxes"
-          routerLinkActive="active"
-          [routerLink]="['terminal', sandbox.businessId]" 
-          [ngClass]="{'debug': sandbox.debug}"
-          matTooltip="Debug active"
-          matTooltipPosition="after"
-          [matTooltipDisabled]="!sandbox.debug">
-          <mat-icon mat-list-icon>subtitles</mat-icon>
-          <p mat-line>{{ sandbox.name }}</p>
-        </mat-list-item>
-      </div>
+      <mat-list-item>
+        <mat-icon mat-list-icon>view_list</mat-icon>
+        <p mat-line>traces tab view</p>
+      </mat-list-item>
+      <mat-list-item>
+          <mat-icon mat-list-icon>dvr</mat-icon>
+          <p mat-line>traces terminal view</p>
+      </mat-list-item>
+      <mat-list-item>
+          <mat-icon mat-list-icon>error</mat-icon>
+          <p mat-line>error traces view</p>
+      </mat-list-item>
     </mat-list>
 
   </mat-sidenav>

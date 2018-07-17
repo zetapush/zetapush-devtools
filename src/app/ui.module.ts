@@ -18,6 +18,8 @@ import {
   MatMenuModule,
   MatTooltipModule,
   MatDialogModule,
+  MatButtonToggleModule,
+  MatPaginatorModule,
 } from '@angular/material';
 
 const MODULES = [
@@ -39,6 +41,8 @@ const MODULES = [
   MatTooltipModule,
   MatDialogModule,
   MatSortModule,
+  MatButtonToggleModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({

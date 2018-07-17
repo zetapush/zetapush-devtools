@@ -38,6 +38,12 @@ const routes: Routes = [
     canDeactivate: [CanLeaveViewGuard],
     loadChildren: './terminal/terminal.module#TerminalModule',
   },
+  {
+    path: 'error',
+    canActivate: [AuthGuard],
+    canDeactivate: [CanLeaveViewGuard],
+    loadChildren: './error/error.module#ErrorModule',
+  },
 ];
 
 @NgModule({

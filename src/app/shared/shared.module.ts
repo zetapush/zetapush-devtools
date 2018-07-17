@@ -13,6 +13,8 @@ import { RedirectViewComponent } from './redirect-view/redirect-view.component';
 import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { PopupComponent } from './pop-up/popup.component';
+import { LazyJsonComponent } from './lazy-json/lazy-json.component';
+import { StackTraceComponent } from './stack-trace/stack-trace.component';
 
 // Directives
 import { ScrollGlueDirective } from './scroll-glue/scroll-glue.directive';
@@ -25,6 +27,8 @@ const COMPONENTS = [
   HeaderComponent,
   SidenavComponent,
   PopupComponent,
+  LazyJsonComponent,
+  StackTraceComponent,
 ];
 
 @NgModule({
