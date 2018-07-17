@@ -21,7 +21,7 @@ import { TreeBuilder } from '../../api/services/tree-building.service';
   styleUrls: ['./stack-tree.component.css', './stack-tree.component.scss'],
 })
 export class StackTreeComponent implements OnInit {
-  @Input() traces: Trace[];
+  @Input() traces: Trace[] = [];
   nestedTreeControl: NestedTreeControl<TreeNode>;
   nestedDataSource: MatTreeNestedDataSource<TreeNode>;
   @Input() filter: ViewTypeFilter[];
@@ -38,7 +38,6 @@ export class StackTreeComponent implements OnInit {
         this.builder.buildTreeFromTrace(this.traces, 0),
       );
     }
-    console.log(this.filterTrace(this.nestedDataSource.data));
   }
 
   ngOnInit() {}

@@ -25,6 +25,10 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
   styles: [
     `
       .Form--Filter {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+
         font-weight: bold;
         margin-top: 10px;
         padding-left: 0.5rem;
@@ -41,15 +45,20 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
         {{type.label}}
       </mat-checkbox>
       <mat-button-toggle-group name="displayStyle" #displayStyle="matButtonToggleGroup" (change)="onChangeDisplay(displayStyle.value)">
-        <mat-button-toggle value="Tree">Tree</mat-button-toggle>
-        <mat-button-toggle value="List">List</mat-button-toggle>
+        <mat-button-toggle value="Tree" [checked]="toggleValue=='Tree'">
+          <mat-icon>call_split</mat-icon>Tree
+        </mat-button-toggle>
+        <mat-button-toggle value="List" [checked]="toggleValue=='List'">
+          <mat-icon>list</mat-icon>List
+        </mat-button-toggle>
       </mat-button-toggle-group>
 
     </form>
   `,
 })
 export class StackFilterComponent implements OnChanges {
-  @Input() traces: Trace[] = [];
+  toggleValue: string = 'Tree';
+
   @Input() types: ViewTypeFilter[];
 
   @Output() filteredTraces = new EventEmitter<ViewTypeFilter[]>(); // the old one, by Gregory
@@ -68,6 +77,7 @@ export class StackFilterComponent implements OnChanges {
   }
 
   onChangeDisplay(choice: string) {
+    this.toggleValue = choice;
     this.filteredDisplay.emit(choice);
   }
 }

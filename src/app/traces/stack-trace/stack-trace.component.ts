@@ -15,7 +15,7 @@ import {
 @Component({
   selector: 'zp-stack-trace',
   template: `
-    <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)" (filteredDisplay)="filterDisplay($event)"></zp-stack-filter>
+    <zp-stack-filter [types]="types" (filteredTraces)="filterTraces($event)" (filteredDisplay)="filterDisplay($event)"></zp-stack-filter>
     <zp-stack-list *ngIf="display == 'List'" [traces]="traces" [filter]="types"></zp-stack-list>
     <zp-stack-tree *ngIf="display == 'Tree'" [traces]="traces" [filter]="types"></zp-stack-tree>
   `,
@@ -39,9 +39,7 @@ export class StackTraceComponent {
   constructor() {}
 
   filterTraces(filter: ViewTypeFilter[]) {
-    //this.filtered = filteredTraces;
     this.types = filter;
-    console.log(this.types);
   }
 
   filterDisplay(filteredDisplay: string) {
