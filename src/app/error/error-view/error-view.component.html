@@ -1,78 +1,30 @@
-<mat-sidenav-container class="Container--Sidenav">
-    <h1>
-      <mat-icon mat-list-icon [routerLink]="['/dashboard']">arrow_back</mat-icon>
-      <span>Errors for {{sandboxId}}</span>
-      <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle [routerLink]="['/traces', sandboxId]">
-          <mat-icon>view_list</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle [routerLink]="['/terminal', sandboxId]">
-          <mat-icon>dvr</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle disabled>
-          <mat-icon>error</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </h1>
-    <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
-    <mat-toolbar>
-      <mat-form-field class="Filter">
-      <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
-      </mat-form-field>
-      <span class="Spacer"></span>
-      <button mat-icon-button matTooltip="Clear traces" matTooltipPosition="before">
-        <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
-      </button>
-    </mat-toolbar>
-    
-    <mat-table #table [dataSource]="source" class="Table">
-      <!-- Ctx Column -->
-      <ng-container matColumnDef="ctx">
-        <mat-header-cell class="HeaderCell HeaderCell--Ctx" *matHeaderCellDef> Id </mat-header-cell>
-        <mat-cell class="Cell Cell--Ctx" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-          {{row.ctx}}
-        </mat-cell>
-      </ng-container>
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <mat-header-cell class="HeaderCell HeaderCell--Actions" *matHeaderCellDef> Actions </mat-header-cell>
-        <mat-cell class="Cell Cell--Actions" *matCellDef="let row">
-          <button mat-icon-button>
-            <mat-icon aria-label="Download full trace" mat-list-icon (click)="onDownloadClick(row)">get_app</mat-icon>
-          </button>
-          <button mat-icon-button>
-            <mat-icon aria-label="Export trace as test case" mat-list-icon (click)="onExportClick(row)">bug_report</mat-icon>
-          </button>
-        </mat-cell>
-      </ng-container>
-      <!-- Ts Column -->
-      <ng-container matColumnDef="ts">
-        <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
-        <mat-cell class="Cell Cell--Ts" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-          {{row.ts | date:'HH:mm:SS'}}
-        </mat-cell>
-      </ng-container>
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <mat-header-cell class="HeaderCell HeaderCell--Name" *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-          {{row.data.name ? row.data.name : 'UNAVAILABLE'}}
-        </mat-cell>
-      </ng-container>
-      <!-- Owner Column -->
-      <ng-container matColumnDef="owner">
-        <mat-header-cell class="HeaderCell HeaderCell--Owner" *matHeaderCellDef> Owner </mat-header-cell>
-        <mat-cell class="Cell Cell--Owner" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-          {{row.owner}}
-        </mat-cell>
-      </ng-container>
-  
-      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns;" class="Table__Row"></mat-row>
-    </mat-table>
-    <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons (page)="pageHandling($event)"></mat-paginator><!-- [length]="numberItem" -->
-  
-    <mat-sidenav #sidenav mode="over" position="end">
-      <zp-stack-trace [traces]="selection"></zp-stack-trace>
-    </mat-sidenav>
-  </mat-sidenav-container>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- ctx Column -->
+  <ng-container matColumnDef="ctx">
+    <th mat-header-cell *matHeaderCellDef> ctx </th>
+    <td mat-cell *matCellDef="let row"> {{row.ctx}} </td>
+  </ng-container>
+
+  <!-- Code Column -->
+  <ng-container matColumnDef="code">
+    <th mat-header-cell *matHeaderCellDef> Code </th>
+    <td mat-cell *matCellDef="let row"> {{row.code}} </td>
+  </ng-container>
+
+  <!-- owner Column -->
+  <ng-container matColumnDef="owner">
+    <th mat-header-cell *matHeaderCellDef> Owner </th>
+    <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
+  </ng-container>
+
+  <!-- ts Column -->
+  <ng-container matColumnDef="time">
+    <th mat-header-cell *matHeaderCellDef> time </th>
+    <td mat-cell *matCellDef="let row"> {{row.ts | date:'HH:mm:SS'}} </td>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: columns;" class="Table__Row"></mat-row>
+
+</table>

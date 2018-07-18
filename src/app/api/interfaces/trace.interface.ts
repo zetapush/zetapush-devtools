@@ -33,7 +33,7 @@ export interface Trace {
 
 export interface errorTrace {
   ctx: number;
-  data: any;
+  code: string;
   owner: string;
   ts: number;
 }
