@@ -15,6 +15,7 @@ import {
   TraceCompletion,
   parseTraceLocation,
   TraceType,
+  errorTrace,
 } from '../../api/interfaces/trace.interface';
 
 // Services
@@ -36,19 +37,20 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
 import { MatTable, MatPaginator, PageEvent } from '@angular/material';
 
-export class TraceDataSource extends DataSource<Trace> {
+// TODO adapter pour afficher non plus des Trace mais errorTrace
+export class TraceDataSource extends DataSource<errorTrace> {
   private _filter = new BehaviorSubject<string>('');
-  private _renderData = new BehaviorSubject<Trace[]>([]);
+  private _renderData = new BehaviorSubject<errorTrace[]>([]);
 
   _renderChangesSubscription: Subscription;
   filteredData: Trace[];
 
-  set filter(filter: string) {
+  /*set filter(filter: string) {
     this._filter.next(filter);
   }
   get filter(): string {
     return this._filter.value;
-  }
+  }*/
 
   constructor(
     private _subject: BehaviorSubject<Trace[]>,
@@ -60,9 +62,8 @@ export class TraceDataSource extends DataSource<Trace> {
     this.logger.warn('TraceDataSource::constructor', _subject);
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Trace[]> {
-    const changes = [this._renderData];
-    return Observable.merge(...changes);
+  connect(): Observable<errorTrace[]> {
+    return this._renderData;
   }
 
   disconnect() {}
@@ -126,7 +127,7 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
   map = new Map<number, Trace[]>();
   client: Client;
   connected = false;
-  subject = new BehaviorSubject<Trace[]>([]);
+  subject = new BehaviorSubject<errorTrace>(null);
   source: TraceDataSource | null;
   columns = ['ctx', 'actions', 'ts', 'name', 'owner'];
   selection: Trace[];
@@ -208,6 +209,26 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  /* function that create an observable which will emits all the traces errors to render*/
+  createTrace(): Observable<errorTrace> {
+    return new Observable<errorTrace>((observer) => {
+      this.sandBoxService.getSandboxErrorPaginatedList(this.sandboxId).then(
+        (value) => {
+          value.content.forEach((element) => {
+            const trace: errorTrace = {
+              ts: Date.now(),
+              owner: element.userId,
+              data: JSON.stringify(element),
+              ctx: 10, // TODO gérer les ctx
+            };
+            observer.next(trace);
+          });
+        },
+        (value) => console.log(value.pagination + 'failure'),
+      );
+    });
+  }
+
   ngOnInit() {
     this.source = new TraceDataSource(
       this.subject,
@@ -233,13 +254,10 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
     this.client.connect();
     // Enable subscription for all deployed services
     this.services.forEach((deploymentId) =>
-      this.createTraceObservable(this.client, this.map, deploymentId).subscribe(
-        (traces) => {
-          this.subject.next(traces);
-          console.log(traces);
-          this.paginator.length++;
-        },
-      ),
+      this.createTrace().subscribe((trace) => {
+        this.subject.next(trace);
+        this.paginator.length++;
+      }),
     );
   }
   ngOnDestroy() {
@@ -316,9 +334,12 @@ export class ErrorViewComponent implements OnInit, OnDestroy {
   }
 
   pageHandling(event: PageEvent) {
-    console.log(
-      this.sandBoxService.getSandboxErrorPaginatedList(this.sandboxId),
-    );
     console.log('HEY');
+    this.sandBoxService.getSandboxErrorPaginatedList(this.sandboxId).then(
+      (value) => {
+        console.log(JSON.stringify(value.content[0], null, 2));
+      },
+      (value) => console.log(value.pagination + 'failure'),
+    );
   }
 }

@@ -31,6 +31,13 @@ export interface Trace {
   ts: number;
 }
 
+export interface errorTrace {
+  ctx: number;
+  data: any;
+  owner: string;
+  ts: number;
+}
+
 export interface StackTrace {
   name: string;
   owner: string;

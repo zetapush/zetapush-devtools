@@ -65,7 +65,7 @@ export class SandboxService {
     return services;
   }
 
-  // retourne un json du retour pour la requête faite ?
+  // retourne une promesse de json du retour pour la requête faite ?
   async getSandboxErrorPaginatedList(sandboxId: string, page = 0) {
     const servers = await this.servers(sandboxId);
     const server = shuffle(servers); //?
@@ -104,7 +104,6 @@ export class SandboxService {
       credentials: 'include',
     });
     const { servers } = await response.json();
-    console.log('--- serveur : ---');
     this.logger.log('DebugStatus::servers', servers);
 
     return servers as string[];
