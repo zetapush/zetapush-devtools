@@ -8,4 +8,5 @@ export class TreeNode {
   type: string;
   number: number;
   owner: string;
+  error?: boolean;
 }

@@ -6,7 +6,7 @@
         <td>{{node.type}}</td>
         <td>
           <zp-lazy-json *ngIf="node.type == 'MS'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
-          <zp-lazy-json *ngIf="node.type == 'ME'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
+          <zp-lazy-json *ngIf="node.type == 'ME'" [value]="node.data" [placeholder]="node.name" [ngClass]="{'ERROR': node.error == true}"></zp-lazy-json>
           <zp-lazy-json *ngIf="node.type == 'USR'" [value]="node.data"></zp-lazy-json>
           <pre *ngIf="node.type == 'CMT'">{{node.data}}</pre>
         </td>
@@ -29,7 +29,7 @@
           <td>{{node.type}}</td>
           <td>
             <zp-lazy-json *ngIf="node.type == 'MS'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
-            <zp-lazy-json *ngIf="node.type == 'ME'" [value]="node.data" [placeholder]="node.name"></zp-lazy-json>
+            <zp-lazy-json *ngIf="node.type == 'ME'" [value]="node.data" [placeholder]="node.name" [ngClass]="{'ERROR': node.error == true}"></zp-lazy-json>
             <zp-lazy-json *ngIf="node.type == 'USR'" [value]="node.data"></zp-lazy-json>
             <pre *ngIf="node.type == 'CMT'">{{node.data}}</pre>
           </td>

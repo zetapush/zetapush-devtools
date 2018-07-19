@@ -30,6 +30,7 @@ export interface Trace {
   level: TraceLevel;
   ts: number;
   indent?: number; //niveau d'indentation dans l'arbre
+  error?: boolean; // si la trace présente une erreur
 }
 
 export interface StackTrace {

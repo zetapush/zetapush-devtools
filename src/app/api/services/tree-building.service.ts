@@ -43,6 +43,7 @@ export class TreeBuilder {
     node.children = [];
     node.number = trace.n;
     node.owner = trace.owner;
+    node.error = trace.error;
 
     return node;
   }

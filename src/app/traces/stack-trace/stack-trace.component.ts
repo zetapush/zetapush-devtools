@@ -58,6 +58,7 @@ export class StackTraceComponent {
     try {
       this.traceId = this.traces[0].ctx;
       this.traceOwner = this.traces[0].owner;
+      this.errorCheck(this.traces);
     } catch {}
   }
 
@@ -71,5 +72,16 @@ export class StackTraceComponent {
 
   onNavigationClick(direction: string) {
     this.traceDirection.emit(direction);
+  }
+
+  errorCheck(traces: Trace[]): void {
+    traces.forEach((value) => {
+      value.error = false;
+      if (value.type == 'ME') {
+        if (value.data.errors.length) {
+          value.error = true;
+        }
+      }
+    });
   }
 }
