@@ -32,9 +32,10 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
         font-weight: bold;
         margin-top: 10px;
         padding-left: 0.5rem;
-      }
-      .Filter {
-        padding-right: 0.25rem;
+
+        .Filter {
+          padding-right: 0.25rem;
+        }
       }
     `,
   ],
@@ -52,7 +53,6 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
           <mat-icon>list</mat-icon>List
         </mat-button-toggle>
       </mat-button-toggle-group>
-
     </form>
   `,
 })
@@ -61,7 +61,7 @@ export class StackFilterComponent implements OnChanges {
 
   @Input() types: ViewTypeFilter[];
 
-  @Output() filteredTraces = new EventEmitter<ViewTypeFilter[]>(); // the old one, by Gregory
+  @Output() filteredTraces = new EventEmitter<ViewTypeFilter[]>();
   @Output() filteredDisplay = new EventEmitter();
 
   ngOnChanges() {}
