@@ -9,7 +9,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 // Components
 import { DebugFormComponent } from './debug-form/debug-form.component';
-import { StackFilterComponent } from './stack-filter/stack-filter.component';
 import { RedirectViewComponent } from './redirect-view/redirect-view.component';
 import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -20,7 +19,6 @@ import { ScrollGlueDirective } from './scroll-glue/scroll-glue.directive';
 
 const COMPONENTS = [
   DebugFormComponent,
-  StackFilterComponent,
   RedirectViewComponent,
   ScrollGlueDirective,
   HeaderComponent,
