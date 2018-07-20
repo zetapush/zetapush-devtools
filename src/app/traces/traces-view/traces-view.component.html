@@ -24,6 +24,7 @@
       <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
     </button>
   </mat-toolbar>
+  
   <mat-table #table [dataSource]="source" class="Table">
     <!-- Ctx Column -->
     <ng-container matColumnDef="ctx">
