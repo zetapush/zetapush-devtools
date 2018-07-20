@@ -10,7 +10,6 @@
           <zp-lazy-json *ngIf="node.type == 'USR'" [value]="node.data"></zp-lazy-json>
           <pre *ngIf="node.type == 'CMT'">{{node.data}}</pre>
         </td>
-        <td>{{node.owner}}</td>
       </tr>
     </li>
   </mat-tree-node>
@@ -33,7 +32,6 @@
             <zp-lazy-json *ngIf="node.type == 'USR'" [value]="node.data"></zp-lazy-json>
             <pre *ngIf="node.type == 'CMT'">{{node.data}}</pre>
           </td>
-          <td>{{node.owner}}</td>
         </tr>
       </div>
       <ul [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)">
