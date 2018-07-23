@@ -35,6 +35,8 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { map } from 'rxjs/operators/map';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
+
+// Material
 import {
   MatTable,
   MatPaginator,
@@ -42,10 +44,17 @@ import {
   MatTableDataSource,
 } from '@angular/material';
 
+// Animation
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
+
 /** TODO
- * remettre clear click + filtering
- * gerer la pagination => obtenir le nombre de trace au total
- * traces clickables pour obtenir les details
+ * avoir des pretty traces clickables
  * css
  */
 
@@ -53,6 +62,16 @@ import {
   selector: 'zp-error-view',
   templateUrl: './error-view.component.html',
   styleUrls: ['./error-view.component.scss'],
+  animations: [
+    trigger('expendRow', [
+      state('collapsed', style({ display: 'none' })),
+      state('expanded', style({ display: 'flex', backgroundColor: 'red' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+      ),
+    ]),
+  ],
 })
 export class ErrorViewComponent implements OnInit {
   // guard variables
@@ -64,7 +83,9 @@ export class ErrorViewComponent implements OnInit {
   dataSource: errorTrace[] = [];
   @ViewChild(MatTable) table: MatTable<any>;
   // Pagination
-  errorLength: number = 0;
+  nbErrors: number = 999;
+  // Filter
+  filteredSource: errorTrace[] = [];
 
   traceCounter: number = 1;
 
@@ -106,21 +127,8 @@ export class ErrorViewComponent implements OnInit {
           this.dataSource.push(this.buildTrace(element));
         });
       });
+    this.filteredSource = this.dataSource;
     this.table.renderRows();
-  }
-
-  ngAfterContentInit() {
-    let nbError: number = 0;
-    do {
-      this.sandBoxService
-        .getSandboxErrorPaginatedList(this.sandboxId)
-        .then((value) => {
-          console.log(value.length);
-          nbError = value.length;
-          this.errorLength += value.length;
-        });
-      console.log('Hey');
-    } while (nbError == 20);
   }
 
   // function to build an errorTrace from the traces that produces the sandBox service via getSandboxErrorPaginatedList
@@ -130,12 +138,15 @@ export class ErrorViewComponent implements OnInit {
       code: error.error.code,
       owner: error.userId,
       ts: error.timestamp,
+      details: error,
+      isExpanded: false,
     };
     this.traceCounter++;
     return trace;
   }
 
   async onChangePagination(event: PageEvent) {
+    this.dataSource = [];
     await this.sandBoxService
       .getSandboxErrorPaginatedList(this.sandboxId, event.pageIndex)
       .then((value) => {
@@ -143,23 +154,24 @@ export class ErrorViewComponent implements OnInit {
           this.dataSource.push(this.buildTrace(element));
         });
       });
+    this.filteredSource = this.dataSource;
     this.table.renderRows();
   }
 
-  onClearClick() {
-    console.log(this.getErrorPaginatedList(0));
+  onCollapseClick() {
+    this.dataSource.map((value) => {
+      value.isExpanded = false;
+    });
   }
 
-  async getErrorPaginatedList(page: number) {
-    await this.sandBoxService.getSandboxErrorPaginatedList(this.sandboxId).then(
-      (value) => {
-        return value;
-      },
-      (value) => {
-        console.log(
-          'ErrorViewComponent::getErrorPaginatedList : impossible to resolve promise',
+  onFiltering(filter: string) {
+    this.filteredSource = this.dataSource;
+    this.filteredSource = !filter
+      ? this.filteredSource
+      : this.filteredSource.filter(
+          (value) =>
+            value.code.toLowerCase().includes(filter.trim().toLowerCase()) ||
+            value.owner.toLowerCase().includes(filter.trim().toLowerCase()),
         );
-      },
-    );
   }
 }

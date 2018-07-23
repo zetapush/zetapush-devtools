@@ -65,7 +65,7 @@ export class SandboxService {
     return services;
   }
 
-  // retourne une promesse de json du retour pour la requête faite ?
+  // retourne une promesse de json du retour pour la requête faite
   async getSandboxErrorPaginatedList(sandboxId: string, page = 0) {
     const servers = await this.servers(sandboxId);
     const server = shuffle(servers); //?
@@ -93,7 +93,6 @@ export class SandboxService {
     return { content, pagination };
   }
 
-  // go chercher une connexion avec la sandbox d'Id donné en param ?
   async servers(sandboxId: string): Promise<string[]> {
     const credentials = this.preferences.getCredentials();
     const url = getSecureUrl(

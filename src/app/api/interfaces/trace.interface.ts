@@ -34,8 +34,10 @@ export interface Trace {
 export interface errorTrace {
   ctx: number;
   code: string;
+  details: string;
   owner: string;
   ts: number;
+  isExpanded?: boolean;
 }
 
 export interface StackTrace {
