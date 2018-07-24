@@ -146,6 +146,9 @@ export class ErrorViewComponent implements OnInit {
   }
 
   async onChangePagination(event: PageEvent) {
+    if (event.pageIndex < event.previousPageIndex) {
+      this.traceCounter = this.traceCounter - 40;
+    }
     this.dataSource = [];
     await this.sandBoxService
       .getSandboxErrorPaginatedList(this.sandboxId, event.pageIndex)

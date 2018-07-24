@@ -20,8 +20,8 @@
     <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
     </mat-form-field>
     <span class="Spacer"></span>
-    <button mat-icon-button matTooltip="Clear all the traces" matTooltipPosition="before">
-      <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
+    <button mat-icon-button matTooltip="Clear all the traces" matTooltipPosition="before" (click)="onClearClick()">
+      <mat-icon aria-label="Clear trace list">clear</mat-icon>
     </button>
   </mat-toolbar>
   
