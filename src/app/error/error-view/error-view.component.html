@@ -53,8 +53,8 @@
 
     <!-- expendable row, which is one column that spans accross all the columns -->
     <ng-container matColumnDef="expandedDetails">
-      <mat-cell *matCellDef="let row" [attr.colspan]="columns.length" class="row-details">
-        <div [@expendRow]="row.isExpanded ? 'expanded' : 'collapsed'">
+      <mat-cell *matCellDef="let row" [attr.colspan]="columns.length" class="row-details" [@expendRow]="row.isExpanded ? 'expanded' : 'collapsed'">
+        <div>
           <pre>{{row.details | json}}</pre>
         </div>
       </mat-cell>

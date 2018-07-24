@@ -61,11 +61,14 @@ import {
 @Component({
   selector: 'zp-error-view',
   templateUrl: './error-view.component.html',
-  styleUrls: ['./error-view.component.scss'],
+  styleUrls: ['./error-view.component.scss', './error-view.component.css'],
   animations: [
     trigger('expendRow', [
-      state('collapsed', style({ display: 'none' })),
-      state('expanded', style({ display: 'flex', backgroundColor: 'red' })),
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', display: 'none' }),
+      ),
+      state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
