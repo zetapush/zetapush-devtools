@@ -41,3 +41,7 @@
 .Cell--Code {
   font-weight: bold;
 }
+
+mat-row.expandable-row:not(.expanded) {
+  min-height: 0;
+}

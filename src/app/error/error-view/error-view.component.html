@@ -61,7 +61,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: columns;" class="Table__Row" (click)="row.isExpanded = !row.isExpanded"></mat-row>
+    <mat-row *matRowDef="let row; columns: columns;" class="Table__Row" (click)="row.isExpanded = !row.isExpanded" [ngClass]="{'expanded': row.isExpanded}"></mat-row>
 
     <!-- row definition for the expandable row -->
     <mat-row *matRowDef="let row; columns: ['expandedDetails']" class="expandable-row"></mat-row>
