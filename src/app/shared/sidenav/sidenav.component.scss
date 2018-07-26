@@ -32,6 +32,10 @@
       font-size: 16px;
       cursor: pointer;
 
+      &.active .mat-line {
+        text-decoration: underline;
+      }
+
       &.debug {
         color: #f1452a;
         &.active,

@@ -41,7 +41,6 @@ const routes: Routes = [
   {
     path: 'error',
     canActivate: [AuthGuard],
-    canDeactivate: [CanLeaveViewGuard],
     loadChildren: './error/error.module#ErrorModule',
   },
 ];

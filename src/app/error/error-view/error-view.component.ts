@@ -80,17 +80,15 @@ export class ErrorViewComponent implements OnInit {
   // guard variables
   sandboxId: string;
   services: string[] = [];
-  initialized = false;
   // table variables
   columns = ['ctx', 'code', 'owner', 'time'];
   dataSource: errorTrace[] = [];
   @ViewChild(MatTable) table: MatTable<any>;
   // Pagination
-  nbErrors: number = 999;
+  nbErrors = 999;
   // Filter
   filteredSource: errorTrace[] = [];
-
-  traceCounter: number = 1;
+  traceCounter = 1;
 
   constructor(
     private preferences: PreferencesStorage,
@@ -107,18 +105,8 @@ export class ErrorViewComponent implements OnInit {
       )
       .subscribe(([params, data]) => {
         this.logger.log('ErrorViewComponent::route', params, data);
-        if (this.initialized) {
-          guard.canDeactivate().then((can) => {
-            if (can) {
-              this.sandboxId = params.sandboxId;
-              this.services = data.services;
-            }
-          });
-        } else {
-          this.initialized = true;
-          this.sandboxId = params.sandboxId;
-          this.services = data.services;
-        }
+        this.sandboxId = params.sandboxId;
+        this.services = data.services;
       });
   }
 
