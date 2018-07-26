@@ -64,7 +64,7 @@ export class ErrorViewComponent implements OnInit {
   dataSource: errorTrace[] = [];
   @ViewChild(MatTable) table: MatTable<any>;
   // Pagination
-  nbErrors = 999;
+  nbErrors = 500;
   // Filter
   filteredSource: errorTrace[] = [];
   traceCounter = 1;

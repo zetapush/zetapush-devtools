@@ -68,7 +68,7 @@ export class SandboxService {
   // retourne une promesse de json du retour pour la requête faite
   async getSandboxErrorPaginatedList(sandboxId: string, page = 0) {
     const servers = await this.servers(sandboxId);
-    const server = shuffle(servers); //?
+    const server = shuffle(servers);
 
     const url = `${getSecureUrl(
       `${server}/rest/b2b/errors/${sandboxId}`,
