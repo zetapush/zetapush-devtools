@@ -11,7 +11,9 @@
   border: 1px dashed rgba(0, 0, 0, 0.12);
   overflow-y: scroll;
 }
-
+.Table__Row {
+  cursor: pointer;
+}
 .Container--Sidenav {
   height: 100vh;
 
