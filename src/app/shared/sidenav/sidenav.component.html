@@ -7,16 +7,19 @@
         <mat-list-item *ngFor="let sandbox of sandboxes" [ngClass]="{'debug': sandbox.debug, 'active': isSandboxActive(sandbox) }">
           <p mat-line>{{ sandbox.name }}</p>
           <mat-icon mat-list-icon
+            routerLinkActive="Icon--Active"
             [routerLink]="['traces', sandbox.businessId]"
             matTooltip="Debug active"
             matTooltipPosition="after"
             [matTooltipDisabled]="!sandbox.debug">view_list</mat-icon>
           <mat-icon mat-list-icon
+            routerLinkActive="Icon--Active"
             [routerLink]="['terminal', sandbox.businessId]"
             matTooltip="Debug active"
             matTooltipPosition="after"
             [matTooltipDisabled]="!sandbox.debug">dvr</mat-icon>
           <mat-icon mat-list-icon
+            routerLinkActive="Icon--Active"
             [routerLink]="['error', sandbox.businessId]"
             matTooltip="Debug active"
             matTooltipPosition="after"

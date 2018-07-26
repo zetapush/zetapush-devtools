@@ -1,48 +1,27 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 // Routing
 import { ActivatedRoute } from '@angular/router';
 
 // Utils
-import { Authentication, Client, services as SERVICES } from 'zetapush-js';
-import { saveAs } from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
-import { DataSource } from '@angular/cdk/collections';
 
 // Interfaces
-import {
-  Trace,
-  TraceCompletion,
-  parseTraceLocation,
-  TraceType,
-  errorTrace,
-} from '../../api/interfaces/trace.interface';
+import { errorTrace } from '../../api/interfaces/trace.interface';
 
 // Services
-import { PreferencesStorage } from '../../api/services/preferences-storage.service';
-import { SandboxService } from '../../api/services/sandbox.service';
 
 // Guards
-import { CanLeaveViewGuard } from '../../api/guards/canleaveview.guard';
+import { SandboxService } from '../../api/services/sandbox.service';
 
 // RxJS
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import { combineLatest as combine } from 'rxjs';
-import { combineLatest } from 'rxjs/operators/combineLatest';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { map } from 'rxjs/operators/map';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
 
 // Material
-import {
-  MatTable,
-  MatPaginator,
-  PageEvent,
-  MatTableDataSource,
-} from '@angular/material';
+import { MatTable, PageEvent } from '@angular/material';
 
 // Animation
 import {
@@ -91,11 +70,9 @@ export class ErrorViewComponent implements OnInit {
   traceCounter = 1;
 
   constructor(
-    private preferences: PreferencesStorage,
-    private route: ActivatedRoute,
     private logger: NGXLogger,
-    private guard: CanLeaveViewGuard,
     private sandBoxService: SandboxService,
+    route: ActivatedRoute,
   ) {
     combine(route.params, route.data)
       .pipe(
