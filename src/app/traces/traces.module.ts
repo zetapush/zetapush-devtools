@@ -10,12 +10,10 @@ import { TracesRoutingModule } from './traces-routing.module';
 
 // Components
 import { TracesViewComponent } from './traces-view/traces-view.component';
-import { StackTraceComponent } from './stack-trace/stack-trace.component';
-import { LazyJsonComponent } from './lazy-json/lazy-json.component';
 
 @NgModule({
   imports: [CommonModule, TracesRoutingModule, UiModule, SharedModule],
-  declarations: [TracesViewComponent, StackTraceComponent, LazyJsonComponent],
+  declarations: [TracesViewComponent],
   providers: [],
 })
 export class TracesModule {}

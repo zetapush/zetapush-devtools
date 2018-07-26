@@ -16,3 +16,13 @@ const FORCE_HTTPS =
 export const getSecureUrl = (url, forceHttps = FORCE_HTTPS) => {
   return forceHttps ? url.replace(HTTP_PATTERN, `${HTTPS_PROTOCOL}//`) : url;
 };
+
+/**
+ * @access private
+ * @param {Array<Object>} list
+ * @return {Object}
+ */
+export const shuffle = (list) => {
+  const index = Math.floor(Math.random() * list.length);
+  return list[index];
+};

@@ -2,7 +2,17 @@
   <h1>
     <mat-icon class="back-link" mat-list-icon [routerLink]="['/dashboard']">arrow_back</mat-icon>
     <span>Terminal for {{ sandboxId }}</span>
-    <a mat-raised-button [routerLink]="['/traces', sandboxId]" color="primary"><mat-icon>folder</mat-icon> Table View</a>
+    <mat-button-toggle-group #group="matButtonToggleGroup">
+      <mat-button-toggle [routerLink]="['/traces', sandboxId]">
+        <mat-icon>view_list</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle disabled>
+        <mat-icon>dvr</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle [routerLink]="['/error', sandboxId]">
+        <mat-icon>error</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </h1>
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
   <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>

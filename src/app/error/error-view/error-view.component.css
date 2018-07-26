@@ -1,0 +1,19 @@
+mat-paginator {
+  position: fixed;
+  bottom: 0;
+  box-shadow: 6px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.Table__Row {
+  border-bottom-width: 0;
+}
+
+.row-details {
+  overflow: hidden;
+  display: flex;
+}
+
+ng-container {
+  /* inutile */
+  cursor: pointer;
+}
