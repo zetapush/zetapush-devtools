@@ -14,58 +14,46 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
   </h1>
+  <div class="Loadable" [ngClass]="{'Loading': loading}">
+    <mat-toolbar>
+      <mat-form-field class="Filter">
+        <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+      <span class="Spacer"></span>
+      <button mat-icon-button matTooltip="Collapse all the traces" matTooltipPosition="before" (click)="onCollapseClick()">
+        <mat-icon aria-label="Collapse trace list">import_export</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-table #table [dataSource]="filteredSource" class="Table" multiTemplateDataRows>
+      <!-- ts Column -->
+      <ng-container matColumnDef="time">
+        <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Ts"> time </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.ts | date:'HH:mm:SS'}} </mat-cell>
+      </ng-container>
+      <!-- Code Column -->
+      <ng-container matColumnDef="code">
+        <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Code"> Code </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="Cell--Code"> {{row.code}} </mat-cell>
+      </ng-container>
+      <!-- owner Column -->
+      <ng-container matColumnDef="owner">
+        <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Owner"> Owner </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
+      </ng-container>
+      <!-- expendable row, which is one column that spans accross all the columns -->
+      <ng-container matColumnDef="expandedDetails">
+        <mat-cell *matCellDef="let row" [attr.colspan]="columns.length" class="row-details" [@expendRow]="row.isExpanded ? 'expanded' : 'collapsed'">
+          <div>
+            <pre>{{row.details | json}}</pre>
+          </div>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;" class="Table__Row" (click)="row.isExpanded = !row.isExpanded" [ngClass]="{'expanded': row.isExpanded}"></mat-row>
+      <!-- row definition for the expandable row -->
+      <mat-row *matRowDef="let row; columns: ['expandedDetails']" class="expandable-row"></mat-row>
+    </mat-table>
+    <mat-paginator [length]=nbErrors [pageSize]="20" (page)="onChangePagination($event)"></mat-paginator>
+  </div>
 
-  <mat-toolbar>
-    <mat-form-field class="Filter">
-      <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
-    </mat-form-field>
-    <span class="Spacer"></span>
-    <button mat-icon-button matTooltip="Collapse all the traces" matTooltipPosition="before" (click)="onCollapseClick()">
-      <mat-icon aria-label="Collapse trace list">import_export</mat-icon>
-    </button>
-  </mat-toolbar>
-
-  <mat-table #table [dataSource]="filteredSource" class="Table" multiTemplateDataRows>
-
-    <!-- ctx Column -->
-    <ng-container matColumnDef="ctx">
-      <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Ctx"> ctx </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.ctx}} </mat-cell>
-    </ng-container>
-
-    <!-- Code Column -->
-    <ng-container matColumnDef="code">
-      <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Code"> Code </mat-header-cell>
-      <mat-cell *matCellDef="let row" class="Cell--Code"> {{row.code}} </mat-cell>
-    </ng-container>
-
-    <!-- owner Column -->
-    <ng-container matColumnDef="owner">
-      <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Owner"> Owner </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
-    </ng-container>
-
-    <!-- ts Column -->
-    <ng-container matColumnDef="time">
-      <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Ts"> time </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.ts | date:'HH:mm:SS'}} </mat-cell>
-    </ng-container>
-
-    <!-- expendable row, which is one column that spans accross all the columns -->
-    <ng-container matColumnDef="expandedDetails">
-      <mat-cell *matCellDef="let row" [attr.colspan]="columns.length" class="row-details" [@expendRow]="row.isExpanded ? 'expanded' : 'collapsed'">
-        <div>
-          <pre>{{row.details | json}}</pre>
-        </div>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: columns;" class="Table__Row" (click)="row.isExpanded = !row.isExpanded" [ngClass]="{'expanded': row.isExpanded}"></mat-row>
-
-    <!-- row definition for the expandable row -->
-    <mat-row *matRowDef="let row; columns: ['expandedDetails']" class="expandable-row"></mat-row>
-
-  </mat-table>
-  <mat-paginator [length]=nbErrors [pageSize]="20" (page)="onChangePagination($event)"></mat-paginator>
 </mat-sidenav-container>
