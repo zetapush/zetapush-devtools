@@ -7,9 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 
 // Interfaces
-import { errorTrace } from '../../api/interfaces/trace.interface';
-
-// Services
+import { ErrorTrace } from '../../api/interfaces/trace.interface';
 
 // Guards
 import { SandboxService } from '../../api/services/sandbox.service';
@@ -55,23 +53,34 @@ import {
     ]),
   ],
 })
-export class ErrorViewComponent implements OnInit {
+export class ErrorViewComponent {
   // guard variables
   sandboxId: string;
-  services: string[] = [];
   // table variables
-  columns = ['ctx', 'code', 'owner', 'time'];
-  dataSource: errorTrace[] = [];
+  columns = ['time', 'code', 'owner'];
+  dataSource: ErrorTrace[] = [];
   @ViewChild(MatTable) table: MatTable<any>;
   // Pagination
   nbErrors = 500;
   // Filter
-  filteredSource: errorTrace[] = [];
-  traceCounter = 1;
+  filteredSource: ErrorTrace[] = [];
+  // Loader
+  loading = false;
+
+  // function to build an errorTrace from the traces that produces the sandBox service via getSandboxErrorPaginatedList
+  private static format(error): ErrorTrace {
+    return {
+      code: error.error.code,
+      owner: error.userId,
+      ts: error.timestamp,
+      details: error,
+      isExpanded: false,
+    };
+  }
 
   constructor(
     private logger: NGXLogger,
-    private sandBoxService: SandboxService,
+    private api: SandboxService,
     route: ActivatedRoute,
   ) {
     combine(route.params, route.data)
@@ -80,59 +89,43 @@ export class ErrorViewComponent implements OnInit {
           (current, next) => current[0].sandboxId === next[0].sandboxId,
         ),
       )
-      .subscribe(([params, data]) => {
+      .subscribe(async ([params, data]) => {
         this.logger.log('ErrorViewComponent::route', params, data);
         this.sandboxId = params.sandboxId;
-        this.services = data.services;
+        this.setDataSource(await this.getSandboxErrorPaginatedList());
       });
   }
 
-  async ngOnInit() {
-    await this.sandBoxService
-      .getSandboxErrorPaginatedList(this.sandboxId)
-      .then((value) => {
-        value.content.forEach((element) => {
-          this.dataSource.push(this.buildTrace(element));
-        });
-      });
-    this.filteredSource = this.dataSource;
+  private async getSandboxErrorPaginatedList(
+    pageIndex = 0,
+  ): Promise<ErrorTrace[]> {
+    this.loading = true;
+    const errors = this.api
+      .getSandboxErrorPaginatedList(this.sandboxId, pageIndex)
+      .then((value) => value.content.map(ErrorViewComponent.format));
+    this.loading = false;
+    return errors;
+  }
+
+  private setDataSource(errors: ErrorTrace[]): void {
+    this.dataSource = errors;
+    this.filteredSource = errors;
     this.table.renderRows();
-  }
-
-  // function to build an errorTrace from the traces that produces the sandBox service via getSandboxErrorPaginatedList
-  buildTrace(error): errorTrace {
-    const trace: errorTrace = {
-      ctx: this.traceCounter,
-      code: error.error.code,
-      owner: error.userId,
-      ts: error.timestamp,
-      details: error,
-      isExpanded: false,
-    };
-    this.traceCounter++;
-    return trace;
   }
 
   async onChangePagination(event: PageEvent) {
-    if (event.pageIndex < event.previousPageIndex) {
-      this.traceCounter = this.traceCounter - 40;
-    }
-    this.dataSource = [];
-    await this.sandBoxService
-      .getSandboxErrorPaginatedList(this.sandboxId, event.pageIndex)
-      .then((value) => {
-        value.content.forEach((element) => {
-          this.dataSource.push(this.buildTrace(element));
-        });
-      });
-    this.filteredSource = this.dataSource;
-    this.table.renderRows();
+    this.setDataSource(
+      await this.getSandboxErrorPaginatedList(event.pageIndex),
+    );
   }
 
   onCollapseClick() {
-    this.dataSource.map((value) => {
-      value.isExpanded = false;
-    });
+    this.setDataSource(
+      this.dataSource.map((error) => ({
+        ...error,
+        isExpanded: false,
+      })),
+    );
   }
 
   onFiltering(filter: string) {

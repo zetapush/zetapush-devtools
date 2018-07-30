@@ -31,8 +31,7 @@ export interface Trace {
   ts: number;
 }
 
-export interface errorTrace {
-  ctx: number;
+export interface ErrorTrace {
   code: string;
   details: string;
   owner: string;
