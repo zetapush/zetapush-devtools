@@ -9,6 +9,9 @@ import { MatSnackBar } from '@angular/material';
       <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()">
         <mat-icon aria-label="Modez, copy dat json!">file_copy</mat-icon>
       </button>
+      <button mat-icon-button *ngIf="show" (click)="onFoldClick()">
+        <mat-icon aria-label="Modez, copy dat json!">import_export</mat-icon>
+      </button>
       <button *ngIf="!show" mat-button (click)="onLazyClick()">
         <mat-icon>visibility</mat-icon>
         <span>{{placeholder}}</span>
@@ -41,6 +44,10 @@ export class LazyJsonComponent {
 
   onLazyClick() {
     this.show = true;
+  }
+
+  onFoldClick() {
+    this.show = false;
   }
 
   onThrowSnackbar() {
