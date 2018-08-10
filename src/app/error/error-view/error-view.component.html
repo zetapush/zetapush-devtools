@@ -1,59 +1,7 @@
-<mat-sidenav-container class="Container--Sidenav">
-  <h1>
-    <mat-icon mat-list-icon [routerLink]="['/dashboard']">arrow_back</mat-icon>
-    <span>Errors for {{sandboxId}}</span>
-    <mat-button-toggle-group #group="matButtonToggleGroup">
-      <mat-button-toggle [routerLink]="['/traces', sandboxId]">
-        <mat-icon>view_list</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle [routerLink]="['/terminal', sandboxId]">
-        <mat-icon>dvr</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle disabled>
-        <mat-icon>error</mat-icon>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </h1>
-  <div class="Loadable" [ngClass]="{'Loading': loading}">
-    <mat-toolbar>
-      <mat-form-field class="Filter">
-        <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
-      </mat-form-field>
-      <span class="Spacer"></span>
-      <button mat-icon-button matTooltip="Collapse all the traces" matTooltipPosition="before" (click)="onCollapseClick()">
-        <mat-icon aria-label="Collapse trace list">import_export</mat-icon>
-      </button>
-    </mat-toolbar>
-    <mat-table #table [dataSource]="filteredSource" class="Table" multiTemplateDataRows>
-      <!-- ts Column -->
-      <ng-container matColumnDef="time">
-        <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Ts"> time </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.ts | date:'HH:mm:SS'}} </mat-cell>
-      </ng-container>
-      <!-- Code Column -->
-      <ng-container matColumnDef="code">
-        <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Code"> Code </mat-header-cell>
-        <mat-cell *matCellDef="let row" class="Cell--Code"> {{row.code}} </mat-cell>
-      </ng-container>
-      <!-- owner Column -->
-      <ng-container matColumnDef="owner">
-        <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Owner"> Owner </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.owner}} </mat-cell>
-      </ng-container>
-      <!-- expendable row, which is one column that spans accross all the columns -->
-      <ng-container matColumnDef="expandedDetails">
-        <mat-cell *matCellDef="let row" [attr.colspan]="columns.length" class="row-details" [@expendRow]="row.isExpanded ? 'expanded' : 'collapsed'">
-          <div>
-            <pre>{{row.details | json}}</pre>
-          </div>
-        </mat-cell>
-      </ng-container>
-      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns;" class="Table__Row" (click)="row.isExpanded = !row.isExpanded" [ngClass]="{'expanded': row.isExpanded}"></mat-row>
-      <!-- row definition for the expandable row -->
-      <mat-row *matRowDef="let row; columns: ['expandedDetails']" class="expandable-row"></mat-row>
-    </mat-table>
-    <mat-paginator [length]=nbErrors [pageSize]="20" (page)="onChangePagination($event)"></mat-paginator>
-  </div>
-
-</mat-sidenav-container>
+<p>error view works!</p>
+<!-- <tr>
+  <td>{{traceDisplay.ctx}}</td>
+  <td>{{traceDispay.owner}}</td>
+</tr> -->
+<iframe src="http://localhost:5601/app/kibana#/dashboard/21800460-962e-11e8-b5f4-bf9eccb7a1bc?embed=true&_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now%2Fw,interval:auto,mode:quick,timezone:Europe%2FBerlin,to:now%2Fw))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!t,hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:14,i:'2',w:21,x:27,y:0),id:c347c5d0-9624-11e8-b5f4-bf9eccb7a1bc,panelIndex:'2',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:14,i:'3',w:18,x:0,y:0),id:'54d27940-962b-11e8-b5f4-bf9eccb7a1bc',panelIndex:'3',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:14,i:'4',w:22,x:0,y:14),id:'6786ce30-962e-11e8-b5f4-bf9eccb7a1bc',panelIndex:'4',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:15,i:'5',w:24,x:24,y:14),id:'284092f0-962f-11e8-b5f4-bf9eccb7a1bc',panelIndex:'5',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:15,i:'6',w:24,x:0,y:28),id:'59de2480-962f-11e8-b5f4-bf9eccb7a1bc',panelIndex:'6',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:15,i:'7',w:24,x:24,y:29),id:bfa01cc0-9633-11e8-b5f4-bf9eccb7a1bc,panelIndex:'7',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:15,i:'8',w:24,x:0,y:43),id:e0bdd680-9639-11e8-b5f4-bf9eccb7a1bc,panelIndex:'8',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:13,i:'9',w:9,x:18,y:0),id:b2019610-9701-11e8-a8c1-37d9b3939d77,panelIndex:'9',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:15,i:'10',w:24,x:0,y:58),id:'86fa1c10-9a41-11e8-b26e-6d511a7d6431',panelIndex:'10',type:visualization,version:'6.3.1'),(embeddableConfig:(),gridData:(h:15,i:'11',w:24,x:24,y:44),id:faebceb0-9a4c-11e8-b26e-6d511a7d6431,panelIndex:'11',type:visualization,version:'6.3.1')),query:(language:lucene,query:''),timeRestore:!t,title:'un+dashboard+pour+les+gouverner+tous!!',viewMode:view)" height="600" width="800"></iframe>
+<iframe src="http://localhost:5601/app/kibana#/dashboard/22d17ed0-9bb9-11e8-bf72-df15832160d5?embed=true&_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now%2Fw,interval:auto,mode:quick,timezone:Europe%2FBerlin,to:now%2Fw))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!t,hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:15,i:'1',w:24,x:0,y:0),id:c347c5d0-9624-11e8-b5f4-bf9eccb7a1bc,panelIndex:'1',type:visualization,version:'6.3.1')),query:(language:lucene,query:''),timeRestore:!f,title:'dashboard+barchart-owner',viewMode:edit)" height="600" width="800"></iframe>
