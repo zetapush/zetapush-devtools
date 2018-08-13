@@ -25,6 +25,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { map } from 'rxjs/operators/map';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
+import { forEach } from '@angular/router/src/utils/collection';
 
 export class TraceDataSource extends DataSource<Trace> {
   private _filter = new BehaviorSubject<string>('');
@@ -50,8 +51,7 @@ export class TraceDataSource extends DataSource<Trace> {
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Trace[]> {
-    const changes = [this._renderData];
-    return Observable.merge(...changes);
+    return this._renderData;
   }
 
   disconnect() {}
@@ -174,6 +174,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
             } catch (e) {
               this.logger.error(trace);
             }
+            this.setError(dictionnary);
             const traces = Array.from(dictionnary.entries())
               .map(([ctx, list]) =>
                 list
@@ -213,10 +214,29 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     // Enable subscription for all deployed services
     this.services.forEach((deploymentId) =>
       this.createTraceObservable(this.client, this.map, deploymentId).subscribe(
-        (traces) => this.subject.next(traces),
+        (traces) => {
+          this.subject.next(traces);
+        },
       ),
     );
   }
+
+  /** set every Trace error boolean to true or false whether the error array is non empty,
+   *  and if so, set the hasError attribute of the calling macro to true
+   */
+  setError(tracesToCheck: Map<number, Trace[]>) {
+    tracesToCheck.forEach((traceArray: Trace[], ctx: number) => {
+      traceArray[1].hasError = false;
+      traceArray.forEach((trace) => {
+        trace.error = false;
+        if (trace.type == 'ME' && trace.data.errors.length) {
+          trace.error = true;
+          traceArray[1].hasError = true;
+        }
+      });
+    });
+  }
+
   ngOnDestroy() {
     this.client.disconnect();
   }

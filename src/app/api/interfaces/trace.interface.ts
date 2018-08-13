@@ -29,6 +29,8 @@ export interface Trace {
   owner: string;
   level: TraceLevel;
   ts: number;
+  error?: boolean; //true if the macro ME has an non empty error array
+  hasError?: boolean; //true if the calling MS will generate errors
 }
 
 export interface ErrorTrace {
