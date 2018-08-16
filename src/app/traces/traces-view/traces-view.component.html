@@ -55,7 +55,7 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell class="HeaderCell HeaderCell--Name" *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
+      <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()" [ngClass]="{'ERROR': row.hasError == true}">
         {{row.data.name ? row.data.name : 'UNAVAILABLE'}}
       </mat-cell>
     </ng-container>
