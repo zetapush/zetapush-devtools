@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 // Feature modules
 import { UiModule } from '../ui.module';
+import { ClipboardModule } from 'ngx-clipboard';
 
 // Components
 import { DebugFormComponent } from './debug-form/debug-form.component';
@@ -32,7 +33,7 @@ const COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, UiModule, RouterModule],
+  imports: [CommonModule, FormsModule, UiModule, RouterModule, ClipboardModule],
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
 })
