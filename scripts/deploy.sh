@@ -12,7 +12,7 @@ if [ -f $file ]; then
 else
   mkdir -p ./archives
   echo "[LOG] Build application"
-  yarn run build --base-href=/
+  yarn run build --prod --base-href=/
   echo "[LOG] Inject revision in built ouput"
   echo $revision > ./dist/$project/revision.txt
   echo "[LOG] Package application"

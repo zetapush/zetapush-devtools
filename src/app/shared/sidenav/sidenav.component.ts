@@ -26,9 +26,9 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher,
     private sandboxService: SandboxService,
     private debugService: DebugStatusApi,
+    media: MediaMatcher,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -37,17 +37,16 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnInit() {
     this.getSandboxes();
-
     // Subscribe to the debug state change
     this.debugService.subject.subscribe((data) => {
-      for (let i = 0, length = this.sandboxes.length; i < length; i++) {
+      this.sandboxes.forEach((sandbox) => {
         if (
-          this.sandboxes[i].businessId === data.sandboxId &&
-          this.sandboxes[i].debug !== data.debug
+          sandbox.businessId === data.sandboxId &&
+          sandbox.debug !== data.debug
         ) {
-          this.sandboxes[i].debug = data.debug;
+          sandbox.debug = data.debug;
         }
-      }
+      });
     });
   }
 
@@ -91,5 +90,9 @@ export class SidenavComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
       }
     }
+  }
+
+  isSandboxActive(sandbox: Sandbox) {
+    return location.toString().indexOf(sandbox.businessId) > -1;
   }
 }

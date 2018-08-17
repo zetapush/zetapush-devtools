@@ -11,7 +11,9 @@
   border: 1px dashed rgba(0, 0, 0, 0.12);
   overflow-y: scroll;
 }
-
+.Table__Row {
+  cursor: pointer;
+}
 .Container--Sidenav {
   height: 100vh;
 
@@ -28,28 +30,20 @@
     }
   }
 }
-.Container--Sidenav mat-sidenav {
-  max-width: 75vw;
-  padding: 1rem;
-}
-.Container--Sidenav .mat-sidenav-content,
-.Container--Sidenav mat-sidenav {
+
+.Container--Sidenav .mat-sidenav-content {
   display: flex;
   overflow-y: scroll;
 }
-.HeaderCell--Name,
-.Cell--Name {
+.HeaderCell--Code,
+.Cell--Code {
   flex-grow: 2;
 }
-.Cell--Ctx,
-.Cell--Ts,
-.Cell--Name,
-.Cell--Owner {
-  cursor: pointer;
-}
-.Cell--Name {
+
+.Cell--Code {
   font-weight: bold;
 }
-.ERROR {
-  color: red;
+
+mat-row.expandable-row:not(.expanded) {
+  min-height: 0;
 }

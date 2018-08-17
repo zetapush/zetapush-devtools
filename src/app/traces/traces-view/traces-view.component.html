@@ -3,7 +3,17 @@
   <h1>
     <mat-icon mat-list-icon [routerLink]="['/dashboard']">arrow_back</mat-icon>
     <span>Trace for {{sandboxId}}</span>
-    <a mat-raised-button [routerLink]="['/terminal', sandboxId]" color="primary"><mat-icon>subtitles</mat-icon> Terminal View</a>
+    <mat-button-toggle-group #group="matButtonToggleGroup">
+      <mat-button-toggle disabled>
+        <mat-icon>view_list</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle [routerLink]="['/terminal', sandboxId]">
+        <mat-icon>dvr</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle [routerLink]="['/error', sandboxId]">
+        <mat-icon>error</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </h1>
   <!-- Filtres toggle -->
   <zp-debug-form [sandboxId]="sandboxId" [services]="services"></zp-debug-form>
@@ -13,12 +23,11 @@
     <input matInput (keyup)="onFiltering($event.target.value)" placeholder="Filter">
     </mat-form-field>
     <span class="Spacer"></span>
-    <button mat-icon-button>
-      <mat-icon aria-label="Clear trace list" (click)="onClearClick()">clear</mat-icon>
+    <button mat-icon-button matTooltip="Clear all the traces" matTooltipPosition="before" (click)="onClearClick()">
+      <mat-icon aria-label="Clear trace list">clear</mat-icon>
     </button>
   </mat-toolbar>
-
-  <!-- Table des traces-->
+  
   <mat-table #table [dataSource]="source" class="Table">
     <!-- Ctx Column -->
     <ng-container matColumnDef="ctx">
@@ -49,7 +58,7 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell class="HeaderCell HeaderCell--Name" *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
+      <mat-cell class="Cell Cell--Name" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()" [ngClass]="{'ERROR': row.hasError == true}">
         {{row.data.name ? row.data.name : 'UNAVAILABLE'}}
       </mat-cell>
     </ng-container>
@@ -66,6 +75,6 @@
   </mat-table>
 
   <mat-sidenav #sidenav mode="over" position="end">
-    <zp-stack-trace [traces]="selection" [navigationFwdDisabled]="navigationFwdDisabled" [navigationBwdDisabled]="navigationBwdDisabled" (traceDirection)="traceNavigate($event)"></zp-stack-trace>
+    <zp-stack-trace [traces]="selection"></zp-stack-trace>
   </mat-sidenav>
 </mat-sidenav-container>

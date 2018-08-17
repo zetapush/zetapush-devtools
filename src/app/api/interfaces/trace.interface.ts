@@ -30,7 +30,16 @@ export interface Trace {
   level: TraceLevel;
   ts: number;
   indent?: number; //niveau d'indentation dans l'arbre
-  error?: boolean; // si la trace présente une erreur
+  error?: boolean; //true if the macro ME has an non empty error array
+  hasError?: boolean; //true if the calling MS will generate errors
+}
+
+export interface ErrorTrace {
+  code: string;
+  details: string;
+  owner: string;
+  ts: number;
+  isExpanded?: boolean;
 }
 
 export interface StackTrace {

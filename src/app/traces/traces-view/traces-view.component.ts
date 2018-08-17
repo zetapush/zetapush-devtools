@@ -56,8 +56,7 @@ export class TraceDataSource extends DataSource<Trace> {
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Trace[]> {
-    const changes = [this._renderData];
-    return Observable.merge(...changes);
+    return this._renderData;
   }
 
   disconnect() {}
@@ -125,7 +124,6 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   selection: Trace[] = [];
   services: string[] = [];
   initialized = false;
-  trace: Trace; // last trace onwhich the user clicked on
   navigationBwdDisabled: boolean = false; //input variables for stack-trace component, disabling the navigation between traces
   navigationFwdDisabled: boolean = false;
 
@@ -185,6 +183,7 @@ export class TracesViewComponent implements OnDestroy, OnInit {
             } catch (e) {
               this.logger.error(trace);
             }
+            this.setError(dictionnary);
             const traces = Array.from(dictionnary.entries())
               .map(([ctx, list]) =>
                 list
@@ -224,10 +223,29 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     // Enable subscription for all deployed services
     this.services.forEach((deploymentId) =>
       this.createTraceObservable(this.client, this.map, deploymentId).subscribe(
-        (traces) => this.subject.next(traces),
+        (traces) => {
+          this.subject.next(traces);
+        },
       ),
     );
   }
+
+  /** set every Trace error boolean to true or false whether the error array is non empty,
+   *  and if so, set the hasError attribute of the calling macro to true
+   */
+  setError(tracesToCheck: Map<number, Trace[]>) {
+    tracesToCheck.forEach((traceArray: Trace[], ctx: number) => {
+      traceArray[1].hasError = false;
+      traceArray.forEach((trace) => {
+        trace.error = false;
+        if (trace.type == 'ME' && trace.data.errors.length) {
+          trace.error = true;
+          traceArray[1].hasError = true;
+        }
+      });
+    });
+  }
+
   ngOnDestroy() {
     this.client.disconnect();
   }
@@ -239,12 +257,10 @@ export class TracesViewComponent implements OnDestroy, OnInit {
     this.selection = null;
   }
   onShowClick(trace: Trace) {
-    this.trace = trace;
     this.logger.log('TraceViewComponent::onShowClick', trace);
     const traces = this.map.get(trace.ctx).filter((truthy) => truthy);
     this.logger.log('TraceViewComponent::onShowClick', traces);
     this.selection = traces;
-    this.setNavigationButton();
   }
   onDownloadClick(trace: Trace) {
     this.logger.log('TraceViewComponent::onDownloadClick', trace);
@@ -300,55 +316,5 @@ export class TracesViewComponent implements OnDestroy, OnInit {
   onFiltering(filterValue: string) {
     filterValue = filterValue.trim();
     this.source.filter = filterValue;
-  }
-
-  /** function triggered on a navigation arrow clic in stack-filter component;
-   * go and check the next value existing in the map of traces,
-   * sets the selection variable to what is to be displayed,
-   * and update the flags allowing or not navigation fwd/bwd*/
-  traceNavigate(direction: string) {
-    let idmin = this.trace.ctx,
-      idmax = this.trace.ctx;
-    Array.from(this.map).forEach((value) => {
-      if (idmin > value[0]) idmin = value[0];
-      if (idmax < value[0]) idmax = value[0];
-    });
-
-    let traces: Trace[];
-    if (direction === 'fwd') {
-      let i = 1;
-      while (!this.map.has(this.trace.ctx + i)) {
-        i++;
-      }
-      traces = this.map.get(this.trace.ctx + i).filter((truthy) => truthy);
-    } else if (direction === 'bwd') {
-      let i = 1;
-      while (!this.map.has(this.trace.ctx - i)) {
-        i++;
-      }
-      traces = this.map.get(this.trace.ctx - i).filter((truthy) => truthy);
-    }
-    this.logger.log('TraceViewComponent::onShowClick', traces);
-    this.selection = traces;
-    this.trace = traces[0];
-    this.setNavigationButton();
-  }
-
-  /** update the flags navigationFwdDisabled,navigationBwdDisabled  */
-  setNavigationButton() {
-    (this.navigationFwdDisabled = false), (this.navigationBwdDisabled = false);
-    let idmin = this.trace.ctx,
-      idmax = this.trace.ctx;
-    Array.from(this.map).forEach((value) => {
-      if (idmin > value[0]) idmin = value[0];
-      if (idmax < value[0]) idmax = value[0];
-    });
-
-    if (this.trace.ctx == idmin) {
-      this.navigationBwdDisabled = true;
-    }
-    if (this.trace.ctx == idmax) {
-      this.navigationFwdDisabled = true;
-    }
   }
 }

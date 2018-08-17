@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 // Feature modules
 import { UiModule } from '../ui.module';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ClipboardModule } from 'ngx-clipboard';
 
 // Components
 import { DebugFormComponent } from './debug-form/debug-form.component';
@@ -13,6 +13,7 @@ import { RedirectViewComponent } from './redirect-view/redirect-view.component';
 import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { PopupComponent } from './pop-up/popup.component';
+import { LazyJsonComponent } from './lazy-json/lazy-json.component';
 
 // Directives
 import { ScrollGlueDirective } from './scroll-glue/scroll-glue.directive';
@@ -24,16 +25,11 @@ const COMPONENTS = [
   HeaderComponent,
   SidenavComponent,
   PopupComponent,
+  LazyJsonComponent,
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    UiModule,
-    RouterModule,
-    MatButtonToggleModule,
-  ],
+  imports: [CommonModule, FormsModule, UiModule, RouterModule, ClipboardModule],
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
 })
