@@ -25,7 +25,7 @@ export class StackTraceComponent {
   @Input() traces: Trace[] = []; //données injectées par variable selection de trace-view
 
   filtered: Trace[] = [];
-  display: String = 'Tree';
+  display: String = 'List';
   types: ViewTypeFilter[] = [
     { label: 'MS', selected: true },
     { label: 'ME', selected: true },
