@@ -26,7 +26,6 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
           <th>N</th>
           <th>Type</th>
           <th>Content</th>
-          <th>Owner</th>
         </tr>
       </thead>
       <tbody>
@@ -39,7 +38,6 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
             <zp-lazy-json *ngIf="trace.type == 'USR'" [value]="trace.data"></zp-lazy-json>
             <pre *ngIf="trace.type == 'CMT'">{{trace.data}}</pre>
           </td>
-          <td>{{trace.owner}}</td>
         </tr>
       </tbody>
     </table>
