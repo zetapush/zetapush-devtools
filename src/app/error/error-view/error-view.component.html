@@ -44,7 +44,7 @@
       <ng-container matColumnDef="expandedDetails">
         <mat-cell *matCellDef="let row" [attr.colspan]="columns.length" class="row-details" [@expendRow]="row.isExpanded ? 'expanded' : 'collapsed'">
           <div>
-            <pre>{{row.details | json}}</pre>
+            <pre>{{row.details.error | json}}</pre>
           </div>
         </mat-cell>
       </ng-container>
