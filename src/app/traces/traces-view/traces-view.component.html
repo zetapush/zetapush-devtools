@@ -49,7 +49,7 @@
     <ng-container matColumnDef="ts">
       <mat-header-cell class="HeaderCell HeaderCell--Ts" *matHeaderCellDef> Date </mat-header-cell>
       <mat-cell class="Cell Cell--Ts" *matCellDef="let row" (click)="onShowClick(row);sidenav.toggle()">
-        {{row.ts | date:'HH:mm:SS'}}
+        {{row.ts | date:'dd/MM/yyyy HH:mm:ss'}}
       </mat-cell>
     </ng-container>
     <!-- Name Column -->

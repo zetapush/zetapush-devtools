@@ -28,7 +28,7 @@
       <!-- ts Column -->
       <ng-container matColumnDef="time">
         <mat-header-cell *matHeaderCellDef class="HeaderCell HeaderCell--Ts"> time </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.ts | date:'HH:mm:SS'}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.ts | date:'dd/MM/yyyy HH:mm:ss'}} </mat-cell>
       </ng-container>
       <!-- Code Column -->
       <ng-container matColumnDef="code">
