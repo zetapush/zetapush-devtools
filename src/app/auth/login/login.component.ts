@@ -56,6 +56,9 @@ export class LoginComponent {
       } catch (e) {
         this.connecting = false;
         this.logger.error('error', e);
+        if (e.message) {
+          alert(e.message);
+        }
       }
     }
   }

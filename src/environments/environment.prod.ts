@@ -18,4 +18,5 @@ export const environment = {
       name: 'Custom',
     },
   ],
+  version: '2.7.0',
 };

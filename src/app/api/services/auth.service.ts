@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { PreferencesStorage } from '../services/preferences-storage.service';
 import { getSecureUrl } from '../../utils';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { VersionService } from './version.service';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +13,11 @@ export class AuthService {
   constructor(
     private router: Router,
     private preferences: PreferencesStorage,
+    private version: VersionService,
   ) {}
 
   async login(credentials): Promise<Response> {
+    await this.version.assertIsCompatible(credentials);
     const response = await fetch(
       getSecureUrl(`${credentials.apiUrl}/zbo/auth/login`),
       {
@@ -47,6 +50,7 @@ export class AuthService {
   async checkCredentials(): Promise<boolean> {
     try {
       const credentials = this.preferences.getCredentials();
+      await this.version.assertIsCompatible(credentials);
       const url = getSecureUrl(`${credentials.apiUrl}/zbo/auth/whoami`);
       const response = await fetch(url, {
         credentials: 'include',
