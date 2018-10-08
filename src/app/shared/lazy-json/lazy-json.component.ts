@@ -5,17 +5,13 @@ import { MatSnackBar } from '@angular/material';
   selector: 'zp-lazy-json',
   template: `
     <div class="LazyJson" [ngClass]="{'LazyJson--Hidden': !show }" >
-      <pre *ngIf="show">{{value | json}}</pre>
+      <button mat-icon-button (click)="onLazyClick()">
+        <mat-icon aria-label="Export content">import_export</mat-icon>
+      </button>
       <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()">
-        <mat-icon aria-label="Modez, copy dat json!">file_copy</mat-icon>
+        <mat-icon aria-label="Copy content">file_copy</mat-icon>
       </button>
-      <button mat-icon-button *ngIf="show" (click)="onFoldClick()">
-        <mat-icon aria-label="Modez, copy dat json!">import_export</mat-icon>
-      </button>
-      <button *ngIf="!show" mat-button (click)="onLazyClick()">
-        <mat-icon>visibility</mat-icon>
-        <span>{{placeholder}}</span>
-      </button>
+      <ngx-json-viewer *ngIf="show" [json]="value" [expanded]="false"></ngx-json-viewer>
     </div>
   `,
   styles: [
@@ -32,24 +28,15 @@ import { MatSnackBar } from '@angular/material';
 export class LazyJsonComponent {
   @Input() value: any;
   @Input() placeholder = 'Show';
-
   show = false;
   json: any;
-
   constructor(private snackBar: MatSnackBar) {}
-
   ngOnChanges() {
     this.json = JSON.stringify(this.value, null, 2);
   }
-
   onLazyClick() {
-    this.show = true;
+    this.show = !this.show;
   }
-
-  onFoldClick() {
-    this.show = false;
-  }
-
   onThrowSnackbar() {
     this.snackBar.open('JSON content copied to clipboard', '', {
       duration: 800,
