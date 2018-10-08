@@ -21,7 +21,7 @@ import { MatSnackBar } from '@angular/material';
     `
       .LazyJson {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         flex-direction: column;
       }
       .LazyJson--Nav {
