@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material';
   template: `
     <div class="LazyJson" [ngClass]="{'LazyJson--Hidden': !show }" >
       <nav class="LazyJson--Nav">
-        <button class="LazyJson--Placeholder" mat-button disabled>{{placeholder}}</button>
+        <span class="LazyJson--Placeholder">{{placeholder}}</span>
         <button mat-icon-button (click)="onLazyClick()">
           <mat-icon aria-label="Export content">import_export</mat-icon>
         </button>

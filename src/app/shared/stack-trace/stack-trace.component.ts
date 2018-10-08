@@ -22,12 +22,12 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let trace of filtered" [ngClass]="['Trace', 'Trace--' + trace.type]">
+        <tr *ngFor="let trace of filtered" [ngClass]="getRowCssClass(trace)">
           <td>{{trace.n}}</td>
           <td>{{trace.type}}</td>
           <td>
             <zp-lazy-json *ngIf="trace.type == 'MS'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
-            <zp-lazy-json *ngIf="trace.type == 'ME'" [value]="trace.data" [placeholder]="trace.data.name" [ngClass]="{'ERROR': trace.error == true}"></zp-lazy-json>
+            <zp-lazy-json *ngIf="trace.type == 'ME'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
             <zp-lazy-json *ngIf="trace.type == 'USR'" [value]="trace.data"></zp-lazy-json>
             <pre *ngIf="trace.type == 'CMT'">{{trace.data}}</pre>
           </td>
@@ -51,5 +51,13 @@ export class StackTraceComponent {
 
   filterTraces(filteredTraces: Trace[]) {
     this.filtered = filteredTraces;
+  }
+
+  getRowCssClass(trace: Trace) {
+    return {
+      Trace: true,
+      [`Trace--${trace.type}`]: true,
+      'TraceStatus--Error': trace.error == true,
+    };
   }
 }
