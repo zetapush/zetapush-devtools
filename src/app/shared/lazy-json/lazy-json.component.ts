@@ -5,12 +5,15 @@ import { MatSnackBar } from '@angular/material';
   selector: 'zp-lazy-json',
   template: `
     <div class="LazyJson" [ngClass]="{'LazyJson--Hidden': !show }" >
-      <button mat-icon-button (click)="onLazyClick()">
-        <mat-icon aria-label="Export content">import_export</mat-icon>
-      </button>
-      <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()">
-        <mat-icon aria-label="Copy content">file_copy</mat-icon>
-      </button>
+      <nav class="LazyJson--Nav">
+        <button class="LazyJson--Placeholder" mat-button disabled>{{placeholder}}</button>
+        <button mat-icon-button (click)="onLazyClick()">
+          <mat-icon aria-label="Export content">import_export</mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="show" ngxClipboard [cbContent]="json" (cbOnSuccess)="onThrowSnackbar()">
+          <mat-icon aria-label="Copy content">file_copy</mat-icon>
+        </button>
+      </nav>
       <ngx-json-viewer *ngIf="show" [json]="value" [expanded]="false"></ngx-json-viewer>
     </div>
   `,
@@ -19,6 +22,13 @@ import { MatSnackBar } from '@angular/material';
       .LazyJson {
         display: flex;
         align-items: center;
+        flex-direction: column;
+      }
+      .LazyJson--Nav {
+        width: 100%;
+      }
+      .LazyJson--Placeholder {
+        font-weight: bold;
       }
       .LazyJson--Hidden {
       }
