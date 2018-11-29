@@ -226,12 +226,16 @@ export class TracesViewComponent implements OnDestroy, OnInit {
    */
   setError(tracesToCheck: Map<number, Trace[]>) {
     tracesToCheck.forEach((traceArray: Trace[], ctx: number) => {
-      traceArray[1].hasError = false;
+      if (traceArray[1]) {
+        traceArray[1].hasError = false;
+      }
       traceArray.forEach((trace) => {
         trace.error = false;
         if (trace.type == 'ME' && trace.data.errors.length) {
           trace.error = true;
-          traceArray[1].hasError = true;
+          if (traceArray[1]) {
+            traceArray[1].hasError = true;
+          }
         }
       });
     });
