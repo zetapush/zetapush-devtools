@@ -1,6 +1,5 @@
 export enum TraceType {
   MACRO_START = 'MS',
-  COMMENT = 'CMT',
   USER = 'USR',
   MACRO_END = 'ME',
 }

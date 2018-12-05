@@ -39,7 +39,6 @@ export class TerminalViewComponent implements OnInit, OnDestroy {
   types: ViewTypeFilter[] = [
     { label: 'MS', selected: false },
     { label: 'ME', selected: false },
-    { label: 'CMT', selected: false },
     { label: 'USR', selected: true },
   ];
 

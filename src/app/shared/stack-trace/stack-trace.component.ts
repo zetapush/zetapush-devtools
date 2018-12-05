@@ -11,7 +11,11 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
 @Component({
   selector: 'zp-stack-trace',
   template: `
-    <zp-stack-filter [traces]="traces" [types]="types" (filteredTraces)="filterTraces($event)"></zp-stack-filter>
+    <zp-stack-filter
+      [traces]="traces"
+      [types]="types"
+      (filteredTraces)="filterTraces($event)"
+    ></zp-stack-filter>
     <table>
       <thead>
         <tr>
@@ -23,15 +27,25 @@ import { ViewTypeFilter } from '../../api/interfaces/type-filter.interface';
       </thead>
       <tbody>
         <tr *ngFor="let trace of filtered" [ngClass]="getRowCssClass(trace)">
-          <td>{{trace.n}}</td>
-          <td>{{trace.type}}</td>
+          <td>{{ trace.n }}</td>
+          <td>{{ trace.type }}</td>
           <td>
-            <zp-lazy-json *ngIf="trace.type == 'MS'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
-            <zp-lazy-json *ngIf="trace.type == 'ME'" [value]="trace.data" [placeholder]="trace.data.name"></zp-lazy-json>
-            <zp-lazy-json *ngIf="trace.type == 'USR'" [value]="trace.data"></zp-lazy-json>
-            <pre *ngIf="trace.type == 'CMT'">{{trace.data}}</pre>
+            <zp-lazy-json
+              *ngIf="trace.type == 'MS'"
+              [value]="trace.data"
+              [placeholder]="trace.data.name"
+            ></zp-lazy-json>
+            <zp-lazy-json
+              *ngIf="trace.type == 'ME'"
+              [value]="trace.data"
+              [placeholder]="trace.data.name"
+            ></zp-lazy-json>
+            <zp-lazy-json
+              *ngIf="trace.type == 'USR'"
+              [value]="trace.data"
+            ></zp-lazy-json>
           </td>
-          <td>{{trace.owner}}</td>
+          <td>{{ trace.owner }}</td>
         </tr>
       </tbody>
     </table>
@@ -43,7 +57,6 @@ export class StackTraceComponent {
   types: ViewTypeFilter[] = [
     { label: 'MS', selected: true },
     { label: 'ME', selected: true },
-    { label: 'CMT', selected: false },
     { label: 'USR', selected: true },
   ];
 

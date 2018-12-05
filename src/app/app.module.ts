@@ -10,12 +10,13 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 import { AppRoutingModule } from './app-routing.module';
 import { UiModule } from './ui.module';
-import { EnvModule, environment } from './env.module';
+import { EnvModule } from './env.module';
 import { SharedModule } from './shared/shared.module';
 import { ApiModule } from './api/api.module';
 
 import { PopupComponent } from './shared/pop-up/popup.component';
 import { AppComponent } from './app.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +42,9 @@ import { AppComponent } from './app.component';
     }),
     // Shared
     SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [{ provide: LocationStrategy, useClass: PathLocationStrategy }],
   bootstrap: [AppComponent],
