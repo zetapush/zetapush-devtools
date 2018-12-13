@@ -264,13 +264,17 @@ export class TracesViewComponent implements OnDestroy, OnInit {
       const identity = (truthy) => truthy;
       const stringify = (object) => JSON.stringify(object);
       const append = (suffix) => (value) => `${value}${suffix}`;
-      const traces = this.map
-        .get(trace.ctx)
-        .filter(identity)
-        .map(stringify)
-        .map(append('\n'));
+      const traces = [
+        '[',
+        ...this.map
+          .get(trace.ctx)
+          .filter(identity)
+          .map(stringify)
+          .map(append(',\n')),
+        ']',
+      ];
       const blob = new Blob(traces, {
-        type: 'text/plain;charset=utf-8',
+        type: 'application/json;charset=utf-8',
       });
       saveAs(blob, filename);
     }
