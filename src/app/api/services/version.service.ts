@@ -32,7 +32,7 @@ export class VersionService {
   async assertIsCompatible({ apiUrl }) {
     const compatible = await this.isCompatible({ apiUrl });
     if (!compatible) {
-      throw new Error('ZBO Version not compatible to Devtools Version');
+      throw new Error('ZBO Version not compatible with Devtools Version');
     }
   }
   async isCompatible({ apiUrl }): Promise<boolean> {
@@ -46,7 +46,7 @@ export class VersionService {
       });
       const rawVersion = await response.text();
       const target = getSemVer(getZboVersion(rawVersion));
-      const current = getSemVer('2.7.0');
+      const current = getSemVer('3.0.0');
       const matchStrictMajor = target.major === current.major;
       const matchStrictMinor = target.minor === current.minor;
       return matchStrictMajor && matchStrictMinor;
